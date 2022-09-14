@@ -10,15 +10,15 @@ int main(int argc, char* argv[]) {
 
     //recebe parâmetros iniciais
     if(comando == 1) {
-        FILE *arqArmaz = fopen(nomeArq, "w");
+        FILE *arqArmaz = fopen(nomeArq, "wb");
         funcionalidade1(arqArmaz);
         fclose(arqArmaz);
     }else if(comando == 2) {
-        FILE *arqArmaz = fopen(nomeArq, "r");
+        FILE *arqArmaz = fopen(nomeArq, "rb");
         funcionalidade2();
         fclose(arqArmaz);
     }else if (comando == 3) {
-        FILE *arqArmaz = fopen(nomeArq, "r");
+        FILE *arqArmaz = fopen(nomeArq, "rb");
         funcionalidade3();
         fclose(arqArmaz);
     } else {
@@ -26,3 +26,9 @@ int main(int argc, char* argv[]) {
         exit(0);
     }
 }
+
+
+//FAZER MANEIRA DE ALTERAR RAPIDAMENTE OS VALORES DE COMPRIMENTO DOS PARAMETROS!! 
+//OU REDUZIR UTILIZACAO DO TAMANHO NAS FUNCOES
+//OU USAR CONST GLOBAL??
+//OU USAR FUNCOES QUE RETORNEM O TAMANHO TIPO STRLEN

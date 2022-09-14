@@ -1,8 +1,8 @@
 typedef struct {
-    char primeiroNome[50];
-    char sobreNome[50]; 
-    char eMail[80];
-    char nacionalidade[50];
+    char primeiroNome[51];
+    char sobreNome[51]; 
+    char eMail[81];
+    char nacionalidade[51];
     int idade;
 } pessoa;
 
