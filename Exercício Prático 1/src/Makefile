@@ -1,16 +1,13 @@
 all : programa
 
-funcoesPadrao.o : funcoesPadrao.c
-		gcc -o funcoesPadrao.o -c funcoesPadrao.c
-
-funcoesCustomizadas.o : funcoesCustomizadas.c
-		gcc -o funcoesCustomizadas.o -c funcoesCustomizadas.c
+funcoesFornecidas.o : funcoesFornecidas.c
+		gcc -o funcoesFornecidas.o -c funcoesFornecidas.c
 
 main.o : main.c 
 		gcc -o main.o -c main.c
 
-programa : funcoesPadrao.o funcoesCustomizadas.o main.o
-		gcc -o programa funcoesPadrao.o funcoesCustomizadas.o main.o
+programa : funcoesFornecidas.o main.o
+		gcc -o programa funcoesFornecidas.o main.o
 
 
 run : programa
