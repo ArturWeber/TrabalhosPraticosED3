@@ -14,10 +14,11 @@ int main(int argc, char* argv[]) {
 
         funcionalidade1(arqArmaz);
 
-        //saida da funcao 1 especificada na documentacao 
-        binarioNaTela(nomeArq);
 
         fclose(arqArmaz);
+
+        //saida da funcao 1 especificada na documentacao 
+        binarioNaTela(nomeArq);
     }else if(comando == 2) {
         FILE *arqArmaz = fopen(nomeArq, "rb");
         if(arqArmaz == NULL) {
