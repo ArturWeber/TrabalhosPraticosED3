@@ -3,8 +3,13 @@
 #include <string.h>
 #include "headers.h"
 
-void trataCampo(char *campo, int capacidade) {
-    int tamanho = strlen(campo);
+void trataCampo(char campo[], int capacidade) {
+    int tamanho;
+    if (strlen(campo) < capacidade) {
+        tamanho = strlen(campo);
+    } else {
+        tamanho = capacidade - 1;
+    }
 
     campo[tamanho] = '\0'; 
 
@@ -83,4 +88,3 @@ void funcionalidade3(FILE* ponteiroArq) {
     }
 
 }
-

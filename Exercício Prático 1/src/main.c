@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
             exit(0);
         }
 
-        funcionalidade3();
+        funcionalidade3(arqArmaz);
 
         fclose(arqArmaz);
     } else {
