@@ -1,3 +1,8 @@
+#define NOME_TAMANHO 51
+#define SOBRENOME_TAMANHO 51
+#define EMAIL_TAMANHO 81
+#define NACIONALIDADE_TAMANHO 51
+
 typedef struct {
     char primeiroNome[51];
     char sobreNome[51]; 
