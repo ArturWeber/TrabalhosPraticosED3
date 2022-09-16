@@ -4,14 +4,14 @@
 #define NACIONALIDADE_TAMANHO 51
 
 typedef struct {
-    char primeiroNome[51];
-    char sobreNome[51]; 
-    char eMail[81];
-    char nacionalidade[51];
+    char primeiroNome[NOME_TAMANHO];
+    char sobreNome[SOBRENOME_TAMANHO]; 
+    char eMail[EMAIL_TAMANHO];
+    char nacionalidade[NACIONALIDADE_TAMANHO];
     int idade;
 } pessoa;
 
 void binarioNaTela(char *nomeArquivoBinario);
-void funcionalidade1(FILE* nomeArquivo);
-void funcionalidade2(FILE* nomeArquivo);
-void funcionalidade3();
+void funcionalidade1(FILE* ponteiroArq);
+void funcionalidade2(FILE* ponteiroArq);
+void funcionalidade3(FILE* ponteiroArq);

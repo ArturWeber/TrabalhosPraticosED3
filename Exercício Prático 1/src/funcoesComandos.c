@@ -3,8 +3,13 @@
 #include <string.h>
 #include "headers.h"
 
-void trataCampo(char *campo, int capacidade) {
-    int tamanho = strlen(campo);
+void trataCampo(char campo[], int capacidade) {
+    int tamanho;
+    if (strlen(campo) < capacidade) {
+        tamanho = strlen(campo);
+    } else {
+        tamanho = capacidade - 1;
+    }
 
     campo[tamanho] = '\0'; 
 
@@ -13,7 +18,7 @@ void trataCampo(char *campo, int capacidade) {
     }
 }
 
-void funcionalidade1(FILE* nomeArquivo) {
+void funcionalidade1(FILE* ponteiroArq) {
     int numReg;
     scanf("%d", &numReg);
 
@@ -31,22 +36,22 @@ void funcionalidade1(FILE* nomeArquivo) {
         trataCampo(aux.nacionalidade, NACIONALIDADE_TAMANHO);
         scanf("%d", &aux.idade);
 
-       fwrite(aux.primeiroNome, sizeof(char), NOME_TAMANHO, nomeArquivo);
-       fwrite(aux.sobreNome, sizeof(char), SOBRENOME_TAMANHO, nomeArquivo);
-       fwrite(aux.eMail, sizeof(char), EMAIL_TAMANHO, nomeArquivo);
-       fwrite(aux.nacionalidade, sizeof(char), NACIONALIDADE_TAMANHO, nomeArquivo);
-       fwrite(&aux.idade, sizeof(int), 1, nomeArquivo);
+       fwrite(aux.primeiroNome, sizeof(char), NOME_TAMANHO, ponteiroArq);
+       fwrite(aux.sobreNome, sizeof(char), SOBRENOME_TAMANHO, ponteiroArq);
+       fwrite(aux.eMail, sizeof(char), EMAIL_TAMANHO, ponteiroArq);
+       fwrite(aux.nacionalidade, sizeof(char), NACIONALIDADE_TAMANHO, ponteiroArq);
+       fwrite(&aux.idade, sizeof(int), 1, ponteiroArq);
     }
 }
 
 
-void funcionalidade2(FILE* nomeArquivo) {
+void funcionalidade2(FILE* ponteiroArq) {
     pessoa aux;
-    while(fread(aux.primeiroNome, sizeof(char), NOME_TAMANHO, nomeArquivo) != 0){
-       fread(aux.sobreNome, sizeof(char), SOBRENOME_TAMANHO, nomeArquivo);
-       fread(aux.eMail, sizeof(char), EMAIL_TAMANHO, nomeArquivo);
-       fread(aux.nacionalidade, sizeof(char), NACIONALIDADE_TAMANHO, nomeArquivo);
-       fread(&aux.idade, sizeof(int), 1, nomeArquivo);
+    while(fread(aux.primeiroNome, sizeof(char), NOME_TAMANHO, ponteiroArq) != 0){
+       fread(aux.sobreNome, sizeof(char), SOBRENOME_TAMANHO, ponteiroArq);
+       fread(aux.eMail, sizeof(char), EMAIL_TAMANHO, ponteiroArq);
+       fread(aux.nacionalidade, sizeof(char), NACIONALIDADE_TAMANHO, ponteiroArq);
+       fread(&aux.idade, sizeof(int), 1, ponteiroArq);
 
        printf("Firstname: %s\n", aux.primeiroNome);
        printf("Lastname: %s\n", aux.sobreNome);
@@ -57,9 +62,29 @@ void funcionalidade2(FILE* nomeArquivo) {
 }
 
 
-void funcionalidade3() {
+void funcionalidade3(FILE* ponteiroArq) {
     int rrn;
     scanf("%d", &rrn);
 
-}
+    int tamanhoRegistro = NOME_TAMANHO + SOBRENOME_TAMANHO + EMAIL_TAMANHO + NACIONALIDADE_TAMANHO + 4;
+    int byteOffset = tamanhoRegistro * rrn;
+    fseek(ponteiroArq, byteOffset, SEEK_SET);
 
+    pessoa aux;
+    if(fread(aux.primeiroNome, sizeof(char), NOME_TAMANHO, ponteiroArq) != 0) {
+        fread(aux.sobreNome, sizeof(char), SOBRENOME_TAMANHO, ponteiroArq);
+        fread(aux.eMail, sizeof(char), EMAIL_TAMANHO, ponteiroArq);
+        fread(aux.nacionalidade, sizeof(char), NACIONALIDADE_TAMANHO, ponteiroArq);
+        fread(&aux.idade, sizeof(int), 1, ponteiroArq);
+
+        printf("Firstname: %s\n", aux.primeiroNome);
+        printf("Lastname: %s\n", aux.sobreNome);
+        printf("Email: %s\n", aux.eMail);
+        printf("Nationality: %s\n", aux.nacionalidade);
+        printf("Age: %d\n\n", aux.idade);
+    } else {
+        printf("Não foi possível ler o arquivo");
+        exit(0);
+    }
+
+}

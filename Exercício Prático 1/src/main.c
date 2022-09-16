@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
             exit(0);
         }
 
-        funcionalidade3();
+        funcionalidade3(arqArmaz);
 
         fclose(arqArmaz);
     } else {
@@ -50,3 +50,7 @@ int main(int argc, char* argv[]) {
 //OU REDUZIR UTILIZACAO DO TAMANHO NAS FUNCOES
 //OU USAR VARIAVEL GLOBAL ---------------------------------> ESCOLHI ESSE!
 //OU USAR FUNCOES QUE RETORNEM O TAMANHO TIPO STRLEN
+
+//FAZER FUNCAO COM OS PRINTS DE ERROS 
+
+//VER SE CRASHA SE O INPUT FOR MTO GRANDE!!
