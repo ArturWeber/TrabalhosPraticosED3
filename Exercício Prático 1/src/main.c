@@ -11,15 +11,33 @@ int main(int argc, char* argv[]) {
     //recebe parâmetros iniciais
     if(comando == 1) {
         FILE *arqArmaz = fopen(nomeArq, "wb");
+
         funcionalidade1(arqArmaz);
+
+
         fclose(arqArmaz);
+
+        //saida da funcao 1 especificada na documentacao 
+        binarioNaTela(nomeArq);
     }else if(comando == 2) {
         FILE *arqArmaz = fopen(nomeArq, "rb");
-        funcionalidade2();
+        if(arqArmaz == NULL) {
+            printf("Falha no processamento do arquivo");
+            exit(0);
+        }
+
+        funcionalidade2(arqArmaz);
+        
         fclose(arqArmaz);
     }else if (comando == 3) {
         FILE *arqArmaz = fopen(nomeArq, "rb");
+        if(arqArmaz == NULL) {
+            printf("Falha no processamento do arquivo");
+            exit(0);
+        }
+
         funcionalidade3();
+
         fclose(arqArmaz);
     } else {
         printf("Erro: Comando não encontrado");
