@@ -12,6 +12,6 @@ typedef struct {
 } pessoa;
 
 void binarioNaTela(char *nomeArquivoBinario);
-void funcionalidade1(FILE* nomeArquivo);
-void funcionalidade2(FILE* nomeArquivo);
+void funcionalidade1(FILE* ponteiroArq);
+void funcionalidade2(FILE* ponteiroArq);
 void funcionalidade3();
