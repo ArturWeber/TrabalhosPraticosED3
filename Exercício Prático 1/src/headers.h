@@ -11,8 +11,7 @@ typedef struct {
     int idade;
 } pessoa;
 
-void readline(char* string);
 void binarioNaTela(char *nomeArquivoBinario);
 void funcionalidade1(FILE* nomeArquivo);
-void funcionalidade2();
+void funcionalidade2(FILE* nomeArquivo);
 void funcionalidade3();

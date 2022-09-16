@@ -17,31 +17,45 @@ void funcionalidade1(FILE* nomeArquivo) {
     int numReg;
     scanf("%d", &numReg);
 
-    //cria e grava campos em um registro temporario, depois gravando os registro obtidos um a um 
+    //cria e grava campos em um registro aux, depois gravando os registro obtidos um a um 
     //uma abordagem de armazenamento de todos os registros em memoria e depois em armazenamento poderia ter sido tomada com a vantagem de maior velocidade, porem mais uso de RAM
-    pessoa temporario;
+    pessoa aux;
     for(int i = 0; i < numReg; i++){
-        scanf("%s", temporario.primeiroNome);
-        trataCampo(temporario.primeiroNome, NOME_TAMANHO);
-        scanf("%s", temporario.sobreNome);
-        trataCampo(temporario.sobreNome, SOBRENOME_TAMANHO);
-        scanf("%s", temporario.eMail);
-        trataCampo(temporario.eMail, EMAIL_TAMANHO);
-        scanf("%s", temporario.nacionalidade);
-        trataCampo(temporario.nacionalidade, NACIONALIDADE_TAMANHO);
-        scanf("%d", &temporario.idade);
+        scanf("%s", aux.primeiroNome);
+        trataCampo(aux.primeiroNome, NOME_TAMANHO);
+        scanf("%s", aux.sobreNome);
+        trataCampo(aux.sobreNome, SOBRENOME_TAMANHO);
+        scanf("%s", aux.eMail);
+        trataCampo(aux.eMail, EMAIL_TAMANHO);
+        scanf("%s", aux.nacionalidade);
+        trataCampo(aux.nacionalidade, NACIONALIDADE_TAMANHO);
+        scanf("%d", &aux.idade);
 
-       fwrite(temporario.primeiroNome, sizeof(char), NOME_TAMANHO, nomeArquivo);
-       fwrite(temporario.sobreNome, sizeof(char), SOBRENOME_TAMANHO, nomeArquivo);
-       fwrite(temporario.eMail, sizeof(char), EMAIL_TAMANHO, nomeArquivo);
-       fwrite(temporario.nacionalidade, sizeof(char), NACIONALIDADE_TAMANHO, nomeArquivo);
-       fwrite(&temporario.idade, sizeof(int), 1, nomeArquivo);
+       fwrite(aux.primeiroNome, sizeof(char), NOME_TAMANHO, nomeArquivo);
+       fwrite(aux.sobreNome, sizeof(char), SOBRENOME_TAMANHO, nomeArquivo);
+       fwrite(aux.eMail, sizeof(char), EMAIL_TAMANHO, nomeArquivo);
+       fwrite(aux.nacionalidade, sizeof(char), NACIONALIDADE_TAMANHO, nomeArquivo);
+       fwrite(&aux.idade, sizeof(int), 1, nomeArquivo);
     }
 }
 
-void funcionalidade2() {
 
+void funcionalidade2(FILE* nomeArquivo) {
+    pessoa aux;
+    while(fread(aux.primeiroNome, sizeof(char), NOME_TAMANHO, nomeArquivo) != 0){
+       fread(aux.sobreNome, sizeof(char), SOBRENOME_TAMANHO, nomeArquivo);
+       fread(aux.eMail, sizeof(char), EMAIL_TAMANHO, nomeArquivo);
+       fread(aux.nacionalidade, sizeof(char), NACIONALIDADE_TAMANHO, nomeArquivo);
+       fread(&aux.idade, sizeof(int), 1, nomeArquivo);
+
+       printf("Firstname: %s\n", aux.primeiroNome);
+       printf("Lastname: %s\n", aux.sobreNome);
+       printf("Email: %s\n", aux.eMail);
+       printf("Nationality: %s\n", aux.nacionalidade);
+       printf("Age: %d\n\n", aux.idade);
+    }
 }
+
 
 void funcionalidade3() {
     int rrn;
