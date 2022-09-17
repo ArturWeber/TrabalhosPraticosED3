@@ -1,16 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "headers.h"
 
 int main(int argc, char* argv[]) {
     //recebe comando inicial
     int comando; 
+    char nomeDir[60];
+    strcpy(nomeDir, "./file/");
     char nomeArq[30];
     scanf("%d %s", &comando, nomeArq);
-
+    strcat(nomeDir, nomeArq);
     //recebe parâmetros iniciais
     if(comando == 1) {
-        FILE *arqArmaz = fopen(nomeArq, "wb");
+        FILE *arqArmaz = fopen(nomeDir, "wb");
 
         funcionalidade1(arqArmaz);
 
@@ -18,9 +21,9 @@ int main(int argc, char* argv[]) {
         fclose(arqArmaz);
 
         //saida da funcao 1 especificada na documentacao 
-        binarioNaTela(nomeArq);
+        binarioNaTela(nomeDir);
     }else if(comando == 2) {
-        FILE *arqArmaz = fopen(nomeArq, "rb");
+        FILE *arqArmaz = fopen(nomeDir, "rb");
         if(arqArmaz == NULL) {
             printf("Falha no processamento do arquivo");
             exit(0);
@@ -30,7 +33,7 @@ int main(int argc, char* argv[]) {
         
         fclose(arqArmaz);
     }else if (comando == 3) {
-        FILE *arqArmaz = fopen(nomeArq, "rb");
+        FILE *arqArmaz = fopen(nomeDir, "rb");
         if(arqArmaz == NULL) {
             printf("Falha no processamento do arquivo");
             exit(0);
