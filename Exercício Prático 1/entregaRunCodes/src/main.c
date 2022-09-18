@@ -11,12 +11,12 @@ int main(int argc, char* argv[]) {
     char nomeArq[30];
     scanf("%d %s", &comando, nomeArq);
     strcat(nomeDir, nomeArq);
-    //recebe parâmetros iniciais
+
+    //chama comandos
     if(comando == 1) {
         FILE *arqArmaz = fopen(nomeDir, "wb");
 
         funcionalidade1(arqArmaz);
-
 
         fclose(arqArmaz);
 
@@ -47,13 +47,3 @@ int main(int argc, char* argv[]) {
         exit(0);
     }
 }
-
-
-//FAZER MANEIRA DE ALTERAR RAPIDAMENTE OS VALORES DE COMPRIMENTO DOS PARAMETROS!! 
-//OU REDUZIR UTILIZACAO DO TAMANHO NAS FUNCOES
-//OU USAR VARIAVEL GLOBAL ---------------------------------> ESCOLHI ESSE!
-//OU USAR FUNCOES QUE RETORNEM O TAMANHO TIPO STRLEN
-
-//FAZER FUNCAO COM OS PRINTS DE ERROS 
-
-//VER SE CRASHA SE O INPUT FOR MTO GRANDE!!

@@ -3,16 +3,18 @@
 #include <string.h>
 #include "headers.h"
 
-void trataCampo(char campo[], int capacidade) {//Função responsável por preencher os bytes não utilizados no campo com lixo por tratarmos campos fixos
+//Função responsável por preencher os bytes não utilizados no campo com lixo por tratarmos campos fixos
+void trataCampo(char campo[], int capacidade) {
     int tamanho;
-    if (strlen(campo) < capacidade) {//verifica o numero de bytes que foram preenchidos e compara se é menor que a capacidade maxima
+    //verifica o numero de bytes que foram preenchidos e compara se é menor que a capacidade maxima
+    if (strlen(campo) < capacidade) {
         tamanho = strlen(campo);
     } else {
         tamanho = capacidade - 1;
     }
 
+    //coloca o \0 onde a string acabou, mesmo que tenha sido usado todos os bytes, um será armazanado para o null
     campo[tamanho] = '\0'; 
-    //coloca o \0 aonde a string acabou, mesmo que tenha sido usado todos os bytes, um será armazanado para o null
 
     //adiciona lixo em bytes não preenchido no campo
     for (int i = (tamanho + 1); i < capacidade; i++){
