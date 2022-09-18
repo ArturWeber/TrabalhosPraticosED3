@@ -19,4 +19,4 @@ run : ./bin/programa
 clean : 
 		rm -f ./obj/*.o
 		rm -f ./bin/*programa
-		rm -f ./file/*.bin
+		rm -f ./*.bi
