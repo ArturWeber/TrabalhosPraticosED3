@@ -16,8 +16,28 @@ void criaRegCabecalho(FILE* arq) {
     }
 }
 
+void TratamentoDeRegistro(FILE* arqSaida, int TamUsado){
+    int tamanho;
+    //verifica o numero de bytes que foram preenchidos e compara se é menor que a capacidade maxima
+    if (TamUsado < linhaMaxima) {
+        tamanho = TamUsado;
+    } else {
+        tamanho = linhaMaxima - 1;
+    }
+
+    //coloca o \0 onde a string acabou, mesmo que tenha sido usado todos os bytes, um será armazanado para o null
+    //campo[tamanho] = '\0'; //Não precisa dessa parte
+
+    //adiciona lixo em bytes não preenchido no campo
+    for (int i = (tamanho + 1); i < linhaMaxima; i++){
+        putc('$', arqSaida);
+    }
+    return;
+}
+
 void createTable(FILE* arqEntrada, FILE* arqSaida) {
     registro aux;
+    int TamUsado;
     //char linha[linhaMaxima];
     //int i = 0;
     //char* token;
@@ -32,6 +52,9 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
     int TamNomePops = 0;
     int TamNomePais = 0;
     int TamSiglaPais = 0;
+    int TamUniMed = 0;
+    int TamIdPops = 0;
+    int TamVel = 0;
 
     int contvir;//contador de virgulas
     fseek(arqEntrada, 80, SEEK_SET);
@@ -40,6 +63,13 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
 
     while((caractere[0] = (char) fgetc(arqEntrada))!='\0'){
         contvir = 0;
+        TamUsado = 0;
+        TamNomePops = 0;
+        TamNomePais = 0;
+        TamSiglaPais = 0;
+        TamUniMed = 0;
+        TamIdPops = 0;
+        TamVel = 0;
         do{
             if(caractere[0] == ','){
                 contvir++;
@@ -68,14 +98,17 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
 
             case 4:
                 strcat(idpops, caractere);
+                TamIdPops = 1;
                 break;
 
             case 5:
                 strcpy(aux.unidadeMedida, caractere);
+                TamUniMed++;
                 break;
             
             case 6:
                 strcat(vel, caractere);
+                TamVel = 1;
                 break;
 
             default:
@@ -96,14 +129,15 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
         fprintf(arqSaida, "|");
         fwrite(aux.siglaPais, sizeof(char), TamSiglaPais, arqSaida);
         fprintf(arqSaida, "|");
-        fwrite(&aux.idPoPsConectado, sizeof(int), 1, arqSaida);
+        fwrite(&aux.idPoPsConectado, sizeof(int), TamIdPops, arqSaida);
         fprintf(arqSaida, "|");
-        fwrite(aux.unidadeMedida, sizeof(char), 1, arqSaida);
+        fwrite(aux.unidadeMedida, sizeof(char), TamUniMed, arqSaida);
         fprintf(arqSaida, "|");
-        fwrite(&aux.velocidade, sizeof(int), 1, arqSaida);
-        fprintf(arqSaida, "\n");
-
+        fwrite(&aux.velocidade, sizeof(int), TamVel, arqSaida);
+        fprintf(arqSaida, "|");
         
+
+        TamUsado = 4+TamNomePais+TamNomePops+TamSiglaPais+(TamIdPops*4)+(TamVel*4);
         // printf("%d|", aux.idConecta);//imprime os campos para verificar o funcionamento
         // printf("%s|", aux.nomePoPs);
         // printf("%s|", aux.nomePais);
@@ -111,6 +145,9 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
         // printf("%d|", aux.idPoPsConectado);
         // printf("%s|", aux.unidadeMedida);
         // printf("%d|\n", aux.velocidade);
+
+        TratamentoDeRegistro(arqSaida, TamUsado);
+        fprintf(arqSaida, "#");
         
         strcpy(idcon, "");//reinicializa strings para uso de concatenação
         strcpy(idpops, "");
@@ -121,6 +158,9 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
         
 
     }
+
+
+    
 
     
     //PROBLEMA ESTA AQUI ARUAN!! esse while so consegue ler registros com todos os campos 

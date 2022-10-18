@@ -1,5 +1,5 @@
 #define campoMaximo 50
-#define linhaMaxima 150
+#define linhaMaxima 100
 
 typedef struct {
     int idConecta;
