@@ -22,6 +22,8 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
     int i = 0;
     char* token;
 
+
+    //PROBLEMA ESTA AQUI ARUAN!! esse while so consegue ler registros com todos os campos 
     while (fgets(linha, linhaMaxima, arqEntrada) != NULL) {
         token = strtok(linha, ",");
         while(token != NULL) {
