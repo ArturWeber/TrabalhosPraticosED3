@@ -5,7 +5,7 @@ typedef struct {
     int idConecta;
     char siglaPais[campoMaximo];
     int idPoPsConectado;
-    char unidadeMedida;
+    char unidadeMedida[2];
     int velocidade;
     char nomePoPs[campoMaximo];
     char nomePais[campoMaximo];
