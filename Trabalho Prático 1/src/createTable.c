@@ -22,16 +22,17 @@ void TratamentoDeRegistro(FILE* arqSaida, int TamUsado){
     if (TamUsado < linhaMaxima) {
         tamanho = TamUsado;
     } else {
-        tamanho = linhaMaxima - 1;
+        tamanho = linhaMaxima;
     }
 
     //coloca o \0 onde a string acabou, mesmo que tenha sido usado todos os bytes, um será armazanado para o null
     //campo[tamanho] = '\0'; //Não precisa dessa parte
 
     //adiciona lixo em bytes não preenchido no campo
-    for (int i = (tamanho + 1); i < linhaMaxima; i++){
+    for (int i = (tamanho+1); i < linhaMaxima - 1; i++){
         putc('$', arqSaida);
     }
+    putc('#', arqSaida);
     return;
 }
 
@@ -58,11 +59,9 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
 
     int contvir;//contador de virgulas
 
-    fseek(arqEntrada, 80, SEEK_SET);//byteoffset
-    //fprintf(arqSaida, "\n");
+    fseek(arqEntrada, 79, SEEK_SET);
     
-
-    while((caractere[0] = (char) fgetc(arqEntrada))!='\0'){
+    while((caractere[0] = (char) fgetc(arqEntrada)) != '\0' && !(feof(arqEntrada))){
         contvir = 0;
         TamUsado = 0;
         TamNomePops = 0;
@@ -116,9 +115,13 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
                 break;
             }
             
-        }while ((caractere[0] = (char)fgetc(arqEntrada)) != '\n');
-        
+            
+        }while ((caractere[0] = (char) fgetc(arqEntrada)) != '\n' && !(feof(arqEntrada)));
+
+        //caractere[0] = '\0';
+
         aux.idConecta = atoi(idcon);//transforma em inteiro o conteudo dessas strings auxiliares
+        
         aux.idPoPsConectado = atoi(idpops);
         aux.velocidade = atoi(vel);
 
@@ -133,28 +136,33 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
         if(TamSiglaPais != 0)
             fwrite(aux.siglaPais, sizeof(char), TamSiglaPais, arqSaida);
         fprintf(arqSaida, "|");
-        if(TamIdPops != 0)
+        if(TamIdPops == 1 && aux.idPoPsConectado != 0)
             fwrite(&aux.idPoPsConectado, sizeof(int), TamIdPops, arqSaida);
         fprintf(arqSaida, "|");
         if(TamUniMed != 0)
             fwrite(aux.unidadeMedida, sizeof(char), TamUniMed, arqSaida);
+        else{
+            TamIdPops = 0;
+        }
         fprintf(arqSaida, "|");
-        if(TamVel != 0)
+        if(TamVel == 1 && aux.velocidade != 0)
             fwrite(&aux.velocidade, sizeof(int), TamVel, arqSaida);
+        else{
+            TamVel = 0;
+        }
         fprintf(arqSaida, "|");
         
 
-        TamUsado = 4+TamNomePais+TamNomePops+TamSiglaPais+(TamIdPops*4)+(TamVel*4);
-        printf("%d|", aux.idConecta);//imprime os campos para verificar o funcionamento
-        printf("%s|", aux.nomePoPs);
-        printf("%s|", aux.nomePais);
-        printf("%s|", aux.siglaPais);
-        printf("%d|", aux.idPoPsConectado);
-        printf("%s|", aux.unidadeMedida);
-        printf("%d|\n", aux.velocidade);
+        TamUsado = 4+TamNomePais+TamNomePops+TamSiglaPais+(TamIdPops*4)+(TamVel*4)+7;
+        // printf("%d|", aux.idConecta);//imprime os campos para verificar o funcionamento
+        // printf("%s|", aux.nomePoPs);
+        // printf("%s|", aux.nomePais);
+        // printf("%s|", aux.siglaPais);
+        // printf("%d|", aux.idPoPsConectado);
+        // printf("%s|", aux.unidadeMedida);
+        // printf("%d|\n", aux.velocidade);
 
         TratamentoDeRegistro(arqSaida, TamUsado);
-        fprintf(arqSaida, "#");
         
         strcpy(idcon, "");//reinicializa strings para uso de concatenação
         strcpy(idpops, "");
@@ -162,7 +170,8 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
         strcpy(aux.nomePais, "");
         strcpy(aux.nomePoPs, "");
         strcpy(aux.siglaPais, "");
-        
+        aux.velocidade = 0;
+        aux.idPoPsConectado = 0;
 
     }
 }

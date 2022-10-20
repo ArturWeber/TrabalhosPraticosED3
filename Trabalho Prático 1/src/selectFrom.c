@@ -8,9 +8,16 @@ void selectFrom(FILE* arqEntrada){
     int delim;
     char auxInt[5] = "";
     aux.idPoPsConectado = 0;
-    fseek(arqEntrada, 960, SEEK_SET);
+    int key = 0;
+    int i = 0;
 
-    for(int i = 1; i <= 6; i++){
+    while (i < 160){
+        fseek(arqEntrada, 960+(linhaMaxima*(i))-key, SEEK_SET);
+        i++;
+        if(feof(arqEntrada)){
+            break;
+        }
+
         fread(&aux.idConecta, sizeof(int), 1, arqEntrada);
         fseek(arqEntrada, 1, SEEK_CUR);
         fscanf(arqEntrada, "%[^|]", aux.nomePoPs);
@@ -32,6 +39,8 @@ void selectFrom(FILE* arqEntrada){
             fseek(arqEntrada, 1, SEEK_CUR);
             fread(&aux.velocidade, sizeof(int), 1, arqEntrada);
             fseek(arqEntrada, 1, SEEK_CUR);
+        }else{
+            key++;
         }
 
 
@@ -58,9 +67,8 @@ void selectFrom(FILE* arqEntrada){
         strcpy(aux.nomePais, "");
         strcpy(aux.siglaPais, "");
         strcpy(aux.unidadeMedida, "");
-        fseek(arqEntrada, 960+(108*(i)), SEEK_SET);
     }
-
+    
 
 }
 

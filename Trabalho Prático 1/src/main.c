@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "headerFuncoes.h"
 
-int main(int argc, char* argv){
+int main(int argc, char* argv[]){
     int funcionalidade; 
     scanf("%d", &funcionalidade);
 
