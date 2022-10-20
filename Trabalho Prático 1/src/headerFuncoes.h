@@ -11,12 +11,23 @@ typedef struct {
     char nomePais[campoMaximo];
 } registro;
 
+
+//Fornecidas
 void readline(char* string);
 void binarioNaTela(char *nomeArquivoBinario);
 void scan_quote_string(char *str);
 void imprimeErroArquivo();
 
+//funcionalidades
 void funcUm(char nomeArqEntrada[], char nomeArqSaida[]);
+void funcDois(char nomeArqEntrada[]);
+void funcTres(char nomeArqEntrada[]);
+
+//createTable
+void TratamentoDeRegistro(FILE* arqSaida, int TamUsado);
 void criaRegCabecalho(FILE* arq);
 void createTable(FILE* arqEntrada, FILE* arqSaida);
-void funcDois(char nomeArqEntrada[]);
+
+//selectFrom
+void selectFrom(FILE* arqEntrada);
+void selectFromWhere(FILE* arqEntrada);

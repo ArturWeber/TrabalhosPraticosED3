@@ -19,7 +19,6 @@ int main(int argc, char* argv){
             break;
         case 2:
             funcDois(nomeArqEntrada);
-            printf("Ainda nn fiz o SELECT \n");
             break;
         case 3:
             printf("Ainda nn fiz o WHERE \n");
