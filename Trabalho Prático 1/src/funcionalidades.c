@@ -57,7 +57,8 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
     int TamVel = 0;
 
     int contvir;//contador de virgulas
-    fseek(arqEntrada, 80, SEEK_SET);
+
+    fseek(arqEntrada, 80, SEEK_SET);//byteoffset
     fprintf(arqSaida, "\n");
     
 
@@ -115,7 +116,7 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
                 break;
             }
             
-        }while ((caractere[0] = (char)getc(arqEntrada)) != '\n');
+        }while ((caractere[0] = (char)fgetc(arqEntrada)) != '\n');
         
         aux.idConecta = atoi(idcon);//transforma em inteiro o conteudo dessas strings auxiliares
         aux.idPoPsConectado = atoi(idpops);
@@ -123,28 +124,34 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
 
         fwrite(&aux.idConecta, sizeof(int), 1, arqSaida);//adiciona no arquivo de saida cada campo
         fprintf(arqSaida, "|");
-        fwrite(aux.nomePoPs, sizeof(char), TamNomePops, arqSaida);
+        if(TamNomePops != 0)
+            fwrite(aux.nomePoPs, sizeof(char), TamNomePops, arqSaida);
         fprintf(arqSaida, "|");
-        fwrite(aux.nomePais, sizeof(char), TamNomePais, arqSaida);
+        if(TamNomePais != 0)
+            fwrite(aux.nomePais, sizeof(char), TamNomePais, arqSaida);
         fprintf(arqSaida, "|");
-        fwrite(aux.siglaPais, sizeof(char), TamSiglaPais, arqSaida);
+        if(TamSiglaPais != 0)
+            fwrite(aux.siglaPais, sizeof(char), TamSiglaPais, arqSaida);
         fprintf(arqSaida, "|");
-        fwrite(&aux.idPoPsConectado, sizeof(int), TamIdPops, arqSaida);
+        if(TamIdPops != 0)
+            fwrite(&aux.idPoPsConectado, sizeof(int), TamIdPops, arqSaida);
         fprintf(arqSaida, "|");
-        fwrite(aux.unidadeMedida, sizeof(char), TamUniMed, arqSaida);
+        if(TamUniMed != 0)
+            fwrite(aux.unidadeMedida, sizeof(char), TamUniMed, arqSaida);
         fprintf(arqSaida, "|");
-        fwrite(&aux.velocidade, sizeof(int), TamVel, arqSaida);
+        if(TamVel != 0)
+            fwrite(&aux.velocidade, sizeof(int), TamVel, arqSaida);
         fprintf(arqSaida, "|");
         
 
         TamUsado = 4+TamNomePais+TamNomePops+TamSiglaPais+(TamIdPops*4)+(TamVel*4);
-        // printf("%d|", aux.idConecta);//imprime os campos para verificar o funcionamento
-        // printf("%s|", aux.nomePoPs);
-        // printf("%s|", aux.nomePais);
-        // printf("%s|", aux.siglaPais);
-        // printf("%d|", aux.idPoPsConectado);
-        // printf("%s|", aux.unidadeMedida);
-        // printf("%d|\n", aux.velocidade);
+        printf("%d|", aux.idConecta);//imprime os campos para verificar o funcionamento
+        printf("%s|", aux.nomePoPs);
+        printf("%s|", aux.nomePais);
+        printf("%s|", aux.siglaPais);
+        printf("%d|", aux.idPoPsConectado);
+        printf("%s|", aux.unidadeMedida);
+        printf("%d|\n", aux.velocidade);
 
         TratamentoDeRegistro(arqSaida, TamUsado);
         fprintf(arqSaida, "#");
@@ -206,7 +213,7 @@ void funcUm(char nomeArqEntrada[], char nomeArqSaida[]) {
     arqEntrada = fopen(nomeArqEntrada, "r");
     
     FILE* arqSaida;
-    arqSaida = fopen(nomeArqSaida, "w");
+    arqSaida = fopen(nomeArqSaida, "wb");
 
     if(arqEntrada == NULL || arqSaida == NULL) {
         imprimeErroArquivo();
@@ -218,3 +225,23 @@ void funcUm(char nomeArqEntrada[], char nomeArqSaida[]) {
     fclose(arqEntrada);
     fclose(arqSaida);
 }
+
+void selectFrom(FILE* arqEntrada){
+    registro aux;
+    
+    fread(&aux.idConecta, sizeof(int), 1, arqEntrada);
+
+}
+
+void funcDois(char nomeArqEntrada[]){
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+
+    if(arqEntrada == NULL){
+        imprimeErroArquivo();
+        exit(-1);
+    }
+
+    selectFrom(arqEntrada);
+}
+

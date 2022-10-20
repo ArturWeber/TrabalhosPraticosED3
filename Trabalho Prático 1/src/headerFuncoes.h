@@ -19,3 +19,4 @@ void imprimeErroArquivo();
 void funcUm(char nomeArqEntrada[], char nomeArqSaida[]);
 void criaRegCabecalho(FILE* arq);
 void createTable(FILE* arqEntrada, FILE* arqSaida);
+void funcDois(char nomeArqEntrada[]);
