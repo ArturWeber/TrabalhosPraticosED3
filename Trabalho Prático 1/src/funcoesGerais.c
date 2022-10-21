@@ -85,6 +85,9 @@ void scan_quote_string(char *str) {
 	}
 }
 
-void imprimeErroArquivo() {
-	printf("Falha no processamento do arquivo.");
+void testaErroArquivo(FILE* arquivo) {
+	if(arquivo == NULL) {
+		printf("Falha no processamento do arquivo.\n");
+        exit(0);
+    }
 }

@@ -1,22 +1,23 @@
 #include <stdio.h>
 #include "headerFuncoes.h"
 
-int main(int argc, char* argv[]){
+int main(void){
     int funcionalidade; 
-    scanf("%d", &funcionalidade);
-
     char nomeArqEntrada[campoMaximo];
-    readline(nomeArqEntrada);
-
     char nomeArqSaida[campoMaximo];
+    scanf("%d %s ", &funcionalidade, nomeArqEntrada);
+
+    //readline(nomeArqEntrada);
+
 
     switch(funcionalidade) {
         case 1:
-            readline(nomeArqSaida);
+            //readline(nomeArqSaida);
+            scanf("%s", nomeArqSaida);
             funcUm(nomeArqEntrada, nomeArqSaida);
             break;
         case 2:
-            funcDois(nomeArqEntrada);
+            //funcDois(nomeArqEntrada);
             break;
         case 3:
             printf("Ainda nn fiz o WHERE \n");

@@ -15,7 +15,7 @@ typedef struct {
 void readline(char* string);
 void binarioNaTela(char *nomeArquivoBinario);
 void scan_quote_string(char *str);
-void imprimeErroArquivo();
+void testaErroArquivo(FILE* arquivo);
 
 //Funcionalidades
 void funcUm(char nomeArqEntrada[], char nomeArqSaida[]);

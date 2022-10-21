@@ -3,6 +3,7 @@
 #include <string.h>
 #include "headerFuncoes.h"
 
+/*
 void selectFrom(FILE* arqEntrada){
     registro aux;
     int delim;
@@ -88,4 +89,4 @@ void funcDois(char nomeArqEntrada[]){
     selectFrom(arqEntrada);
     fclose(arqEntrada);
 }
-
+*/

@@ -3,6 +3,7 @@
 #include <string.h>
 #include "headerFuncoes.h"
 
+/*
 void funcTres(char nomeArqEntrada[]){
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb");
@@ -14,3 +15,4 @@ void funcTres(char nomeArqEntrada[]){
 
     selectFromWhere(arqEntrada);
 }
+*/
