@@ -8,12 +8,10 @@ int main(int argc, char* argv[]){
     char nomeArqEntrada[campoMaximo];
     readline(nomeArqEntrada);
 
-
-    //printf("%d, %s, %s", funcionalidade, nomeArqEntrada, nomeArqSaida);
+    char nomeArqSaida[campoMaximo];
 
     switch(funcionalidade) {
         case 1:
-            char nomeArqSaida[campoMaximo];
             readline(nomeArqSaida);
             funcUm(nomeArqEntrada, nomeArqSaida);
             break;

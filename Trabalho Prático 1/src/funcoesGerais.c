@@ -88,4 +88,3 @@ void scan_quote_string(char *str) {
 void imprimeErroArquivo() {
 	printf("Falha no processamento do arquivo.");
 }
-

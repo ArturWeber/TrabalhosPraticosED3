@@ -76,3 +76,16 @@ void selectFromWhere(FILE* arqEntrada){
     registro aux;
 
 }
+
+void funcDois(char nomeArqEntrada[]){
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+
+    if(arqEntrada == NULL){
+        imprimeErroArquivo();
+        exit(-1);
+    }
+    selectFrom(arqEntrada);
+    fclose(arqEntrada);
+}
+
