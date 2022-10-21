@@ -91,3 +91,7 @@ void testaErroArquivo(FILE* arquivo) {
         exit(0);
     }
 }
+
+void atualizaRegCabecalho (FILE* arquivo) {
+	return;
+}

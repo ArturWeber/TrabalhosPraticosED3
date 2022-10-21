@@ -46,9 +46,11 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
     char* token;
     int i = 0;
 
+    //le registro a registro
     while (fgets(linhaDestratada, linhaMaxima, arqEntrada) != NULL) {
         transfString(linhaDestratada, linhaTratada);
         token = strtok(linhaTratada, ",");
+        //le campo a campo 
         while(token != NULL) {
             i++;
             switch(i){
@@ -82,6 +84,7 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
             token = strtok(NULL, ",");
         }
 
+        //ESCREVE VALOR NO ARQUIVO
         //obs: dar define nos valores de tamanhho de campo 
         criaInicioRegistro(arqSaida);
 
@@ -90,7 +93,7 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
         fwrite(&aux.idConecta, sizeof(int), 1, arqSaida);
 
         fwrite(aux.siglaPais, sizeof(char), strlen(aux.siglaPais), arqSaida);
-        preenchimentoComSifrao(arqSaida, strlen(aux.siglaPais), 2);
+        preenchimentoComSifrao(arqSaida, strlen(aux.siglaPais), tamSiglaPais);
 
         if (aux.idPoPsConectado != 0) {
             fwrite(&aux.idPoPsConectado, sizeof(int), 1, arqSaida);
@@ -100,7 +103,7 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
         }
 
         fwrite(&aux.unidadeMedida, sizeof(char), strlen(&aux.unidadeMedida), arqSaida);
-        preenchimentoComSifrao(arqSaida, strlen(&aux.unidadeMedida), 1);
+        preenchimentoComSifrao(arqSaida, strlen(&aux.unidadeMedida), tamUnidadeMedida);
 
         if (aux.velocidade != 0) {
             fwrite(&aux.velocidade, sizeof(int), 1, arqSaida);
@@ -115,12 +118,12 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
         fwrite("|", sizeof(char), 1, arqSaida);
         
         int tamOcupadoRegistro = 22 + strlen(aux.nomePoPs) + strlen(aux.nomePais);
-        preenchimentoComSifrao(arqSaida, tamOcupadoRegistro, 64);
+        preenchimentoComSifrao(arqSaida, tamOcupadoRegistro, tamRegistro);
     }
 }
 
 void criaRegCabecalho(FILE* arq) {
-    fwrite("1", sizeof(char), 1, arq);
+    fwrite("0", sizeof(char), 1, arq);
 
     int topo = -1;
     fwrite(&topo, sizeof(int), 1, arq);
@@ -146,10 +149,10 @@ void funcUm(char nomeArqEntrada[], char nomeArqSaida[]) {
 
     criaRegCabecalho(arqSaida);
     createTable(arqEntrada, arqSaida);
+    atualizaRegCabecalho(arqSaida);
 
     fclose(arqEntrada);
     fclose(arqSaida);
 
     binarioNaTela(nomeArqSaida);
-
 }
