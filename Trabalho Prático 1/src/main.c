@@ -5,22 +5,19 @@ int main(void){
     int funcionalidade; 
     char nomeArqEntrada[campoMaximo];
     char nomeArqSaida[campoMaximo];
-    scanf("%d %s", &funcionalidade, nomeArqEntrada);
-
-    //readline(nomeArqEntrada);
-
+    scanf("%d", &funcionalidade);
+    readline(nomeArqEntrada);
 
     switch(funcionalidade) {
         case 1:
-            //readline(nomeArqSaida);
-            scanf("%s", nomeArqSaida);
+            readline(nomeArqSaida);
             funcUm(nomeArqEntrada, nomeArqSaida);
             break;
         case 2:
             funcDois(nomeArqEntrada);
             break;
         case 3:
-            funcTres(nomeArqEntrada);
+            //funcTres(nomeArqEntrada);
             break;
         case 4:
             printf("Ainda nn fiz a REMOCAO \n");

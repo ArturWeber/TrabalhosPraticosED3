@@ -9,7 +9,7 @@ void readline(char* string) {
     do{
         c = (char) getchar();
 
-    } while(c == '\n' || c == '\r');
+    } while(c == '\n' || c == '\r' || c == ' ');
 
     int i = 0;
 
@@ -17,7 +17,7 @@ void readline(char* string) {
         string[i] = c;
         i++;
         c = getchar();
-    } while(c != '\n' && c != '\r');
+    } while(c != '\n' && c != '\r' && c != ' ');
 
     string[i]  = '\0';
 }
@@ -94,9 +94,10 @@ void testaErroArquivo(FILE* arquivo) {
 
 void atualizaRegCabecalho (FILE* arquivo) {
 	int sz, pagDisco, proxRRN;
+	fseek(arquivo, 0, SEEK_END);
 	sz = ftell(arquivo);
-	pagDisco = ((sz-960)/64)/15;
-	proxRRN = (sz-960)/64 + 1;
+	pagDisco = ((sz - 960) / 64) / 15;
+	proxRRN = (sz - 960) / 64 + 1;
 	if(((sz-960) % 64) != 0){
 		pagDisco++;
 	}

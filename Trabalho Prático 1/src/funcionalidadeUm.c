@@ -3,10 +3,19 @@
 #include <string.h>
 #include "headerFuncoes.h"
 
-void preenchimentoComSifrao(FILE* arqSaida, int tamUsado, int tamMaximo){
-    //adiciona lixo em bytes não preenchido no campo
-    for (int i = 0; i < tamMaximo - tamUsado; i++){
-        fwrite("$", sizeof(char), 1, arqSaida);
+void criaRegCabecalho(FILE* arq) {
+    fwrite("0", sizeof(char), 1, arq);
+
+    int topo = -1;
+    fwrite(&topo, sizeof(int), 1, arq);
+
+    int zero = 0;
+    for(int i = 0; i < 4; i++) {
+        fwrite(&zero, sizeof(int), 1, arq);
+    }
+
+    for(int i = 0; i < 939; i++) {
+        fwrite("$", sizeof(char), 1, arq);
     }
 }
 
@@ -15,6 +24,13 @@ void criaInicioRegistro(FILE* arqSaida) {
 
     int inicializar = -1;
     fwrite(&inicializar, sizeof(int), 1, arqSaida);
+}
+
+void preenchimentoComSifrao(FILE* arqSaida, int tamUsado, int tamMaximo){
+    //adiciona lixo em bytes não preenchido no campo
+    for (int i = 0; i < tamMaximo - tamUsado; i++){
+        fwrite("$", sizeof(char), 1, arqSaida);
+    }
 }
 
 void transfString(char linhaInicial[], char linhaFinal[]) {
@@ -30,13 +46,44 @@ void transfString(char linhaInicial[], char linhaFinal[]) {
     linhaFinal[posicao] = '\0';
 }
 
-void transfInversaString(char *string) {
-    int aux = strlen(string);
+void transfInversaString(char *string) {  
+    int comprimento = strlen(string);
     if(string[0] == ' ') {
         string[0] = '\0';
+    } else if (string[comprimento - 1] == ' ') {
+        string[comprimento - 1] = '\0';
     }
-    if(string[aux] == ' '){
-        string[aux] = '\0';
+}
+
+void insereUnico(FILE* arqSaida, int insercao, int flagTipagem) {
+    int intNulo = -1;
+
+    switch (flagTipagem) {
+        case 0:
+            if (insercao != 0) {
+            fwrite(&insercao, sizeof(int), 1, arqSaida);
+            } else {
+                fwrite(&intNulo, sizeof(int), 1, arqSaida);
+            }
+            break;
+        case 1:
+            if (insercao != ' ') {
+                fwrite(&insercao, sizeof(char), 1, arqSaida);
+            } else {
+                preenchimentoComSifrao(arqSaida, 1, tamUnidadeMedida);
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+void insereMultiplos(FILE* arqSaida, char* insercao, int tamanhoCampo, int isFixo) {
+    fwrite(insercao, sizeof(char), strlen(insercao), arqSaida);
+    if (isFixo) {
+        preenchimentoComSifrao(arqSaida, strlen(insercao), tamanhoCampo);
+    } else {
+        fwrite("|", sizeof(char), 1, arqSaida);
     }
 }
 
@@ -88,57 +135,22 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
             token = strtok(NULL, ",");
         }
 
-        //ESCREVE VALOR NO ARQUIVO
-        //obs: dar define nos valores de tamanhho de campo 
+
+        //obs: dar define nos valores de tamanhho de campo
+
+        //Funcoes que criam registro e adicionam campos
         criaInicioRegistro(arqSaida);
-
-        int intNulo = -1;
         
-        fwrite(&aux.idConecta, sizeof(int), 1, arqSaida);
-
-        fwrite(aux.siglaPais, sizeof(char), strlen(aux.siglaPais), arqSaida);
-        preenchimentoComSifrao(arqSaida, strlen(aux.siglaPais), tamSiglaPais);
-
-        if (aux.idPoPsConectado != 0) {
-            fwrite(&aux.idPoPsConectado, sizeof(int), 1, arqSaida);
-            
-        } else {
-            fwrite(&intNulo, sizeof(int), 1, arqSaida);
-        }
-
-        fwrite(&aux.unidadeMedida, sizeof(char), strlen(&aux.unidadeMedida), arqSaida);
-        preenchimentoComSifrao(arqSaida, strlen(&aux.unidadeMedida), tamUnidadeMedida);
-
-        if (aux.velocidade != 0) {
-            fwrite(&aux.velocidade, sizeof(int), 1, arqSaida);
-        } else {
-            fwrite(&intNulo, sizeof(int), 1, arqSaida);
-        }
-        
-        fwrite(aux.nomePoPs, sizeof(char), strlen(aux.nomePoPs), arqSaida);
-        fwrite("|", sizeof(char), 1, arqSaida);
-
-        fwrite(aux.nomePais, sizeof(char), strlen(aux.nomePais), arqSaida);
-        fwrite("|", sizeof(char), 1, arqSaida);
+        insereUnico(arqSaida, aux.idConecta, 0);
+        insereMultiplos(arqSaida, aux.siglaPais, tamSiglaPais, 1);
+        insereUnico(arqSaida, aux.idPoPsConectado, 0);
+        insereUnico(arqSaida, aux.unidadeMedida, 1);
+        insereUnico(arqSaida, aux.velocidade, 0);
+        insereMultiplos(arqSaida, aux.nomePoPs, 0, 0);
+        insereMultiplos(arqSaida, aux.nomePais, 0, 0);
         
         int tamOcupadoRegistro = 22 + strlen(aux.nomePoPs) + strlen(aux.nomePais);
         preenchimentoComSifrao(arqSaida, tamOcupadoRegistro, tamRegistro);
-    }
-}
-
-void criaRegCabecalho(FILE* arq) {
-    fwrite("0", sizeof(char), 1, arq);
-
-    int topo = -1;
-    fwrite(&topo, sizeof(int), 1, arq);
-
-    int zero = 0;
-    for(int i = 0; i < 4; i++) {
-        fwrite(&zero, sizeof(int), 1, arq);
-    }
-
-    for(int i = 0; i < 939; i++) {
-        fwrite("$", sizeof(char), 1, arq);
     }
 }
 
@@ -154,7 +166,6 @@ void funcUm(char nomeArqEntrada[], char nomeArqSaida[]) {
     criaRegCabecalho(arqSaida);
     createTable(arqEntrada, arqSaida);
     atualizaRegCabecalho(arqSaida);
-
     fclose(arqEntrada);
     fclose(arqSaida);
 
