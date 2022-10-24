@@ -61,16 +61,16 @@ void insereUnico(FILE* arqSaida, int insercao, int flagTipagem) {
     switch (flagTipagem) {
         case 0:
             if (insercao != 0) {
-            fwrite(&insercao, sizeof(int), 1, arqSaida);
+                fwrite(&insercao, sizeof(int), 1, arqSaida);
             } else {
                 fwrite(&intNulo, sizeof(int), 1, arqSaida);
             }
             break;
         case 1:
-            if (insercao != ' ') {
+            if (insercao != '\0') {
                 fwrite(&insercao, sizeof(char), 1, arqSaida);
             } else {
-                preenchimentoComSifrao(arqSaida, 1, tamUnidadeMedida);
+                preenchimentoComSifrao(arqSaida, 0, tamUnidadeMedida);
             }
             break;
         default:
@@ -160,12 +160,29 @@ void funcUm(char nomeArqEntrada[], char nomeArqSaida[]) {
     testaErroArquivo(arqEntrada);
     
     FILE* arqSaida;
-    arqSaida = fopen(nomeArqSaida, "wb");
+    arqSaida = fopen(nomeArqSaida, "wb+");
     testaErroArquivo(arqSaida);
 
     criaRegCabecalho(arqSaida);
     createTable(arqEntrada, arqSaida);
     atualizaRegCabecalho(arqSaida);
+
+    // FILE* arqTeste = fopen("teste.bin", "rb");
+    // char status;
+    // int topo;
+    // int proxRRN;
+    // int numRegRem;
+    // int numPagDisc;
+    // int qttCompacta;
+    // fread(&status, sizeof(char), 1, arqTeste);
+    // fread(&topo, sizeof(int), 1, arqTeste);
+    // fread(&proxRRN, sizeof(int), 1, arqTeste);
+    // fread(&numRegRem, sizeof(int), 1, arqTeste);
+    // fread(&numPagDisc, sizeof(int), 1, arqTeste);
+    // fread(&qttCompacta, sizeof(int), 1, arqTeste);
+    // printf("\n%c %d %d %d %d %d \n",  status, topo, proxRRN, numRegRem, numPagDisc, qttCompacta);
+    // fclose(arqTeste);
+
     fclose(arqEntrada);
     fclose(arqSaida);
 

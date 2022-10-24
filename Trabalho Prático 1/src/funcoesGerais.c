@@ -98,18 +98,16 @@ void atualizaRegCabecalho (FILE* arquivo) {
 
 	fseek(arquivo, 0, SEEK_END);
 	sz = ftell(arquivo);
-	printf("%d\n", sz);
 
-	pagDisco = (int) ceil((sz - 960.0) / (64.0 * 15.0)) + 1;
-	printf("%d\n", pagDisco);
-
+	pagDisco = (int) ceil((sz) / (64.0 * 15.0));
 	proxRRN = ((sz - 960) / 64);
-	printf("%d\n", proxRRN);
 
 	fseek(arquivo, 5, SEEK_SET);
 	fwrite(&proxRRN, sizeof(int), 1, arquivo);
+
 	fseek(arquivo, 13, SEEK_SET);
 	fwrite(&pagDisco, sizeof(int), 1, arquivo);
+
 	fseek(arquivo, 0, SEEK_SET);
 	fwrite("1", sizeof(char), 1, arquivo);
 
