@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 void readline(char* string) {
     char c = 0;
@@ -93,14 +94,17 @@ void testaErroArquivo(FILE* arquivo) {
 }
 
 void atualizaRegCabecalho (FILE* arquivo) {
-	int sz, pagDisco, proxRRN;
+	int sz, proxRRN, pagDisco;
+
 	fseek(arquivo, 0, SEEK_END);
 	sz = ftell(arquivo);
-	pagDisco = ((sz - 960) / 64) / 15;
-	proxRRN = (sz - 960) / 64 + 1;
-	if(((sz-960) % 64) != 0){
-		pagDisco++;
-	}
+	printf("%d\n", sz);
+
+	pagDisco = (int) ceil((sz - 960.0) / (64.0 * 15.0)) + 1;
+	printf("%d\n", pagDisco);
+
+	proxRRN = ((sz - 960) / 64);
+	printf("%d\n", proxRRN);
 
 	fseek(arquivo, 5, SEEK_SET);
 	fwrite(&proxRRN, sizeof(int), 1, arquivo);

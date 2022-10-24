@@ -5,12 +5,14 @@ int main(void){
     int funcionalidade; 
     char nomeArqEntrada[campoMaximo];
     char nomeArqSaida[campoMaximo];
-    scanf("%d", &funcionalidade);
-    readline(nomeArqEntrada);
+    scanf("%d %s ", &funcionalidade, nomeArqEntrada);
+    //readline(nomeArqEntrada);
+
 
     switch(funcionalidade) {
         case 1:
-            readline(nomeArqSaida);
+            scanf("%s", nomeArqSaida);
+            //readline(nomeArqSaida);
             funcUm(nomeArqEntrada, nomeArqSaida);
             break;
         case 2:
@@ -31,4 +33,7 @@ int main(void){
         default:
             printf("Comando Não Encontrado \n");
     }
+
+    return 0;
+
 }
