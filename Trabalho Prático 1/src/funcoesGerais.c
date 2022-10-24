@@ -93,5 +93,20 @@ void testaErroArquivo(FILE* arquivo) {
 }
 
 void atualizaRegCabecalho (FILE* arquivo) {
+	int sz, pagDisco, proxRRN;
+	sz = ftell(arquivo);
+	pagDisco = ((sz-960)/64)/15;
+	proxRRN = (sz-960)/64 + 1;
+	if(((sz-960) % 64) != 0){
+		pagDisco++;
+	}
+
+	fseek(arquivo, 5, SEEK_SET);
+	fwrite(&proxRRN, sizeof(int), 1, arquivo);
+	fseek(arquivo, 13, SEEK_SET);
+	fwrite(&pagDisco, sizeof(int), 1, arquivo);
+	fseek(arquivo, 0, SEEK_SET);
+	fwrite("1", sizeof(char), 1, arquivo);
+
 	return;
 }

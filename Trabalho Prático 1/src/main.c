@@ -5,7 +5,7 @@ int main(void){
     int funcionalidade; 
     char nomeArqEntrada[campoMaximo];
     char nomeArqSaida[campoMaximo];
-    scanf("%d %s ", &funcionalidade, nomeArqEntrada);
+    scanf("%d %s", &funcionalidade, nomeArqEntrada);
 
     //readline(nomeArqEntrada);
 
@@ -17,10 +17,10 @@ int main(void){
             funcUm(nomeArqEntrada, nomeArqSaida);
             break;
         case 2:
-            //funcDois(nomeArqEntrada);
+            funcDois(nomeArqEntrada);
             break;
         case 3:
-            printf("Ainda nn fiz o WHERE \n");
+            funcTres(nomeArqEntrada);
             break;
         case 4:
             printf("Ainda nn fiz a REMOCAO \n");

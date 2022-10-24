@@ -26,8 +26,6 @@ void funcUm(char nomeArqEntrada[], char nomeArqSaida[]);
 
 //Funcionalidade 2
 void funcDois(char nomeArqEntrada[]);
-void selectFrom(FILE* arqEntrada);
-void selectFromWhere(FILE* arqEntrada);
 
 //Funcionalidade 3
 void funcTres(char nomeArqEntrada[]);

@@ -31,8 +31,12 @@ void transfString(char linhaInicial[], char linhaFinal[]) {
 }
 
 void transfInversaString(char *string) {
+    int aux = strlen(string);
     if(string[0] == ' ') {
         string[0] = '\0';
+    }
+    if(string[aux] == ' '){
+        string[aux] = '\0';
     }
 }
 
