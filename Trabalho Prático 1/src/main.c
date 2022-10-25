@@ -19,7 +19,7 @@ int main(void){
             funcDois(nomeArqEntrada);
             break;
         case 3:
-            //funcTres(nomeArqEntrada);
+            funcTres(nomeArqEntrada);
             break;
         case 4:
             printf("Ainda nn fiz a REMOCAO \n");

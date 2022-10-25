@@ -93,6 +93,16 @@ void testaErroArquivo(FILE* arquivo) {
     }
 }
 
+void verificaStatus(FILE* arquivo){
+	char status;
+	fread(&status, sizeof(char), 1, arquivo);
+	if(status == '0'){
+		printf("Falha no processamento do arquivo.\n");
+		exit(0);
+	}
+	fseek(arquivo, 0L, SEEK_SET);
+}
+
 void atualizaRegCabecalho (FILE* arquivo) {
 	int sz, proxRRN, pagDisco;
 

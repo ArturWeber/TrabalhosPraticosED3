@@ -19,6 +19,7 @@ void readline(char* string);
 void binarioNaTela(char *nomeArquivoBinario);
 void scan_quote_string(char *str);
 void testaErroArquivo(FILE* arquivo);
+void verificaStatus(FILE* arquivo);
 void atualizaRegCabecalho (FILE* arquivo);
 
 //Funcionalidades

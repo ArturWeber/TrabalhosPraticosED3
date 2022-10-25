@@ -23,7 +23,7 @@ void imprimeInt(int impressao, char *apresentacao, int flagTipagem) {
 }
 
 void imprimeString(char *impressao, char *apresentacao) {
-    if (impressao[0] != '$' && impressao[0] != '\0') {
+    if (impressao[0] != '$' && impressao[0] != '\0' && strlen(impressao) > 1) {
         printf(apresentacao, impressao);
     }
     impressao[0] = '\0';
@@ -44,10 +44,15 @@ void selectFrom(FILE* arqEntrada){
         printf("\n");
     }
     
+    //zerando campos variados que estavam dando problema no primeiro caso
+    strcpy(aux.nomePais, "");
+    strcpy(aux.nomePoPs, "");
+
     int i = 0;
     while(i < numRegistros){
         fseek(arqEntrada, 960 + (64 * i), SEEK_SET);
         i++;
+
 
         fread(&removido, sizeof(char), 1, arqEntrada);
         if(removido == '1'){
@@ -84,6 +89,7 @@ void funcDois(char nomeArqEntrada[]){
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb");
     testaErroArquivo(arqEntrada);
+    verificaStatus(arqEntrada);
 
     selectFrom(arqEntrada);
 

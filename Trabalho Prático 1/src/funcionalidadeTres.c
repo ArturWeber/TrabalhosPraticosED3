@@ -129,8 +129,10 @@ void selectFromWhere(FILE* arqEntrada){
 
 void funcTres(char nomeArqEntrada[]){
     FILE* arqEntrada;
+    
     arqEntrada = fopen(nomeArqEntrada, "rb");
     testaErroArquivo(arqEntrada);
+    verificaStatus(arqEntrada);
 
     selectFromWhere(arqEntrada);
 
