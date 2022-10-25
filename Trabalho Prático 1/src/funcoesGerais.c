@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
+#include "headerFuncoes.h"
 
 void readline(char* string) {
     char c = 0;
@@ -94,10 +95,12 @@ void testaErroArquivo(FILE* arquivo) {
 }
 
 void verificaStatus(FILE* arquivo){
+	fseek(arquivo, 0L, SEEK_SET);
 	char status;
 	fread(&status, sizeof(char), 1, arquivo);
 	if(status == '0'){
 		printf("Falha no processamento do arquivo.\n");
+		fclose(arquivo);
 		exit(0);
 	}
 	fseek(arquivo, 0L, SEEK_SET);
@@ -122,4 +125,34 @@ void atualizaRegCabecalho (FILE* arquivo) {
 	fwrite("1", sizeof(char), 1, arquivo);
 
 	return;
+}
+
+registro inicializaRegistro(void){
+    registro aux;
+    memset(&aux, 0, sizeof(registro));
+	return aux;
+}
+
+void imprimeInt(int impressao, char *apresentacao, int flagTipagem) {
+    switch (flagTipagem) {
+    case 0:
+        if (impressao != -1) {
+            printf(apresentacao, impressao);
+        }
+        break;
+    case 1:
+        if (impressao != '$') {
+            printf(apresentacao, impressao);
+        }
+        break;
+    default:
+        break;
+    }
+    
+}
+
+void imprimeString(char *impressao, char *apresentacao) {
+    if (impressao[0] != '$' && impressao[0] != '\0' && strlen(impressao) > 1) {
+        printf(apresentacao, impressao);
+    }
 }

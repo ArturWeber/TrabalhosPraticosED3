@@ -4,34 +4,7 @@
 #include <math.h>
 #include "headerFuncoes.h"
 
-void imprimeInt(int impressao, char *apresentacao, int flagTipagem) {
-    switch (flagTipagem) {
-    case 0:
-        if (impressao != -1) {
-            printf(apresentacao, impressao);
-        }
-        break;
-    case 1:
-        if (impressao != '$') {
-            printf(apresentacao, impressao);
-        }
-        break;
-    default:
-        break;
-    }
-    
-}
-
-void imprimeString(char *impressao, char *apresentacao) {
-    if (impressao[0] != '$' && impressao[0] != '\0' && strlen(impressao) > 1) {
-        printf(apresentacao, impressao);
-    }
-    impressao[0] = '\0';
-}
-
-
 void selectFrom(FILE* arqEntrada){
-    registro aux;
     int encadeamento;
     char removido;
     fseek(arqEntrada, 0L, SEEK_END);
@@ -44,10 +17,6 @@ void selectFrom(FILE* arqEntrada){
         printf("\n");
     }
     
-    //zerando campos variados que estavam dando problema no primeiro caso
-    strcpy(aux.nomePais, "");
-    strcpy(aux.nomePoPs, "");
-
     int i = 0;
     while(i < numRegistros){
         fseek(arqEntrada, 960 + (64 * i), SEEK_SET);
@@ -59,6 +28,7 @@ void selectFrom(FILE* arqEntrada){
             continue;
         }
 
+        registro aux = inicializaRegistro();
         fread(&encadeamento, sizeof(int), 1, arqEntrada);
         fread(&aux.idConecta, sizeof(int), 1, arqEntrada);
         fread(aux.siglaPais, sizeof(char), tamSiglaPais, arqEntrada);
@@ -85,14 +55,14 @@ void selectFrom(FILE* arqEntrada){
 
 }
 
-void funcDois(char nomeArqEntrada[]){
+void funcDois(char *nomeArqEntrada){
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb");
+
     testaErroArquivo(arqEntrada);
     verificaStatus(arqEntrada);
 
     selectFrom(arqEntrada);
 
     fclose(arqEntrada);
-
 }

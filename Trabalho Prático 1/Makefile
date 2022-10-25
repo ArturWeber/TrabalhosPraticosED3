@@ -1,6 +1,6 @@
 CC ?= gcc
 ZIP ?= 7za
-CFLAGS += -Wall -Wextra -Wpedantic
+CFLAGS += -Wall -Wextra
 LDFLAGS += -lm
 VDFLAGS += --leak-check=full --show-leak-kinds=all -s
 

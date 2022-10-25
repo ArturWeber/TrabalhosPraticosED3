@@ -21,12 +21,11 @@ void scan_quote_string(char *str);
 void testaErroArquivo(FILE* arquivo);
 void verificaStatus(FILE* arquivo);
 void atualizaRegCabecalho (FILE* arquivo);
+registro inicializaRegistro(void);
+void imprimeInt(int impressao, char *apresentacao, int flagTipagem);
+void imprimeString(char *impressao, char *apresentacao);
 
 //Funcionalidades
-void funcUm(char nomeArqEntrada[], char nomeArqSaida[]);
-
-//Funcionalidade 2
-void funcDois(char nomeArqEntrada[]);
-
-//Funcionalidade 3
-void funcTres(char nomeArqEntrada[]);
+void funcUm(char *nomeArqEntrada, char *nomeArqSaida); 
+void funcDois(char *nomeArqEntrada);
+void funcTres(char *nomeArqEntrada);

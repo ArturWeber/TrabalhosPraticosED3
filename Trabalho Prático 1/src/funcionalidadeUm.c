@@ -90,7 +90,7 @@ void insereString(FILE* arqSaida, char* insercao, int tamanhoCampo, int isFixo) 
 void createTable(FILE* arqEntrada, FILE* arqSaida) {
 
     //cria registro auxiliar e variaveis para armazenar as linhas 
-    registro aux;
+    registro aux = inicializaRegistro();
     char linhaDestratada[linhaMaxima];
     fgets(linhaDestratada, linhaMaxima, arqEntrada);
     char linhaTratada[linhaMaxima];
@@ -154,13 +154,13 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
     }
 }
 
-void funcUm(char nomeArqEntrada[], char nomeArqSaida[]) {
+void funcUm(char *nomeArqEntrada, char *nomeArqSaida) {
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb");
     testaErroArquivo(arqEntrada);
     
     FILE* arqSaida;
-    arqSaida = fopen(nomeArqSaida, "wb+");
+    arqSaida = fopen(nomeArqSaida, "wb");
     testaErroArquivo(arqSaida);
 
     criaRegCabecalho(arqSaida);
