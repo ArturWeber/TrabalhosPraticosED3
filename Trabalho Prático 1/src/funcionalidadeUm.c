@@ -55,7 +55,7 @@ void transfInversaString(char *string) {
     }
 }
 
-void insereUnico(FILE* arqSaida, int insercao, int flagTipagem) {
+void insereInt(FILE* arqSaida, int insercao, int flagTipagem) {
     int intNulo = -1;
 
     switch (flagTipagem) {
@@ -78,7 +78,7 @@ void insereUnico(FILE* arqSaida, int insercao, int flagTipagem) {
     }
 }
 
-void insereMultiplos(FILE* arqSaida, char* insercao, int tamanhoCampo, int isFixo) {
+void insereString(FILE* arqSaida, char* insercao, int tamanhoCampo, int isFixo) {
     fwrite(insercao, sizeof(char), strlen(insercao), arqSaida);
     if (isFixo) {
         preenchimentoComSifrao(arqSaida, strlen(insercao), tamanhoCampo);
@@ -141,13 +141,13 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
         //Funcoes que criam registro e adicionam campos
         criaInicioRegistro(arqSaida);
         
-        insereUnico(arqSaida, aux.idConecta, 0);
-        insereMultiplos(arqSaida, aux.siglaPais, tamSiglaPais, 1);
-        insereUnico(arqSaida, aux.idPoPsConectado, 0);
-        insereUnico(arqSaida, aux.unidadeMedida, 1);
-        insereUnico(arqSaida, aux.velocidade, 0);
-        insereMultiplos(arqSaida, aux.nomePoPs, 0, 0);
-        insereMultiplos(arqSaida, aux.nomePais, 0, 0);
+        insereInt(arqSaida, aux.idConecta, 0);
+        insereString(arqSaida, aux.siglaPais, tamSiglaPais, 1);
+        insereInt(arqSaida, aux.idPoPsConectado, 0);
+        insereInt(arqSaida, aux.unidadeMedida, 1);
+        insereInt(arqSaida, aux.velocidade, 0);
+        insereString(arqSaida, aux.nomePoPs, 0, 0);
+        insereString(arqSaida, aux.nomePais, 0, 0);
         
         int tamOcupadoRegistro = 22 + strlen(aux.nomePoPs) + strlen(aux.nomePais);
         preenchimentoComSifrao(arqSaida, tamOcupadoRegistro, tamRegistro);

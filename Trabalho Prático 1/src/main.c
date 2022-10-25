@@ -5,7 +5,7 @@ int main(void){
     int funcionalidade; 
     char nomeArqEntrada[campoMaximo];
     char nomeArqSaida[campoMaximo];
-    scanf("%d %s ", &funcionalidade, nomeArqEntrada);
+    scanf("%d %s", &funcionalidade, nomeArqEntrada);
     //readline(nomeArqEntrada);
 
 

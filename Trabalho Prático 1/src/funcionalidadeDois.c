@@ -1,23 +1,60 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "headerFuncoes.h"
+
+void imprimeInt(int impressao, char *apresentacao, int flagTipagem) {
+    switch (flagTipagem) {
+    case 0:
+        if (impressao != -1) {
+            printf(apresentacao, impressao);
+        }
+        break;
+    case 1:
+        if (impressao != '$') {
+            printf(apresentacao, impressao);
+        }
+        break;
+    default:
+        break;
+    }
+    
+}
+
+void imprimeString(char *impressao, char *apresentacao) {
+    if (impressao[0] != '$' && impressao[0] != '\0') {
+        printf(apresentacao, impressao);
+    }
+    impressao[0] = '\0';
+}
 
 
 void selectFrom(FILE* arqEntrada){
     registro aux;
-    int i, tam, encademento;
+    int encadeamento;
     char removido;
     fseek(arqEntrada, 0L, SEEK_END);
-    tam = (ftell(arqEntrada)-960)/64;
-    i = 0;
+    int tamanhoArq = ftell(arqEntrada);
+    int numRegistros = (tamanhoArq - 960) / 64;
+    int pagDisco = (int) ceil((tamanhoArq) / (64.0 * 15.0));
 
-    while(i < tam){
-        fseek(arqEntrada, 960+(64*i), SEEK_SET);
-
+    if (pagDisco == 1) {
+        printf("Registro inexistente.\n");
+        printf("\n");
+    }
+    
+    int i = 0;
+    while(i < numRegistros){
+        fseek(arqEntrada, 960 + (64 * i), SEEK_SET);
+        i++;
 
         fread(&removido, sizeof(char), 1, arqEntrada);
-        fread(&encademento, sizeof(int), 1, arqEntrada);
+        if(removido == '1'){
+            continue;
+        }
+
+        fread(&encadeamento, sizeof(int), 1, arqEntrada);
         fread(&aux.idConecta, sizeof(int), 1, arqEntrada);
         fread(aux.siglaPais, sizeof(char), tamSiglaPais, arqEntrada);
         fread(&aux.idPoPsConectado, sizeof(int), 1, arqEntrada);
@@ -27,27 +64,19 @@ void selectFrom(FILE* arqEntrada){
         fseek(arqEntrada, 1, SEEK_CUR);
         fscanf(arqEntrada, "%[^|]", aux.nomePais);
 
+        imprimeInt(aux.idConecta, "Identificador do ponto: %d\n", 0);
+        imprimeString(aux.nomePoPs, "Nome do ponto: %s\n");
+        imprimeString(aux.nomePais, "Pais de localizacao: %s\n");
+        imprimeString(aux.siglaPais, "Sigla do pais: %s\n");
+        imprimeInt(aux.idPoPsConectado, "Identificador do ponto conectado: %d\n", 0);
+        imprimeInt(aux.velocidade, "Velocidade de transmissao: %d", 0);
+        imprimeInt(aux.unidadeMedida, " %cbps\n", 1);
 
-
-        if(removido == '0'){
-            printf("Identificador do ponto: %d\n", aux.idConecta);
-            if(strlen(aux.nomePoPs) > 1)
-                printf("Nome do ponto: %s\n", aux.nomePoPs);
-            if(strlen(aux.nomePais) > 1)
-                printf("Pais de localizacao: %s\n", aux.nomePais);
-            if(strcmp(aux.siglaPais, "$$"))
-                printf("Sigla do pais: %s\n", aux.siglaPais);
-            if(aux.idPoPsConectado != -1)
-                printf("Identificador do ponto conectado: %d\n", aux.idPoPsConectado);
-            if(aux.velocidade != -1)
-                printf("Velocidade de transmissao: %d %cbps\n", aux.velocidade, aux.unidadeMedida);
-            printf("\n");
-        }else{
-            printf("registro removido\n");
-        }
-
-        i++;
+        printf("\n");
     }
+
+    printf("Numero de paginas de disco: %d\n", pagDisco);
+    printf("\n");
 
 }
 
@@ -61,4 +90,3 @@ void funcDois(char nomeArqEntrada[]){
     fclose(arqEntrada);
 
 }
-
