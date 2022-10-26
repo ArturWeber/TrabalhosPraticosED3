@@ -26,13 +26,6 @@ void criaInicioRegistro(FILE* arqSaida) {
     fwrite(&inicializar, sizeof(int), 1, arqSaida);
 }
 
-void preenchimentoComSifrao(FILE* arqSaida, int tamUsado, int tamMaximo){
-    //adiciona lixo em bytes não preenchido no campo
-    for (int i = 0; i < tamMaximo - tamUsado; i++){
-        fwrite("$", sizeof(char), 1, arqSaida);
-    }
-}
-
 void transfString(char linhaInicial[], char linhaFinal[]) {
     int posicao = 0;
     for(unsigned long i = 0; i < (strlen(linhaInicial) - 1); i++) {

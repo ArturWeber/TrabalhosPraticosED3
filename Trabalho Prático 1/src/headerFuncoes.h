@@ -24,8 +24,13 @@ void atualizaRegCabecalho (FILE* arquivo);
 registro inicializaRegistro(void);
 void imprimeInt(int impressao, char *apresentacao, int flagTipagem);
 void imprimeString(char *impressao, char *apresentacao);
+int descobreCampoBuscado(char* campo);
+int temAspas(int indice);
+int campoEncontrado(int campoBuscado, char* valorCampo, registro aux);
+void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo);
 
 //Funcionalidades
 void funcUm(char *nomeArqEntrada, char *nomeArqSaida); 
 void funcDois(char *nomeArqEntrada);
 void funcTres(char *nomeArqEntrada);
+void funcQuatro(char *nomeArqEntrada);

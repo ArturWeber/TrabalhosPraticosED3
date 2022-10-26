@@ -156,3 +156,86 @@ void imprimeString(char *impressao, char *apresentacao) {
         printf(apresentacao, impressao);
     }
 }
+
+int descobreCampoBuscado(char* campo) {
+    enum campos{idConecta, siglaPais, idPoPsConectado, unidadeMedida, velocidade, nomePoPs, nomePais};
+    if(!strcmp(campo, "idConecta")) {
+        return idConecta;
+    }
+    if(!strcmp(campo, "siglaPais")) {
+        return siglaPais;
+    }
+    if(!strcmp(campo, "idPoPsConectado")) {
+        return idPoPsConectado;
+    }
+    if(!strcmp(campo, "unidadeMedida")) {
+        return unidadeMedida;
+    }
+    if(!strcmp(campo, "velocidade")) {
+        return velocidade;
+    }
+    if(!strcmp(campo, "nomePoPs")) {
+        return nomePoPs;
+    }
+    if(!strcmp(campo, "nomePais")) {
+        return nomePais;
+    }
+    return 7;
+}
+
+int temAspas(int indice) {
+    if (indice == 1 || indice == 5 || indice == 6) {
+        return 1;
+    }
+    return 0;
+}
+
+int campoEncontrado(int campoBuscado, char* valorCampo, registro aux) {
+    switch (campoBuscado) {
+        case 0:
+            if (atoi(valorCampo) == aux.idConecta){
+                return 1;
+            }
+            break;
+        case 1:
+            if (!strcmp(valorCampo, aux.siglaPais)){
+                return 1;
+            }
+            break;
+        case 2:
+            if (atoi(valorCampo) == aux.idPoPsConectado){
+                return 1;
+            }
+            break;
+        case 3:
+            if (valorCampo[0] == aux.unidadeMedida){
+                return 1;
+            }
+            break;
+        case 4:
+            if (atoi(valorCampo) == aux.velocidade){
+                return 1;
+            }
+            break;
+        case 5:
+            if (!strcmp(valorCampo, aux.nomePoPs)){
+                return 1;
+            }
+            break;
+        case 6:
+            if (!strcmp(valorCampo, aux.nomePais)){
+                return 1;
+            }
+            break;
+        default:
+            break;
+    }
+    return 0;
+}
+
+void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo){
+    //adiciona lixo em bytes não preenchido no campo
+    for (int i = 0; i < tamMaximo - tamUsado; i++){
+        fwrite("$", sizeof(char), 1, arquivo);
+    }
+}

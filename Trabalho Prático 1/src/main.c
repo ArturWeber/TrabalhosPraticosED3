@@ -25,7 +25,7 @@ int main(void){
             funcTres(nomeArqEntrada);
             break;
         case 4:
-            printf("Ainda nn fiz a REMOCAO \n");
+            funcQuatro(nomeArqEntrada);
             break;
         case 5:
             printf("Ainda nn fiz o INSERT INTO \n");
