@@ -36,12 +36,10 @@ void selectFromWhere(FILE* arqEntrada){
         printf("Busca %d\n", i + 1);
         int encadeamento;
         char removido;
-        int j = 0;
-        int encontrouAlgum = 0;
-        while(j < numRegistros){
-            fseek(arqEntrada, 960 + (64 * j), SEEK_SET);
-            j++;
-
+        int numEncontrados = 0;
+        for(int rrn = 0; rrn < numRegistros; rrn++){
+            fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
+            
             fread(&removido, sizeof(char), 1, arqEntrada);
             if(removido == '1'){
                 continue;
@@ -63,7 +61,7 @@ void selectFromWhere(FILE* arqEntrada){
             }
             
             if (campoEncontrado(indiceCampoBuscado[i], valorCampoBuscado[i], aux)) {
-                encontrouAlgum++;
+                numEncontrados++;
                 imprimeInt(aux.idConecta, "Identificador do ponto: %d\n", 0);
                 imprimeString(aux.nomePoPs, "Nome do ponto: %s\n");
                 imprimeString(aux.nomePais, "Pais de localizacao: %s\n");
@@ -73,9 +71,10 @@ void selectFromWhere(FILE* arqEntrada){
                 imprimeInt(aux.unidadeMedida, " %cbps\n", 1);
                 printf("\n");
             }
+
         }
         
-        if (!encontrouAlgum){
+        if (!numEncontrados){
             printf("Registro inexistente.\n");    
             printf("\n");
         }
@@ -89,10 +88,11 @@ void selectFromWhere(FILE* arqEntrada){
 
 void funcTres(char *nomeArqEntrada){
     FILE* arqEntrada;
-    
     arqEntrada = fopen(nomeArqEntrada, "rb");
     testaErroArquivo(arqEntrada);
-    verificaStatus(arqEntrada);
+
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatus(aux.status);
 
     selectFromWhere(arqEntrada);
 

@@ -14,13 +14,23 @@ typedef struct {
     char nomePais[campoMaximo];
 } registro;
 
+typedef struct {
+    char status;
+    int topo;
+    int proxRRN;
+    int nroRegRem;
+    int nroPagDisco;
+    int qttCompacta;
+} regCabecalho;
+
 //Funcoes Gerais
 void readline(char* string);
 void binarioNaTela(char *nomeArquivoBinario);
 void scan_quote_string(char *str);
 void testaErroArquivo(FILE* arquivo);
-void verificaStatus(FILE* arquivo);
-void atualizaRegCabecalho (FILE* arquivo);
+void verificaStatus(char status);
+void atualizaRegCabecalho (FILE* arquivo, int topo, int nroRegRem, int qttCompacta);
+regCabecalho recuperaCabecalho (FILE* arquivo);
 registro inicializaRegistro(void);
 void imprimeInt(int impressao, char *apresentacao, int flagTipagem);
 void imprimeString(char *impressao, char *apresentacao);
@@ -28,6 +38,7 @@ int descobreCampoBuscado(char* campo);
 int temAspas(int indice);
 int campoEncontrado(int campoBuscado, char* valorCampo, registro aux);
 void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo);
+void atualizaStatusEscrita (FILE* arquivo);
 
 //Funcionalidades
 void funcUm(char *nomeArqEntrada, char *nomeArqSaida); 

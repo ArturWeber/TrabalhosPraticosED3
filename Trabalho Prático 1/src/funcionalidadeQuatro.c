@@ -2,14 +2,13 @@
 #include <math.h>
 #include "headerFuncoes.h"
 
-void remocaoLogica(FILE* arqEntrada) {
+void remocaoLogica(FILE* arqEntrada, int* flagRemovidos, regCabecalho cabecalho) {
     int numBuscas;
     scanf("%d", &numBuscas);
 
     fseek(arqEntrada, 0L, SEEK_END);
     int tamanhoArq = ftell(arqEntrada);
     int numRegistros = (tamanhoArq - 960) / 64;
-
 
     //char *descricaoCampo[numBuscas];
     //char *valorCampoBuscado[numBuscas];
@@ -24,16 +23,16 @@ void remocaoLogica(FILE* arqEntrada) {
             scan_quote_string(valorCampoBuscado[i]);
         }else {
             scanf("%s", valorCampoBuscado[i]);
-        }
-        
+        }   
     }
-   
+
+    int numRemovidos = cabecalho.nroRegRem;
+    int ultimoRemovido = cabecalho.topo;
     for(int i = 0; i < numBuscas; i++){
         int encadeamento;
         char removido;
-        int j = 0;
-        while(j < numRegistros){
-            fseek(arqEntrada, 960 + (64 * j), SEEK_SET);
+        for(int rrn = 0; rrn < numRegistros; rrn++){
+            fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
 
             fread(&removido, sizeof(char), 1, arqEntrada);
             if(removido == '1'){
@@ -56,25 +55,44 @@ void remocaoLogica(FILE* arqEntrada) {
             }
             
             if (campoEncontrado(indiceCampoBuscado[i], valorCampoBuscado[i], aux)) {
-                fseek(arqEntrada, -64, SEEK_CUR);
-                fwrite('1', sizeof(char), 1, arqEntrada);
-                preenchimentoComSifrao(arqEntrada, 2, tamRegistro);
+                fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
+                fwrite("1", sizeof(char), 1, arqEntrada);
+                fwrite(&ultimoRemovido, sizeof(int), 1, arqEntrada);
+                preenchimentoComSifrao(arqEntrada, 5, tamRegistro);
+                ultimoRemovido = rrn;
+                numRemovidos++;
             }
-            j++;
         }
 
         //free(descricaoCampo);
     }
+    flagRemovidos[0] = ultimoRemovido;
+    flagRemovidos[1] = numRemovidos;
 }
 
 void funcQuatro(char *nomeArqEntrada){
     FILE* arqEntrada;
-    
-    arqEntrada = fopen(nomeArqEntrada, "rb");
+    arqEntrada = fopen(nomeArqEntrada, "rb+");
     testaErroArquivo(arqEntrada);
-    verificaStatus(arqEntrada);
 
-    remocaoLogica(arqEntrada);
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatus(aux.status);
+    atualizaStatusEscrita(arqEntrada);
+
+    int flagRemovidos[2];
+    remocaoLogica(arqEntrada, flagRemovidos, aux);
+    atualizaRegCabecalho(arqEntrada, flagRemovidos[0], flagRemovidos[1], 0); 
 
     fclose(arqEntrada);
+    binarioNaTela(nomeArqEntrada);
+
+
+    // FILE* arquivo = fopen("correto.bin", "rb+");
+    // regCabecalho aux = recuperaCabecalho(arquivo);
+    // printf("\n%c %d %d %d %d %d\n", aux.status, aux.topo, aux.proxRRN, aux.nroRegRem, aux.nroPagDisco, aux.qttCompacta);
+
+    // arquivo = fopen("errado.bin", "rb+");
+    // aux = recuperaCabecalho(arquivo);
+    // printf("\n%c %d %d %d %d %d\n", aux.status, aux.topo, aux.proxRRN, aux.nroRegRem, aux.nroPagDisco, aux.qttCompacta);
+
 }

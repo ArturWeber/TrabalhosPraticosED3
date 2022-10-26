@@ -158,23 +158,7 @@ void funcUm(char *nomeArqEntrada, char *nomeArqSaida) {
 
     criaRegCabecalho(arqSaida);
     createTable(arqEntrada, arqSaida);
-    atualizaRegCabecalho(arqSaida);
-
-    // FILE* arqTeste = fopen("teste.bin", "rb");
-    // char status;
-    // int topo;
-    // int proxRRN;
-    // int numRegRem;
-    // int numPagDisc;
-    // int qttCompacta;
-    // fread(&status, sizeof(char), 1, arqTeste);
-    // fread(&topo, sizeof(int), 1, arqTeste);
-    // fread(&proxRRN, sizeof(int), 1, arqTeste);
-    // fread(&numRegRem, sizeof(int), 1, arqTeste);
-    // fread(&numPagDisc, sizeof(int), 1, arqTeste);
-    // fread(&qttCompacta, sizeof(int), 1, arqTeste);
-    // printf("\n%c %d %d %d %d %d \n",  status, topo, proxRRN, numRegRem, numPagDisc, qttCompacta);
-    // fclose(arqTeste);
+    atualizaRegCabecalho (arqSaida, -1, 0, 0); 
 
     fclose(arqEntrada);
     fclose(arqSaida);

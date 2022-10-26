@@ -17,11 +17,8 @@ void selectFrom(FILE* arqEntrada){
         printf("\n");
     }
     
-    int i = 0;
-    while(i < numRegistros){
-        fseek(arqEntrada, 960 + (64 * i), SEEK_SET);
-        i++;
-
+    for(int rrn = 0; rrn < numRegistros; rrn++){
+        fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
 
         fread(&removido, sizeof(char), 1, arqEntrada);
         if(removido == '1'){
@@ -58,9 +55,10 @@ void selectFrom(FILE* arqEntrada){
 void funcDois(char *nomeArqEntrada){
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb");
-
     testaErroArquivo(arqEntrada);
-    verificaStatus(arqEntrada);
+    
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatus(aux.status);
 
     selectFrom(arqEntrada);
 

@@ -94,37 +94,43 @@ void testaErroArquivo(FILE* arquivo) {
     }
 }
 
-void verificaStatus(FILE* arquivo){
-	fseek(arquivo, 0L, SEEK_SET);
-	char status;
-	fread(&status, sizeof(char), 1, arquivo);
+void verificaStatus(char status) {
 	if(status == '0'){
 		printf("Falha no processamento do arquivo.\n");
-		fclose(arquivo);
 		exit(0);
 	}
-	fseek(arquivo, 0L, SEEK_SET);
 }
 
-void atualizaRegCabecalho (FILE* arquivo) {
-	int sz, proxRRN, pagDisco;
+void atualizaRegCabecalho (FILE* arquivo, int topo, int nroRegRem, int qttCompacta) {
+	int tamArquivo, proxRRN, nroPagDisco;
+	fseek(arquivo, 0L, SEEK_END);
+	tamArquivo = ftell(arquivo);
+	nroPagDisco = (int) ceil((tamArquivo) / (64.0 * 15.0));
+	proxRRN = ((tamArquivo - 960) / 64);
 
-	fseek(arquivo, 0, SEEK_END);
-	sz = ftell(arquivo);
-
-	pagDisco = (int) ceil((sz) / (64.0 * 15.0));
-	proxRRN = ((sz - 960) / 64);
-
-	fseek(arquivo, 5, SEEK_SET);
-	fwrite(&proxRRN, sizeof(int), 1, arquivo);
-
-	fseek(arquivo, 13, SEEK_SET);
-	fwrite(&pagDisco, sizeof(int), 1, arquivo);
-
-	fseek(arquivo, 0, SEEK_SET);
+    fseek(arquivo, 0L, SEEK_SET);
 	fwrite("1", sizeof(char), 1, arquivo);
+    fwrite(&topo, sizeof(int), 1, arquivo);
+	fwrite(&proxRRN, sizeof(int), 1, arquivo);
+    fwrite(&nroRegRem, sizeof(int), 1, arquivo);
+	fwrite(&nroPagDisco, sizeof(int), 1, arquivo);
+    fwrite(&qttCompacta, sizeof(int), 1, arquivo);
 
 	return;
+}
+
+regCabecalho recuperaCabecalho (FILE* arquivo) {
+    fseek(arquivo, 0L, SEEK_SET);
+    regCabecalho aux;
+
+    fread(&aux.status, sizeof(char), 1, arquivo);
+    fread(&aux.topo, sizeof(int), 1, arquivo);
+    fread(&aux.proxRRN, sizeof(int), 1, arquivo);
+    fread(&aux.nroRegRem, sizeof(int), 1, arquivo);
+    fread(&aux.nroPagDisco, sizeof(int), 1, arquivo);
+    fread(&aux.qttCompacta, sizeof(int), 1, arquivo);
+
+    return aux;
 }
 
 registro inicializaRegistro(void){
@@ -184,10 +190,10 @@ int descobreCampoBuscado(char* campo) {
 }
 
 int temAspas(int indice) {
-    if (indice == 1 || indice == 5 || indice == 6) {
-        return 1;
+    if (indice == 0 || indice == 2 || indice == 4) {
+        return 0;
     }
-    return 0;
+    return 1;
 }
 
 int campoEncontrado(int campoBuscado, char* valorCampo, registro aux) {
@@ -238,4 +244,9 @@ void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo){
     for (int i = 0; i < tamMaximo - tamUsado; i++){
         fwrite("$", sizeof(char), 1, arquivo);
     }
+}
+
+void atualizaStatusEscrita (FILE* arquivo) {
+	fwrite("0", sizeof(char), 1, arquivo);
+	fseek(arquivo, 0L, SEEK_SET);
 }
