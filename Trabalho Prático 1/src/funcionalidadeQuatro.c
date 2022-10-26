@@ -31,7 +31,7 @@ void remocaoLogica(FILE* arqEntrada, int* flagRemovidos, regCabecalho cabecalho)
     for(int i = 0; i < numBuscas; i++){
         int encadeamento;
         char removido;
-        for(int rrn = 0; rrn < numRegistros; rrn++){
+        for(int rrn = 0; rrn < numRegistros; rrn++) {
             fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
 
             fread(&removido, sizeof(char), 1, arqEntrada);
@@ -76,7 +76,7 @@ void funcQuatro(char *nomeArqEntrada){
     testaErroArquivo(arqEntrada);
 
     regCabecalho aux = recuperaCabecalho(arqEntrada);
-    verificaStatus(aux.status);
+    verificaStatusLeitura(aux.status);
     atualizaStatusEscrita(arqEntrada);
 
     int flagRemovidos[2];
@@ -85,7 +85,6 @@ void funcQuatro(char *nomeArqEntrada){
 
     fclose(arqEntrada);
     binarioNaTela(nomeArqEntrada);
-
 
     // FILE* arquivo = fopen("correto.bin", "rb+");
     // regCabecalho aux = recuperaCabecalho(arquivo);

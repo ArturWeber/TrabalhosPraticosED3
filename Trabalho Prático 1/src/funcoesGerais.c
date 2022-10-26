@@ -94,7 +94,7 @@ void testaErroArquivo(FILE* arquivo) {
     }
 }
 
-void verificaStatus(char status) {
+void verificaStatusLeitura(char status) {
 	if(status == '0'){
 		printf("Falha no processamento do arquivo.\n");
 		exit(0);

@@ -92,7 +92,7 @@ void funcTres(char *nomeArqEntrada){
     testaErroArquivo(arqEntrada);
 
     regCabecalho aux = recuperaCabecalho(arqEntrada);
-    verificaStatus(aux.status);
+    verificaStatusLeitura(aux.status);
 
     selectFromWhere(arqEntrada);
 
