@@ -20,6 +20,7 @@ clean:
 	@rm -f $(ZIPFILE)
 	@rm -rf build/
 	@rm -rf out/*.csv
+	@rm -rf *.bin
 
 zip: clean
 	$(ZIP) a $(ZIPFILE) ./*
