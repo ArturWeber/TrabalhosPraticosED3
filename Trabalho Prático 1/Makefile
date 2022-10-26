@@ -1,7 +1,6 @@
 CC ?= gcc
 ZIP ?= 7za
-PDFLAGS += #-march=native
-CFLAGS += -Wall -Wextra -Wpedantic
+CFLAGS += -Wall -Wextra
 LDFLAGS += -lm
 VDFLAGS += --leak-check=full --show-leak-kinds=all -s
 
@@ -15,13 +14,13 @@ CFILES      = $(wildcard src/*.c) $(wildcard src/**/*.c)
 
 .PHONY: all clean zip run test debug
 
-all: PDFLAGS += -O3
 all: $(EXECUTABLE)
 
 clean:
 	@rm -f $(ZIPFILE)
 	@rm -rf build/
 	@rm -rf out/*.csv
+	@rm -rf *.bin
 
 zip: clean
 	$(ZIP) a $(ZIPFILE) ./*
@@ -35,7 +34,7 @@ debug: $(EXECUTABLE)
 
 $(EXECUTABLE): $(CFILES)
 	@mkdir -p build
-	$(CC) $(CFLAGS) $(INC_PARAMS) -o $@ $^ $(LDFLAGS) $(PDFLAGS)
+	$(CC) $(CFLAGS) $(INC_PARAMS) -o $@ $^ $(LDFLAGS)
 
 valgrind: $(EXECUTABLE)
 	valgrind $(VDFLAGS) ./$(EXECUTABLE)

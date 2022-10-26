@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
+#include "headerFuncoes.h"
 
 void readline(char* string) {
     char c = 0;
@@ -9,7 +11,7 @@ void readline(char* string) {
     do{
         c = (char) getchar();
 
-    } while(c == '\n' || c == '\r');
+    } while(c == '\n' || c == '\r' || c == ' ');
 
     int i = 0;
 
@@ -17,7 +19,7 @@ void readline(char* string) {
         string[i] = c;
         i++;
         c = getchar();
-    } while(c != '\n' && c != '\r');
+    } while(c != '\n' && c != '\r' && c != ' ');
 
     string[i]  = '\0';
 }
@@ -85,7 +87,72 @@ void scan_quote_string(char *str) {
 	}
 }
 
-void imprimeErroArquivo() {
-	printf("Falha no processamento do arquivo.");
+void testaErroArquivo(FILE* arquivo) {
+	if(arquivo == NULL) {
+		printf("Falha no processamento do arquivo.\n");
+        exit(0);
+    }
 }
 
+void verificaStatus(FILE* arquivo){
+	fseek(arquivo, 0L, SEEK_SET);
+	char status;
+	fread(&status, sizeof(char), 1, arquivo);
+	if(status == '0'){
+		printf("Falha no processamento do arquivo.\n");
+		fclose(arquivo);
+		exit(0);
+	}
+	fseek(arquivo, 0L, SEEK_SET);
+}
+
+void atualizaRegCabecalho (FILE* arquivo) {
+	int sz, proxRRN, pagDisco;
+
+	fseek(arquivo, 0, SEEK_END);
+	sz = ftell(arquivo);
+
+	pagDisco = (int) ceil((sz) / (64.0 * 15.0));
+	proxRRN = ((sz - 960) / 64);
+
+	fseek(arquivo, 5, SEEK_SET);
+	fwrite(&proxRRN, sizeof(int), 1, arquivo);
+
+	fseek(arquivo, 13, SEEK_SET);
+	fwrite(&pagDisco, sizeof(int), 1, arquivo);
+
+	fseek(arquivo, 0, SEEK_SET);
+	fwrite("1", sizeof(char), 1, arquivo);
+
+	return;
+}
+
+registro inicializaRegistro(void){
+    registro aux;
+    memset(&aux, 0, sizeof(registro));
+	return aux;
+}
+
+void imprimeInt(int impressao, char *apresentacao, int flagTipagem) {
+    switch (flagTipagem) {
+    case 0:
+        if (impressao != -1) {
+            printf(apresentacao, impressao);
+        }
+        break;
+    case 1:
+        if (impressao != '$') {
+            printf(apresentacao, impressao);
+        }
+        break;
+    default:
+        break;
+    }
+    
+}
+
+void imprimeString(char *impressao, char *apresentacao) {
+    if (impressao[0] != '$' && impressao[0] != '\0' && strlen(impressao) > 1) {
+        printf(apresentacao, impressao);
+    }
+}

@@ -1,27 +1,28 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "headerFuncoes.h"
 
-int main(int argc, char* argv[]){
+int main(void){
     int funcionalidade; 
-    scanf("%d", &funcionalidade);
-
+    //char *nomeArqEntrada;
+    //char *nomeArqSaida;
+    //scanf("%d %ms", &funcionalidade, &nomeArqEntrada);
     char nomeArqEntrada[campoMaximo];
-    readline(nomeArqEntrada);
-
     char nomeArqSaida[campoMaximo];
-    readline(nomeArqSaida);
-
-    //printf("%d, %s, %s", funcionalidade, nomeArqEntrada, nomeArqSaida);
+    scanf("%d %s", &funcionalidade, nomeArqEntrada);
 
     switch(funcionalidade) {
         case 1:
+            //scanf("%ms", &nomeArqSaida);
+            scanf("%s", nomeArqSaida);
             funcUm(nomeArqEntrada, nomeArqSaida);
+            //free(nomeArqSaida);
             break;
         case 2:
-            printf("Ainda nn fiz o SELECT \n");
+            funcDois(nomeArqEntrada);
             break;
         case 3:
-            printf("Ainda nn fiz o WHERE \n");
+            funcTres(nomeArqEntrada);
             break;
         case 4:
             printf("Ainda nn fiz a REMOCAO \n");
@@ -35,4 +36,8 @@ int main(int argc, char* argv[]){
         default:
             printf("Comando Não Encontrado \n");
     }
+
+    //free(nomeArqEntrada);
+    return 0;
+
 }
