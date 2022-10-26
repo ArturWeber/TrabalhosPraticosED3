@@ -94,5 +94,4 @@ void funcQuatro(char *nomeArqEntrada){
     // arquivo = fopen("errado.bin", "rb+");
     // aux = recuperaCabecalho(arquivo);
     // printf("\n%c %d %d %d %d %d\n", aux.status, aux.topo, aux.proxRRN, aux.nroRegRem, aux.nroPagDisco, aux.qttCompacta);
-
 }
