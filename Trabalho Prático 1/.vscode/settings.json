@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "headerfuncoes.h": "c"
+        "headerfuncoes.h": "c",
+        "string": "c",
+        "iosfwd": "c"
     }
 }

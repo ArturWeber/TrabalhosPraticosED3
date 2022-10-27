@@ -18,10 +18,16 @@ void transfString(char linhaInicial[], char linhaFinal[]) {
 
 void transfInversaString(char *string) {  
     int comprimento = strlen(string);
-    if(string[0] == ' ') {
+    int ultimoDigito = -1 ;
+    for (int i = 0; i < comprimento; i++) {
+        if (string[i] != ' ') {
+            ultimoDigito = i;
+        }
+    }
+    if (ultimoDigito == -1) {
         string[0] = '\0';
-    } else if (string[comprimento - 1] == ' ') {
-        string[comprimento - 1] = '\0';
+    } else {
+        string[ultimoDigito + 1] = '\0';
     }
 }
 
