@@ -75,11 +75,8 @@ void createTable(FILE* arqEntrada, FILE* arqSaida, regCabecalho* cabecalho) {
         cabecalho->proxRRN++;
 
         //Funcoes que criam registro e adicionam campos
-        criaInicioRegistro(arqSaida);
         insereRegistro(arqSaida, aux);
         
-        int tamOcupadoRegistro = 22 + strlen(aux.nomePoPs) + strlen(aux.nomePais);
-        preenchimentoComSifrao(arqSaida, tamOcupadoRegistro, tamRegistro);
     }
     cabecalho->status = '1';
 }

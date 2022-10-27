@@ -303,6 +303,8 @@ void insereString(FILE* arquivo, char* insercao, int tamanhoCampo, int isFixo) {
 }
 
 void insereRegistro (FILE* arquivo, registro aux) {
+    criaInicioRegistro(arquivo);
+
     insereInt(arquivo, aux.idConecta, 0);
     insereString(arquivo, aux.siglaPais, tamSiglaPais, 1);
     insereInt(arquivo, aux.idPoPsConectado, 0);
@@ -310,6 +312,9 @@ void insereRegistro (FILE* arquivo, registro aux) {
     insereInt(arquivo, aux.velocidade, 0);
     insereString(arquivo, aux.nomePoPs, 0, 0);
     insereString(arquivo, aux.nomePais, 0, 0);
+
+    int tamOcupadoRegistro = 22 + strlen(aux.nomePoPs) + strlen(aux.nomePais);
+    preenchimentoComSifrao(arquivo, tamOcupadoRegistro, tamRegistro);
 }
 
 void criaInicioRegistro(FILE* arqSaida) {

@@ -49,23 +49,21 @@ void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
                 break;
             }
         }
+    }
 
-        for(int insercao = 0; insercao < numInsercoes; insercao++) {
-            if(cabecalho->nroRegRem) {
-                fseek(arquivo, (960 + cabecalho->topo * 64) + 1, SEEK_SET);
-                fread(&(cabecalho->topo), sizeof(int), 1, arquivo);
-                fseek(arquivo, -5, SEEK_CUR);
-                criaInicioRegistro(arquivo);
-                insereRegistro(arquivo, aux[insercao]);
-                cabecalho->nroRegRem--;
-            } else {
-                fseek(arquivo, (960 + cabecalho->proxRRN * 64), SEEK_SET);
-                criaInicioRegistro(arquivo);
-                insereRegistro(arquivo, aux[insercao]);
-                cabecalho->proxRRN++;
-            }
-            
+    for(int insercao = 0; insercao < numInsercoes; insercao++) {
+        if(cabecalho->nroRegRem) {
+            fseek(arquivo, (961 + (cabecalho->topo * 64)), SEEK_SET);
+            fread(&(cabecalho->topo), sizeof(int), 1, arquivo);
+            fseek(arquivo, -5, SEEK_CUR);
+            insereRegistro(arquivo, aux[insercao]);
+            cabecalho->nroRegRem--;
+        } else {
+            fseek(arquivo, (960 + (cabecalho->proxRRN * 64)), SEEK_SET);
+            insereRegistro(arquivo, aux[insercao]);
+            cabecalho->proxRRN++;
         }
+            
     }
     cabecalho->status = '1';
 }
@@ -76,21 +74,21 @@ void funcCinco(char *nomeArqEntrada){
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb+");
     testaErroArquivo(arqEntrada);
-    fclose(arqEntrada);
 
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusLeitura(aux.status);
     atualizaStatusEscrita(arqEntrada);
 
     insertInto(arqEntrada, &aux);
-    atualizaRegCabecalho(arqEntrada, aux); 
+    atualizaRegCabecalho(arqEntrada, aux);
+    fclose(arqEntrada);
 
-    // FILE* arquivo1 = fopen("correto.bin", "rb+");
+    // FILE* arquivo1 = fopen("binario15.bin", "rb+");
     // regCabecalho aux1 = recuperaCabecalho(arquivo1);
     // printf("\n%c %d %d %d %d %d\n", aux1.status, aux1.topo, aux1.proxRRN, aux1.nroRegRem, aux1.nroPagDisco, aux1.qttCompacta);
     // printf("\n\n\n");
     // fclose(arquivo1);
-    // FILE *arquivo2 = fopen("errado.bin", "rb+");
+    // FILE *arquivo2 = fopen("correto15.bin", "rb+");
     // regCabecalho aux2 = recuperaCabecalho(arquivo2);
     // printf("\n%c %d %d %d %d %d\n", aux2.status, aux2.topo, aux2.proxRRN, aux2.nroRegRem, aux2.nroPagDisco, aux2.qttCompacta);
     // printf("\n\n\n");
