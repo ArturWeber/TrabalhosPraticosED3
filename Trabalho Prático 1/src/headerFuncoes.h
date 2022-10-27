@@ -29,8 +29,9 @@ void binarioNaTela(char *nomeArquivoBinario);
 void scan_quote_string(char *str);
 void testaErroArquivo(FILE* arquivo);
 void verificaStatusLeitura(char status);
-void atualizaRegCabecalho (FILE* arquivo, int topo, int nroRegRem, int qttCompacta);
+void atualizaRegCabecalho (FILE* arquivo, regCabecalho cabecalho);
 regCabecalho recuperaCabecalho (FILE* arquivo);
+regCabecalho inicializaCabecalho(void);
 registro inicializaRegistro(void);
 void imprimeInt(int impressao, char *apresentacao, int flagTipagem);
 void imprimeString(char *impressao, char *apresentacao);
@@ -39,6 +40,8 @@ int temAspas(int indice, int flagFuncionalidade);
 int campoEncontrado(int campoBuscado, char* valorCampo, registro aux);
 void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo);
 void atualizaStatusEscrita (FILE* arquivo);
+void insereInt(FILE* arquivo, int insercao, int flagTipagem);
+void insereString(FILE* arquivo, char* insercao, int tamanhoCampo, int isFixo);
 
 //Funcionalidades
 void funcUm(char *nomeArqEntrada, char *nomeArqSaida); 

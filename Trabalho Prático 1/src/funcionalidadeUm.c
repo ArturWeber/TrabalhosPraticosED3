@@ -3,22 +3,6 @@
 #include <string.h>
 #include "headerFuncoes.h"
 
-void criaRegCabecalho(FILE* arq) {
-    fwrite("0", sizeof(char), 1, arq);
-
-    int topo = -1;
-    fwrite(&topo, sizeof(int), 1, arq);
-
-    int zero = 0;
-    for(int i = 0; i < 4; i++) {
-        fwrite(&zero, sizeof(int), 1, arq);
-    }
-
-    for(int i = 0; i < 939; i++) {
-        fwrite("$", sizeof(char), 1, arq);
-    }
-}
-
 void criaInicioRegistro(FILE* arqSaida) {
     fwrite("0", sizeof(char), 1, arqSaida);
 
@@ -48,39 +32,7 @@ void transfInversaString(char *string) {
     }
 }
 
-void insereInt(FILE* arqSaida, int insercao, int flagTipagem) {
-    int intNulo = -1;
-
-    switch (flagTipagem) {
-        case 0:
-            if (insercao != 0) {
-                fwrite(&insercao, sizeof(int), 1, arqSaida);
-            } else {
-                fwrite(&intNulo, sizeof(int), 1, arqSaida);
-            }
-            break;
-        case 1:
-            if (insercao != '\0') {
-                fwrite(&insercao, sizeof(char), 1, arqSaida);
-            } else {
-                preenchimentoComSifrao(arqSaida, 0, tamUnidadeMedida);
-            }
-            break;
-        default:
-            break;
-    }
-}
-
-void insereString(FILE* arqSaida, char* insercao, int tamanhoCampo, int isFixo) {
-    fwrite(insercao, sizeof(char), strlen(insercao), arqSaida);
-    if (isFixo) {
-        preenchimentoComSifrao(arqSaida, strlen(insercao), tamanhoCampo);
-    } else {
-        fwrite("|", sizeof(char), 1, arqSaida);
-    }
-}
-
-void createTable(FILE* arqEntrada, FILE* arqSaida) {
+void createTable(FILE* arqEntrada, FILE* arqSaida, regCabecalho* cabecalho) {
 
     //cria registro auxiliar e variaveis para armazenar as linhas 
     registro aux = inicializaRegistro();
@@ -127,9 +79,7 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
             }
             token = strtok(NULL, ",");
         }
-
-
-        //obs: dar define nos valores de tamanhho de campo
+        cabecalho->proxRRN++;
 
         //Funcoes que criam registro e adicionam campos
         criaInicioRegistro(arqSaida);
@@ -145,6 +95,7 @@ void createTable(FILE* arqEntrada, FILE* arqSaida) {
         int tamOcupadoRegistro = 22 + strlen(aux.nomePoPs) + strlen(aux.nomePais);
         preenchimentoComSifrao(arqSaida, tamOcupadoRegistro, tamRegistro);
     }
+    cabecalho->status = '1';
 }
 
 void funcUm(char *nomeArqEntrada, char *nomeArqSaida) {
@@ -156,9 +107,10 @@ void funcUm(char *nomeArqEntrada, char *nomeArqSaida) {
     arqSaida = fopen(nomeArqSaida, "wb");
     testaErroArquivo(arqSaida);
 
-    criaRegCabecalho(arqSaida);
-    createTable(arqEntrada, arqSaida);
-    atualizaRegCabecalho (arqSaida, -1, 0, 0); 
+    regCabecalho aux = inicializaCabecalho();
+    atualizaRegCabecalho (arqSaida, aux);
+    createTable(arqEntrada, arqSaida, &aux);
+    atualizaRegCabecalho (arqSaida, aux); 
 
     fclose(arqEntrada);
     fclose(arqSaida);

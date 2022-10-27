@@ -2,7 +2,7 @@
 #include <math.h>
 #include "headerFuncoes.h"
 
-void remocaoLogica(FILE* arqEntrada, int* flagRemovidos, regCabecalho cabecalho) {
+void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
     int numBuscas;
     scanf("%d", &numBuscas);
 
@@ -26,8 +26,6 @@ void remocaoLogica(FILE* arqEntrada, int* flagRemovidos, regCabecalho cabecalho)
         }   
     }
 
-    int numRemovidos = cabecalho.nroRegRem;
-    int ultimoRemovido = cabecalho.topo;
     for(int i = 0; i < numBuscas; i++){
         int encadeamento;
         char removido;
@@ -57,17 +55,16 @@ void remocaoLogica(FILE* arqEntrada, int* flagRemovidos, regCabecalho cabecalho)
             if (campoEncontrado(indiceCampoBuscado[i], valorCampoBuscado[i], aux)) {
                 fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
                 fwrite("1", sizeof(char), 1, arqEntrada);
-                fwrite(&ultimoRemovido, sizeof(int), 1, arqEntrada);
+                fwrite(&(cabecalho->proxRRN), sizeof(int), 1, arqEntrada);
                 preenchimentoComSifrao(arqEntrada, 5, tamRegistro);
-                ultimoRemovido = rrn;
-                numRemovidos++;
+                cabecalho->proxRRN = rrn;
+                cabecalho->nroRegRem++;
             }
         }
 
         //free(descricaoCampo);
     }
-    flagRemovidos[0] = ultimoRemovido;
-    flagRemovidos[1] = numRemovidos;
+    cabecalho->status = '1';
 }
 
 void funcQuatro(char *nomeArqEntrada){
@@ -79,9 +76,8 @@ void funcQuatro(char *nomeArqEntrada){
     verificaStatusLeitura(aux.status);
     atualizaStatusEscrita(arqEntrada);
 
-    int flagRemovidos[2];
-    remocaoLogica(arqEntrada, flagRemovidos, aux);
-    atualizaRegCabecalho(arqEntrada, flagRemovidos[0], flagRemovidos[1], 0); 
+    remocaoLogica(arqEntrada, &aux);
+    atualizaRegCabecalho(arqEntrada, aux); 
 
     fclose(arqEntrada);
     binarioNaTela(nomeArqEntrada);

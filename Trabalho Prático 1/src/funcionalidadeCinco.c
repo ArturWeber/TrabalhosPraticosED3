@@ -3,48 +3,18 @@
 #include <string.h>
 #include "headerFuncoes.h"
 
-void gravaInt(int* destino, char* entrada, int flagTipagem) {
-    switch (flagTipagem) {
-        case 0:
-            if (strcmp(entrada, "NULO")) {
-                (*destino) = -1;
-            } else {
-                (*destino) = atoi(entrada);
-            }
-            break;
-        case 1:
-            if (strcmp(entrada, "NULO")) {
-                (*destino) = '$';
-            } else {
-                (*destino) = (*entrada);
-            }
-            break;
-        default:
-            break;
-    }
-}
-
-void gravaString (char* destino, char* entrada) {
-    if (strcmp(entrada, "NULO")) {
-        strcpy(entrada, "");
+int gravaInt(char* entrada) {
+    if (!strcmp(entrada, "NULO")) {
+        return 0;
     } else {
-        strcpy(destino, entrada);
+        return atoi(entrada);
     }
-} 
-
-void gravaRegistroMemoria(registro aux, char entrada[7][campoMaximo]) {
-    gravaInt(&aux.idConecta, entrada[0], 0);
-    gravaString(aux.nomePoPs, entrada[1]);
-    gravaString(aux.nomePais, entrada[2]);
-    gravaString(aux.siglaPais, entrada[3]);
-    gravaInt(&aux.idPoPsConectado, entrada[4], 0);
-    gravaInt(&aux.unidadeMedida, entrada[5], 1);
-    gravaInt(&aux.velocidade, entrada[6], 0);
 }
 
-void insertInto(FILE* arqEntrada, int* flagInseridos, regCabecalho cabecalho) {
+void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
     int numInsercoes;
     scanf("%d", &numInsercoes);
+
 
     registro aux[numInsercoes];
     char entrada[7][campoMaximo];
@@ -54,17 +24,42 @@ void insertInto(FILE* arqEntrada, int* flagInseridos, regCabecalho cabecalho) {
                 scan_quote_string(entrada[indice]);
             } else {
                 scanf(" %s", entrada[indice]);
-            }   
+            }
+            switch(indice){
+                case 0:
+                    aux[insercao].idConecta = gravaInt(entrada[indice]);
+                    break;
+                case 1:
+                    strcpy(aux[insercao].nomePoPs, entrada[indice]);
+                    break;
+                case 2:
+                    strcpy(aux[insercao].nomePais, entrada[indice]);
+                    break;
+                case 3:
+                    strcpy(aux[insercao].siglaPais, entrada[indice]);
+                    break;
+                case 4:
+                    aux[insercao].idPoPsConectado = gravaInt(entrada[indice]);
+                    break;
+                case 5:
+                    aux[insercao].unidadeMedida = entrada[indice][0];
+                    break;
+                case 6:
+                    aux[insercao].velocidade = gravaInt(entrada[indice]);
+                break;
+            }
         }
-        gravaRegistroMemoria(aux[insercao], entrada);
-        
-        imprimeInt(aux[insercao].idConecta, "Identificador do ponto: %d\n", 0);
-        imprimeString(aux[insercao].nomePoPs, "Nome do ponto: %s\n");
-        imprimeString(aux[insercao].nomePais, "Pais de localizacao: %s\n");
-        imprimeString(aux[insercao].siglaPais, "Sigla do pais: %s\n");
-        imprimeInt(aux[insercao].idPoPsConectado, "Identificador do ponto conectado: %d\n", 0);
-        imprimeInt(aux[insercao].velocidade, "Velocidade de transmissao: %d", 0);
-        imprimeInt(aux[insercao].unidadeMedida, " %cbps\n", 1);
+
+        for(int insercao = 0; insercao < numInsercoes; insercao++) {
+            insereInt(arquivo, aux[insercao].idConecta, 0);
+            insereString(arquivo, aux[insercao].siglaPais, tamSiglaPais, 1);
+            insereInt(arquivo, aux[insercao].idPoPsConectado, 0);
+            insereInt(arquivo, aux[insercao].unidadeMedida, 1);
+            insereInt(arquivo, aux[insercao].velocidade, 0);
+            insereString(arquivo, aux[insercao].nomePoPs, 0, 0);
+            insereString(arquivo, aux[insercao].nomePais, 0, 0);
+            cabecalho->nroRegRem--;
+        }
 
         printf("\n");
     }
@@ -82,9 +77,8 @@ void funcCinco(char *nomeArqEntrada){
     verificaStatusLeitura(aux.status);
     atualizaStatusEscrita(arqEntrada);
 
-    int flagInseridos[2];
-    insertInto(arqEntrada, flagInseridos, aux);
-    atualizaRegCabecalho(arqEntrada, 0, 0, 0); 
+    insertInto(arqEntrada, &aux);
+    atualizaRegCabecalho(arqEntrada, aux); 
 
     fclose(arqEntrada);
     binarioNaTela(nomeArqEntrada);

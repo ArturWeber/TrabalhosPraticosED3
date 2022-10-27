@@ -101,27 +101,25 @@ void verificaStatusLeitura(char status) {
 	}
 }
 
-void atualizaRegCabecalho (FILE* arquivo, int topo, int nroRegRem, int qttCompacta) {
-	int tamArquivo, proxRRN, nroPagDisco;
-	fseek(arquivo, 0L, SEEK_END);
-	tamArquivo = ftell(arquivo);
-	nroPagDisco = (int) ceil((tamArquivo) / (64.0 * 15.0));
-	proxRRN = ((tamArquivo - 960) / 64);
+void atualizaRegCabecalho (FILE* arquivo, regCabecalho cabecalho) {
+	int nroPagDisco;
+	nroPagDisco = (int) (ceil((cabecalho.proxRRN) / 15.0) + 1);
 
     fseek(arquivo, 0L, SEEK_SET);
-	fwrite("1", sizeof(char), 1, arquivo);
-    fwrite(&topo, sizeof(int), 1, arquivo);
-	fwrite(&proxRRN, sizeof(int), 1, arquivo);
-    fwrite(&nroRegRem, sizeof(int), 1, arquivo);
+	fwrite(&cabecalho.status, sizeof(char), 1, arquivo);
+    fwrite(&cabecalho.topo, sizeof(int), 1, arquivo);
+	fwrite(&cabecalho.proxRRN, sizeof(int), 1, arquivo);
+    fwrite(&cabecalho.nroRegRem, sizeof(int), 1, arquivo);
 	fwrite(&nroPagDisco, sizeof(int), 1, arquivo);
-    fwrite(&qttCompacta, sizeof(int), 1, arquivo);
+    fwrite(&cabecalho.qttCompacta, sizeof(int), 1, arquivo);
 
+    preenchimentoComSifrao(arquivo, 21, 960);
 	return;
 }
 
 regCabecalho recuperaCabecalho (FILE* arquivo) {
-    //fseek(arquivo, 0L, SEEK_SET);
     regCabecalho aux;
+    memset(&aux, 0, sizeof(aux));
 
     fread(&aux.status, sizeof(char), 1, arquivo);
     fread(&aux.topo, sizeof(int), 1, arquivo);
@@ -130,6 +128,19 @@ regCabecalho recuperaCabecalho (FILE* arquivo) {
     fread(&aux.nroPagDisco, sizeof(int), 1, arquivo);
     fread(&aux.qttCompacta, sizeof(int), 1, arquivo);
     
+    return aux;
+}
+
+regCabecalho inicializaCabecalho(void) {
+    regCabecalho aux;
+    memset(&aux, 0, sizeof(regCabecalho));
+
+    aux.status = '1';
+    aux.topo = -1;
+    aux.proxRRN = 0;
+    aux.nroRegRem = 0;
+    aux.nroPagDisco = 1;
+    aux.qttCompacta = 0;
     return aux;
 }
 
@@ -257,4 +268,36 @@ void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo){
 void atualizaStatusEscrita (FILE* arquivo) {
     fseek(arquivo, 0L, SEEK_SET);//adicionei esse fseek para funcionar
 	fwrite("0", sizeof(char), 1, arquivo);
+}
+
+void insereInt(FILE* arquivo, int insercao, int flagTipagem) {
+    int intNulo = -1;
+
+    switch (flagTipagem) {
+        case 0:
+            if (insercao != 0) {
+                fwrite(&insercao, sizeof(int), 1, arquivo);
+            } else {
+                fwrite(&intNulo, sizeof(int), 1, arquivo);
+            }
+            break;
+        case 1:
+            if (insercao != '\0') {
+                fwrite(&insercao, sizeof(char), 1, arquivo);
+            } else {
+                preenchimentoComSifrao(arquivo, 0, tamUnidadeMedida);
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+void insereString(FILE* arquivo, char* insercao, int tamanhoCampo, int isFixo) {
+    fwrite(insercao, sizeof(char), strlen(insercao), arquivo);
+    if (isFixo) {
+        preenchimentoComSifrao(arquivo, strlen(insercao), tamanhoCampo);
+    } else {
+        fwrite("|", sizeof(char), 1, arquivo);
+    }
 }
