@@ -120,7 +120,7 @@ void atualizaRegCabecalho (FILE* arquivo, int topo, int nroRegRem, int qttCompac
 }
 
 regCabecalho recuperaCabecalho (FILE* arquivo) {
-    fseek(arquivo, 0L, SEEK_SET);
+    //fseek(arquivo, 0L, SEEK_SET);
     regCabecalho aux;
 
     fread(&aux.status, sizeof(char), 1, arquivo);
@@ -189,11 +189,19 @@ int descobreCampoBuscado(char* campo) {
     return 7;
 }
 
-int temAspas(int indice) {
-    if (indice == 0 || indice == 2 || indice == 4) {
-        return 0;
+int temAspas(int indice, int flagFuncionalidade) {
+    if (flagFuncionalidade == 0) {
+        if (indice == 0 || indice == 2 || indice == 4) {
+            return 0;
+        }
+        return 1;
+    } else if (flagFuncionalidade == 1) {
+        if (indice == 0 || indice == 4 || indice == 6) {
+            return 0;
+        }
+        return 1;
     }
-    return 1;
+    exit(0);
 }
 
 int campoEncontrado(int campoBuscado, char* valorCampo, registro aux) {
@@ -249,5 +257,4 @@ void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo){
 void atualizaStatusEscrita (FILE* arquivo) {
     fseek(arquivo, 0L, SEEK_SET);//adicionei esse fseek para funcionar
 	fwrite("0", sizeof(char), 1, arquivo);
-	fseek(arquivo, 0L, SEEK_SET);//esse talvez não seja tão necessario porque a gente sempre usa fseek antes de fazer qualquer coisa
 }

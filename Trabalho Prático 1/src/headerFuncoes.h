@@ -35,7 +35,7 @@ registro inicializaRegistro(void);
 void imprimeInt(int impressao, char *apresentacao, int flagTipagem);
 void imprimeString(char *impressao, char *apresentacao);
 int descobreCampoBuscado(char* campo);
-int temAspas(int indice);
+int temAspas(int indice, int flagFuncionalidade);
 int campoEncontrado(int campoBuscado, char* valorCampo, registro aux);
 void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo);
 void atualizaStatusEscrita (FILE* arquivo);

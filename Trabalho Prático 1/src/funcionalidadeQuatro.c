@@ -19,7 +19,7 @@ void remocaoLogica(FILE* arqEntrada, int* flagRemovidos, regCabecalho cabecalho)
         //scanf("%ms", &descricaoCampo[i]);
         scanf("%s", descricaoCampo[i]);
         indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
-        if (temAspas(indiceCampoBuscado[i])) {
+        if (temAspas(indiceCampoBuscado[i], 0)) {
             scan_quote_string(valorCampoBuscado[i]);
         }else {
             scanf("%s", valorCampoBuscado[i]);

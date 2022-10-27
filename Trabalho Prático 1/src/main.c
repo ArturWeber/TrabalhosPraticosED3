@@ -28,7 +28,7 @@ int main(void){
             funcQuatro(nomeArqEntrada);
             break;
         case 5:
-            funcCinco(nomeArqEntrada);
+            //funcCinco(nomeArqEntrada);
             break;
         case 6:
             printf("Ainda nn fiz a COMPACTACAO \n");
