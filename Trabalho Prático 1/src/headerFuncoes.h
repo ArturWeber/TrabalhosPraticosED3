@@ -51,3 +51,4 @@ void funcDois(char *nomeArqEntrada);
 void funcTres(char *nomeArqEntrada);
 void funcQuatro(char *nomeArqEntrada);
 void funcCinco(char *nomeArqEntrada);
+void funcSeis(char *nomeArqEntrada);
