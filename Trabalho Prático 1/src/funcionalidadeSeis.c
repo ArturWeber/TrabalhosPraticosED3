@@ -53,11 +53,23 @@ void funcSeis(char *nomeArqEntrada){
     verificaStatusLeitura(aux.status);
 
     compactacao(arqEntrada, arqSaida, &aux);
-    atualizaRegCabecalho(arqEntrada, aux); 
+    atualizaRegCabecalho(arqSaida, aux); 
     fclose(arqEntrada);
     fclose(arqSaida);
 
     manipulaArquivoDuplicata(nomeArqEntrada, "temporario.bin");
     
     binarioNaTela(nomeArqEntrada);
+
+
+    // FILE* arquivo1 = fopen("binario17.bin", "rb+");
+    // regCabecalho aux1 = recuperaCabecalho(arquivo1);
+    // printf("\n%c %d %d %d %d %d\n", aux1.status, aux1.topo, aux1.proxRRN, aux1.nroRegRem, aux1.nroPagDisco, aux1.qttCompacta);
+    // printf("\n\n\n");
+    // fclose(arquivo1);
+    // FILE *arquivo2 = fopen("correto17.bin", "rb+");
+    // regCabecalho aux2 = recuperaCabecalho(arquivo2);
+    // printf("\n%c %d %d %d %d %d\n", aux2.status, aux2.topo, aux2.proxRRN, aux2.nroRegRem, aux2.nroPagDisco, aux2.qttCompacta);
+    // printf("\n\n\n");
+    // fclose(arquivo2);
 }
