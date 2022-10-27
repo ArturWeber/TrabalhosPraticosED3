@@ -4,15 +4,9 @@
 #include <math.h>
 #include "headerFuncoes.h"
 
-void selectFromWhere(FILE* arqEntrada){
+void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
     int numBuscas;
     scanf("%d", &numBuscas);
-
-    fseek(arqEntrada, 0L, SEEK_END);
-    int tamanhoArq = ftell(arqEntrada);
-    int numRegistros = (tamanhoArq - 960) / 64;
-    int pagDisco = (int) ceil((tamanhoArq) / (64.0 * 15.0));
-
 
     //char *descricaoCampo[numBuscas];
     //char *valorCampoBuscado[numBuscas];
@@ -37,7 +31,7 @@ void selectFromWhere(FILE* arqEntrada){
         int encadeamento;
         char removido;
         int numEncontrados = 0;
-        for(int rrn = 0; rrn < numRegistros; rrn++){
+        for(int rrn = 0; rrn < aux.proxRRN; rrn++){
             fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
             
             fread(&removido, sizeof(char), 1, arqEntrada);
@@ -79,7 +73,7 @@ void selectFromWhere(FILE* arqEntrada){
             printf("\n");
         }
 
-        printf("Numero de paginas de disco: %d\n", pagDisco);        
+        printf("Numero de paginas de disco: %d\n", aux.nroPagDisco);        
         printf("\n");
 
         //free(descricaoCampo);
@@ -94,7 +88,7 @@ void funcTres(char *nomeArqEntrada){
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusLeitura(aux.status);
 
-    selectFromWhere(arqEntrada);
+    selectFromWhere(arqEntrada, aux);
 
     fclose(arqEntrada);
 }

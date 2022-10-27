@@ -4,20 +4,16 @@
 #include <math.h>
 #include "headerFuncoes.h"
 
-void selectFrom(FILE* arqEntrada){
+void selectFrom(FILE* arqEntrada, regCabecalho cabecalho){
     int encadeamento;
     char removido;
-    fseek(arqEntrada, 0L, SEEK_END);
-    int tamanhoArq = ftell(arqEntrada);
-    int numRegistros = (tamanhoArq - 960) / 64;
-    int pagDisco = (int) ceil((tamanhoArq) / (64.0 * 15.0));
 
-    if (pagDisco == 1) {
+    if (cabecalho.nroPagDisco == 1) {
         printf("Registro inexistente.\n");
         printf("\n");
     }
     
-    for(int rrn = 0; rrn < numRegistros; rrn++){
+    for(int rrn = 0; rrn < cabecalho.proxRRN; rrn++){
         fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
 
         fread(&removido, sizeof(char), 1, arqEntrada);
@@ -47,7 +43,7 @@ void selectFrom(FILE* arqEntrada){
         printf("\n");
     }
 
-    printf("Numero de paginas de disco: %d\n", pagDisco);
+    printf("Numero de paginas de disco: %d\n", cabecalho.nroPagDisco);
     printf("\n");
 
 }
@@ -60,7 +56,7 @@ void funcDois(char *nomeArqEntrada){
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusLeitura(aux.status);
 
-    selectFrom(arqEntrada);
+    selectFrom(arqEntrada, aux);
 
     fclose(arqEntrada);
 }

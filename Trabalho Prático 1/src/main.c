@@ -31,7 +31,7 @@ int main(void){
             funcCinco(nomeArqEntrada);
             break;
         case 6:
-            printf("Ainda nn fiz a COMPACTACAO \n");
+            funcSeis(nomeArqEntrada);
             break; 
         default:
             printf("Comando Não Encontrado \n");

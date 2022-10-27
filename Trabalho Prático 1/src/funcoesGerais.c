@@ -275,14 +275,14 @@ void insereInt(FILE* arquivo, int insercao, int flagTipagem) {
 
     switch (flagTipagem) {
         case 0:
-            if (insercao != 0) {
+            if (insercao != 0 && insercao != -1) {
                 fwrite(&insercao, sizeof(int), 1, arquivo);
             } else {
                 fwrite(&intNulo, sizeof(int), 1, arquivo);
             }
             break;
         case 1:
-            if (insercao != '\0') {
+            if (insercao != '\0' && insercao != '$') {
                 fwrite(&insercao, sizeof(char), 1, arquivo);
             } else {
                 preenchimentoComSifrao(arquivo, 0, tamUnidadeMedida);
