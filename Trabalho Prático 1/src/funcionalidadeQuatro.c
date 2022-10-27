@@ -55,9 +55,9 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
             if (campoEncontrado(indiceCampoBuscado[i], valorCampoBuscado[i], aux)) {
                 fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
                 fwrite("1", sizeof(char), 1, arqEntrada);
-                fwrite(&(cabecalho->proxRRN), sizeof(int), 1, arqEntrada);
+                fwrite(&(cabecalho->topo), sizeof(int), 1, arqEntrada);
                 preenchimentoComSifrao(arqEntrada, 5, tamRegistro);
-                cabecalho->proxRRN = rrn;
+                cabecalho->topo = rrn;
                 cabecalho->nroRegRem++;
             }
         }
@@ -78,7 +78,7 @@ void funcQuatro(char *nomeArqEntrada){
 
     remocaoLogica(arqEntrada, &aux);
     atualizaRegCabecalho(arqEntrada, aux); 
-
+    
     fclose(arqEntrada);
     binarioNaTela(nomeArqEntrada);
 }

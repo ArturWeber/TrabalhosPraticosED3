@@ -42,6 +42,8 @@ void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo);
 void atualizaStatusEscrita (FILE* arquivo);
 void insereInt(FILE* arquivo, int insercao, int flagTipagem);
 void insereString(FILE* arquivo, char* insercao, int tamanhoCampo, int isFixo);
+void insereRegistro (FILE* arquivo, registro registro);
+void criaInicioRegistro(FILE* arqSaida);
 
 //Funcionalidades
 void funcUm(char *nomeArqEntrada, char *nomeArqSaida); 

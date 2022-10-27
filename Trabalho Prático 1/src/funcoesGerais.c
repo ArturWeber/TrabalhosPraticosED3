@@ -301,3 +301,20 @@ void insereString(FILE* arquivo, char* insercao, int tamanhoCampo, int isFixo) {
         fwrite("|", sizeof(char), 1, arquivo);
     }
 }
+
+void insereRegistro (FILE* arquivo, registro aux) {
+    insereInt(arquivo, aux.idConecta, 0);
+    insereString(arquivo, aux.siglaPais, tamSiglaPais, 1);
+    insereInt(arquivo, aux.idPoPsConectado, 0);
+    insereInt(arquivo, aux.unidadeMedida, 1);
+    insereInt(arquivo, aux.velocidade, 0);
+    insereString(arquivo, aux.nomePoPs, 0, 0);
+    insereString(arquivo, aux.nomePais, 0, 0);
+}
+
+void criaInicioRegistro(FILE* arqSaida) {
+    fwrite("0", sizeof(char), 1, arqSaida);
+
+    int inicializar = -1;
+    fwrite(&inicializar, sizeof(int), 1, arqSaida);
+}

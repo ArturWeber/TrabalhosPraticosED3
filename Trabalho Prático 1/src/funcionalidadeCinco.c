@@ -51,19 +51,23 @@ void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
         }
 
         for(int insercao = 0; insercao < numInsercoes; insercao++) {
-            insereInt(arquivo, aux[insercao].idConecta, 0);
-            insereString(arquivo, aux[insercao].siglaPais, tamSiglaPais, 1);
-            insereInt(arquivo, aux[insercao].idPoPsConectado, 0);
-            insereInt(arquivo, aux[insercao].unidadeMedida, 1);
-            insereInt(arquivo, aux[insercao].velocidade, 0);
-            insereString(arquivo, aux[insercao].nomePoPs, 0, 0);
-            insereString(arquivo, aux[insercao].nomePais, 0, 0);
-            cabecalho->nroRegRem--;
+            if(cabecalho->nroRegRem) {
+                fseek(arquivo, (960 + cabecalho->topo * 64) + 1, SEEK_SET);
+                fread(&(cabecalho->topo), sizeof(int), 1, arquivo);
+                fseek(arquivo, -5, SEEK_CUR);
+                criaInicioRegistro(arquivo);
+                insereRegistro(arquivo, aux[insercao]);
+                cabecalho->nroRegRem--;
+            } else {
+                fseek(arquivo, (960 + cabecalho->proxRRN * 64), SEEK_SET);
+                criaInicioRegistro(arquivo);
+                insereRegistro(arquivo, aux[insercao]);
+                cabecalho->proxRRN++;
+            }
+            
         }
-
-        printf("\n");
     }
-
+    cabecalho->status = '1';
 }
 
 
@@ -72,6 +76,7 @@ void funcCinco(char *nomeArqEntrada){
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb+");
     testaErroArquivo(arqEntrada);
+    fclose(arqEntrada);
 
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusLeitura(aux.status);
@@ -80,6 +85,16 @@ void funcCinco(char *nomeArqEntrada){
     insertInto(arqEntrada, &aux);
     atualizaRegCabecalho(arqEntrada, aux); 
 
-    fclose(arqEntrada);
+    // FILE* arquivo1 = fopen("correto.bin", "rb+");
+    // regCabecalho aux1 = recuperaCabecalho(arquivo1);
+    // printf("\n%c %d %d %d %d %d\n", aux1.status, aux1.topo, aux1.proxRRN, aux1.nroRegRem, aux1.nroPagDisco, aux1.qttCompacta);
+    // printf("\n\n\n");
+    // fclose(arquivo1);
+    // FILE *arquivo2 = fopen("errado.bin", "rb+");
+    // regCabecalho aux2 = recuperaCabecalho(arquivo2);
+    // printf("\n%c %d %d %d %d %d\n", aux2.status, aux2.topo, aux2.proxRRN, aux2.nroRegRem, aux2.nroPagDisco, aux2.qttCompacta);
+    // printf("\n\n\n");
+    // fclose(arquivo2);
+
     binarioNaTela(nomeArqEntrada);
 }

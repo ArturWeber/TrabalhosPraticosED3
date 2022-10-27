@@ -3,13 +3,6 @@
 #include <string.h>
 #include "headerFuncoes.h"
 
-void criaInicioRegistro(FILE* arqSaida) {
-    fwrite("0", sizeof(char), 1, arqSaida);
-
-    int inicializar = -1;
-    fwrite(&inicializar, sizeof(int), 1, arqSaida);
-}
-
 void transfString(char linhaInicial[], char linhaFinal[]) {
     int posicao = 0;
     for(unsigned long i = 0; i < (strlen(linhaInicial) - 1); i++) {
@@ -83,14 +76,7 @@ void createTable(FILE* arqEntrada, FILE* arqSaida, regCabecalho* cabecalho) {
 
         //Funcoes que criam registro e adicionam campos
         criaInicioRegistro(arqSaida);
-        
-        insereInt(arqSaida, aux.idConecta, 0);
-        insereString(arqSaida, aux.siglaPais, tamSiglaPais, 1);
-        insereInt(arqSaida, aux.idPoPsConectado, 0);
-        insereInt(arqSaida, aux.unidadeMedida, 1);
-        insereInt(arqSaida, aux.velocidade, 0);
-        insereString(arqSaida, aux.nomePoPs, 0, 0);
-        insereString(arqSaida, aux.nomePais, 0, 0);
+        insereRegistro(arqSaida, aux);
         
         int tamOcupadoRegistro = 22 + strlen(aux.nomePoPs) + strlen(aux.nomePais);
         preenchimentoComSifrao(arqSaida, tamOcupadoRegistro, tamRegistro);
