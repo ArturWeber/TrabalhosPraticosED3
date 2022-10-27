@@ -54,9 +54,7 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
             
             if (campoEncontrado(indiceCampoBuscado[i], valorCampoBuscado[i], aux)) {
                 fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
-                fwrite("1", sizeof(char), 1, arqEntrada);
-                fwrite(&(cabecalho->topo), sizeof(int), 1, arqEntrada);
-                preenchimentoComSifrao(arqEntrada, 5, tamRegistro);
+                apagaRegistro(arqEntrada, cabecalho->topo);
                 cabecalho->topo = rrn;
                 cabecalho->nroRegRem++;
             }

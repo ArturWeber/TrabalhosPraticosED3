@@ -32,13 +32,7 @@ void selectFrom(FILE* arqEntrada, regCabecalho cabecalho){
         fseek(arqEntrada, 1, SEEK_CUR);
         fscanf(arqEntrada, "%[^|]", aux.nomePais);
 
-        imprimeInt(aux.idConecta, "Identificador do ponto: %d\n", 0);
-        imprimeString(aux.nomePoPs, "Nome do ponto: %s\n");
-        imprimeString(aux.nomePais, "Pais de localizacao: %s\n");
-        imprimeString(aux.siglaPais, "Sigla do pais: %s\n");
-        imprimeInt(aux.idPoPsConectado, "Identificador do ponto conectado: %d\n", 0);
-        imprimeInt(aux.velocidade, "Velocidade de transmissao: %d", 0);
-        imprimeInt(aux.unidadeMedida, " %cbps\n", 1);
+        imprimeRegistro(aux);
 
         printf("\n");
     }

@@ -24,26 +24,21 @@ typedef struct {
 } regCabecalho;
 
 //Funcoes Gerais
-void readline(char* string);
-void binarioNaTela(char *nomeArquivoBinario);
-void scan_quote_string(char *str);
-void testaErroArquivo(FILE* arquivo);
-void verificaStatusLeitura(char status);
-void atualizaRegCabecalho (FILE* arquivo, regCabecalho cabecalho);
-regCabecalho recuperaCabecalho (FILE* arquivo);
-regCabecalho inicializaCabecalho(void);
-registro inicializaRegistro(void);
-void imprimeInt(int impressao, char *apresentacao, int flagTipagem);
-void imprimeString(char *impressao, char *apresentacao);
-int descobreCampoBuscado(char* campo);
-int temAspas(int indice, int flagFuncionalidade);
-int campoEncontrado(int campoBuscado, char* valorCampo, registro aux);
-void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo);
-void atualizaStatusEscrita (FILE* arquivo);
-void insereInt(FILE* arquivo, int insercao, int flagTipagem);
-void insereString(FILE* arquivo, char* insercao, int tamanhoCampo, int isFixo);
-void insereRegistro (FILE* arquivo, registro registro);
-void criaInicioRegistro(FILE* arqSaida);
+void binarioNaTela(char *nomeArquivoBinario); // 1 4 5 6  
+void scan_quote_string(char *str); // 3 4 5 
+void testaErroArquivo(FILE* arquivo); // 1 2 3 4 5 6 
+void verificaStatusLeitura(char status); // 2 3 4 5 6
+void atualizaRegCabecalho (FILE* arquivo, regCabecalho cabecalho); // 1 4 5 6 
+regCabecalho recuperaCabecalho (FILE* arquivo); // 2 3 4 5 6
+regCabecalho inicializaCabecalho(void); // 1 6
+registro inicializaRegistro(void); // 1 2 3 4 6
+void imprimeRegistro(registro aux); // 2 3
+int descobreCampoBuscado(char* campo); // 3 4
+int temAspas(int indice, int flagFuncionalidade); // 3 4 5
+int campoEncontrado(int campoBuscado, char* valorCampo, registro aux); // 3 4
+void atualizaStatusEscrita (FILE* arquivo); // 4 5
+void insereRegistro (FILE* arquivo, registro registro); // 1 5 6
+void apagaRegistro(FILE* arquivo, int topo); // 4 
 
 //Funcionalidades
 void funcUm(char *nomeArqEntrada, char *nomeArqSaida); 

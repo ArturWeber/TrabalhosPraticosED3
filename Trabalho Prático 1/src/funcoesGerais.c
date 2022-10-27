@@ -5,23 +5,19 @@
 #include <math.h>
 #include "headerFuncoes.h"
 
-void readline(char* string) {
-    char c = 0;
 
-    do{
-        c = (char) getchar();
+void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo){
+    //adiciona lixo em bytes não preenchido no campo
+    for (int i = 0; i < tamMaximo - tamUsado; i++){
+        fwrite("$", sizeof(char), 1, arquivo);
+    }
+}
 
-    } while(c == '\n' || c == '\r' || c == ' ');
+void criaInicioRegistro(FILE* arqSaida) {
+    fwrite("0", sizeof(char), 1, arqSaida);
 
-    int i = 0;
-
-    do{
-        string[i] = c;
-        i++;
-        c = getchar();
-    } while(c != '\n' && c != '\r' && c != ' ');
-
-    string[i]  = '\0';
+    int inicializar = -1;
+    fwrite(&inicializar, sizeof(int), 1, arqSaida);
 }
 
 void binarioNaTela(char *nomeArquivoBinario) { /* Você não precisa entender o código dessa função. */
@@ -174,6 +170,22 @@ void imprimeString(char *impressao, char *apresentacao) {
     }
 }
 
+void imprimeRegistro(registro aux) {
+    imprimeInt(aux.idConecta, "Identificador do ponto: %d\n", 0);
+    imprimeString(aux.nomePoPs, "Nome do ponto: %s\n");
+    imprimeString(aux.nomePais, "Pais de localizacao: %s\n");
+    imprimeString(aux.siglaPais, "Sigla do pais: %s\n");
+    imprimeInt(aux.idPoPsConectado, "Identificador do ponto conectado: %d\n", 0);
+    imprimeInt(aux.velocidade, "Velocidade de transmissao: %d", 0);
+    imprimeInt(aux.unidadeMedida, " %cbps\n", 1);
+}
+
+void apagaRegistro(FILE* arquivo, int topo) {
+    fwrite("1", sizeof(char), 1, arquivo);
+    fwrite(&topo, sizeof(int), 1, arquivo);
+    preenchimentoComSifrao(arquivo, 5, tamRegistro);
+}
+
 int descobreCampoBuscado(char* campo) {
     enum campos{idConecta, siglaPais, idPoPsConectado, unidadeMedida, velocidade, nomePoPs, nomePais};
     if(!strcmp(campo, "idConecta")) {
@@ -258,13 +270,6 @@ int campoEncontrado(int campoBuscado, char* valorCampo, registro aux) {
     return 0;
 }
 
-void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo){
-    //adiciona lixo em bytes não preenchido no campo
-    for (int i = 0; i < tamMaximo - tamUsado; i++){
-        fwrite("$", sizeof(char), 1, arquivo);
-    }
-}
-
 void atualizaStatusEscrita (FILE* arquivo) {
     fseek(arquivo, 0L, SEEK_SET);//adicionei esse fseek para funcionar
 	fwrite("0", sizeof(char), 1, arquivo);
@@ -317,9 +322,3 @@ void insereRegistro (FILE* arquivo, registro aux) {
     preenchimentoComSifrao(arquivo, tamOcupadoRegistro, tamRegistro);
 }
 
-void criaInicioRegistro(FILE* arqSaida) {
-    fwrite("0", sizeof(char), 1, arqSaida);
-
-    int inicializar = -1;
-    fwrite(&inicializar, sizeof(int), 1, arqSaida);
-}
