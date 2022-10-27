@@ -129,7 +129,7 @@ regCabecalho recuperaCabecalho (FILE* arquivo) {
     fread(&aux.nroRegRem, sizeof(int), 1, arquivo);
     fread(&aux.nroPagDisco, sizeof(int), 1, arquivo);
     fread(&aux.qttCompacta, sizeof(int), 1, arquivo);
-
+    
     return aux;
 }
 
@@ -247,6 +247,7 @@ void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo){
 }
 
 void atualizaStatusEscrita (FILE* arquivo) {
+    fseek(arquivo, 0L, SEEK_SET);//adicionei esse fseek para funcionar
 	fwrite("0", sizeof(char), 1, arquivo);
-	fseek(arquivo, 0L, SEEK_SET);
+	fseek(arquivo, 0L, SEEK_SET);//esse talvez não seja tão necessario porque a gente sempre usa fseek antes de fazer qualquer coisa
 }

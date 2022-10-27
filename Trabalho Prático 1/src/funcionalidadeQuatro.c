@@ -85,12 +85,4 @@ void funcQuatro(char *nomeArqEntrada){
 
     fclose(arqEntrada);
     binarioNaTela(nomeArqEntrada);
-
-    // FILE* arquivo = fopen("correto.bin", "rb+");
-    // regCabecalho aux = recuperaCabecalho(arquivo);
-    // printf("\n%c %d %d %d %d %d\n", aux.status, aux.topo, aux.proxRRN, aux.nroRegRem, aux.nroPagDisco, aux.qttCompacta);
-
-    // arquivo = fopen("errado.bin", "rb+");
-    // aux = recuperaCabecalho(arquivo);
-    // printf("\n%c %d %d %d %d %d\n", aux.status, aux.topo, aux.proxRRN, aux.nroRegRem, aux.nroPagDisco, aux.qttCompacta);
 }
