@@ -17,7 +17,9 @@ void Compactacao(FILE* arquivo, regCabecalho* cabecalho){
 
 void funcSeis(char *nomeArqEntrada){
     FILE* arqEntrada;
+    FILE* arqSaida;
     arqEntrada = fopen(nomeArqEntrada, "rb+");
+    arqSaida = fopen("SUB.bin", "wb+");
     testaErroArquivo(arqEntrada);
 
     regCabecalho aux = recuperaCabecalho(arqEntrada);
