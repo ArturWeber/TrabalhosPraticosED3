@@ -1,9 +1,13 @@
+//Header de funcoesGerais.c
+
+//Define valores fixos de campo e registro
 #define campoMaximo 50
 #define linhaMaxima 150
 #define tamSiglaPais 2
 #define tamUnidadeMedida 1
 #define tamRegistro 64
 
+//Apresenta as duas structs utilizadas no projeto
 typedef struct {
     int idConecta;
     char siglaPais[campoMaximo];

@@ -2,6 +2,10 @@
     "files.associations": {
         "headerfuncoes.h": "c",
         "string": "c",
-        "iosfwd": "c"
+        "iosfwd": "c",
+        "funcoesgerais.h": "c",
+        "ctype.h": "c",
+        "funcoesbuscabin.h": "c",
+        "sstream": "c"
     }
 }

@@ -1,10 +1,26 @@
+/************************************************************
+ *            Trabalho Prático 1 - SCC0607                   *
+ *                                                           *
+ *      Nome: Artur Brenner Weber                            *
+ *      nUSP: 12675451    Participacao: 100%                 *
+ *      Nome: Aruan                                          *
+ *      nUSP:             Participacao: 100%                 *
+ *      Data de última atualizacao: 28/10/2022               *
+ *      Ambiente de Desenvolv: VSCode 1.72.2                 *
+ *                                                           *
+ *             Conteudo arquivo funcoesBuscaBin:             *
+ *   Funcoes gerais utilizadas por todo o codigo, em 5       *
+ * ou mais funcionalidades. Seu header inclui as structs     *
+ * utilizadas ao longo do projeto.                           *
+*************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <math.h>
 #include "funcoesGerais.h"
 
+//Testa erro no arquivo aberto
 void testaErroArquivo(FILE* arquivo) {
 	if(arquivo == NULL) {
 		printf("Falha no processamento do arquivo.\n");
@@ -12,11 +28,13 @@ void testaErroArquivo(FILE* arquivo) {
     }
 }
 
+//Le lixo do arquivo para mover ponteiro, evitando fseeks desnecessarios 
 void leLixo (FILE* arquivo, int compLixo) {
     char lixo[compLixo];
     fread(lixo, sizeof(char), compLixo, arquivo);
 }
 
+//Recupera o cabecalho do arquivo .bin, armazenando em um auxiliar e retornando-o
 regCabecalho recuperaCabecalho (FILE* arquivo) {
     regCabecalho aux;
     memset(&aux, 0, sizeof(aux));
@@ -31,6 +49,7 @@ regCabecalho recuperaCabecalho (FILE* arquivo) {
     return aux;
 }
 
+//Verifica se o status do arquivo está como nao corrompido '1'
 void verificaStatusLeitura(char status) {
 	if(status == '0'){
 		printf("Falha no processamento do arquivo.\n");
@@ -38,12 +57,15 @@ void verificaStatusLeitura(char status) {
 	}
 }
 
+//Inicializa um registro com valores nulos e retorna-o
 registro inicializaRegistro(void){
     registro aux;
     memset(&aux, 0, sizeof(registro));
 	return aux;
 }
 
+
+//Funcao fornecida binarioNaTela
 void binarioNaTela(char *nomeArquivoBinario) { /* Você não precisa entender o código dessa função. */
 
 	/* Use essa função para comparação no run.codes. Lembre-se de ter fechado (fclose) o arquivo anteriormente.
@@ -72,6 +94,7 @@ void binarioNaTela(char *nomeArquivoBinario) { /* Você não precisa entender o 
 	fclose(fs);
 }
 
+//Preenche arquivo com sifroes, essencialmente lixo 
 void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo){
     //adiciona lixo em bytes não preenchido no campo
     for (int i = 0; i < tamMaximo - tamUsado; i++){
@@ -79,6 +102,7 @@ void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo){
     }
 }
 
+//Aplica os valores do cabecalho passado como parametro ao arquivo .bin 
 void atualizaRegCabecalho (FILE* arquivo, regCabecalho cabecalho) {
 	int nroPagDisco;
 	nroPagDisco = (int) (ceil((cabecalho.proxRRN) / 15.0) + 1);
@@ -95,6 +119,7 @@ void atualizaRegCabecalho (FILE* arquivo, regCabecalho cabecalho) {
 	return;
 }
 
+//Remove arquivo original e renomeia o novo para o nome do original
 void manipulaArquivoDuplicata (char* nomeArqOriginal, char* nomeArqTemporario) {
     remove(nomeArqOriginal);
     rename(nomeArqTemporario, nomeArqOriginal);

@@ -1,3 +1,19 @@
+/************************************************************
+ *            Trabalho Prático 1 - SCC0607                   *
+ *                                                           *
+ *      Nome: Artur Brenner Weber                            *
+ *      nUSP: 12675451    Participacao: 100%                 *
+ *      Nome: Aruan                                          *
+ *      nUSP:             Participacao: 100%                 *
+ *      Data de última atualizacao: 28/10/2022               *
+ *      Ambiente de Desenvolv: VSCode 1.72.2                 *
+ *                                                           *
+ *             Conteudo arquivo funcoesBuscaBin:             *
+ *   Funcoes secundarias das funcionalidades                 *
+ * 3 (selectFromWhere), 4 (remocaoLogica) e 5 (insertInto).  *
+ * Organizadas juntas pois envolvem funcoes em comum.        *
+*************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,6 +23,7 @@
 #include "funcoesBuscaBin.h"
 #include "funcoesImpressaoBin.h"
 
+//Funcao fornecida para ler comandos com aspas 
 void scan_quote_string(char *str) {
 
 	/*
@@ -42,6 +59,9 @@ void scan_quote_string(char *str) {
 	}
 }
 
+//Funcao que verifica se o indice enviado e de campo possivelmente com ou sem aspas
+//a flagFuncionalidade serve para indicar qual funcionalidade esta utilizando a funcao
+//vale 0 para funcionalidades 3 e 4 e vale 1 para a funcionalidade 5
 int temAspas(int indice, int flagFuncionalidade) {
     if (flagFuncionalidade == 0) {
         if (indice == 0 || indice == 2 || indice == 4) {
@@ -57,6 +77,8 @@ int temAspas(int indice, int flagFuncionalidade) {
     exit(0);
 }
 
+//Descobre qual campo esta sendo buscado pelos comandos das funcionalidades e retorna um valor definido
+//para cada campo
 int descobreCampoBuscado(char* campo) {
     enum campos{idConecta, siglaPais, idPoPsConectado, unidadeMedida, velocidade, nomePoPs, nomePais};
     if(!strcmp(campo, "idConecta")) {
@@ -83,6 +105,7 @@ int descobreCampoBuscado(char* campo) {
     return 7;
 }
 
+//Retorna 1 caso o campoBuscado seja encontrado 
 int campoEncontrado(int campoBuscado, char* valorCampo, registro aux) {
     switch (campoBuscado) {
         case 0:
@@ -126,10 +149,13 @@ int campoEncontrado(int campoBuscado, char* valorCampo, registro aux) {
     return 0;
 }
 
+//Funcao secundaria da funcionalidade 3, busca o registro pedido e o imprime
 void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
+    //Coleta o numero de buscas 
     int numBuscas;
     scanf("%d", &numBuscas);
 
+    //Armazena as especificacoes de cada busca, isto e, o campo, seu valor e o indice do campo
     //char *descricaoCampo[numBuscas];
     //char *valorCampoBuscado[numBuscas];
     char descricaoCampo[numBuscas][campoMaximo];
@@ -139,6 +165,7 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
         //scanf("%ms", &descricaoCampo[i]);
         scanf("%s", descricaoCampo[i]);
         indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
+        //Se tiver aspas, usa a funcao de ler aspas, senao, usa scanf
         if (temAspas(indiceCampoBuscado[i], 0)) {
             scan_quote_string(valorCampoBuscado[i]);
         }else {
@@ -147,20 +174,23 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
         
     }
    
-
+    //Efetua cada busca
     for(int i = 0; i < numBuscas; i++){
         printf("Busca %d\n", i + 1);
         int encadeamento;
         char removido;
         int numEncontrados = 0;
+        //Le registro a registro procurando o que busca
         for(int rrn = 0; rrn < aux.proxRRN; rrn++){
             fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
             
             fread(&removido, sizeof(char), 1, arqEntrada);
+            //Se for removido para de ler 
             if(removido == '1'){
                 continue;
             }
 
+            //Armazena registro na variavel auxiliar
             registro aux = inicializaRegistro();
             fread(&encadeamento, sizeof(int), 1, arqEntrada);
             fread(&aux.idConecta, sizeof(int), 1, arqEntrada);
@@ -176,6 +206,7 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
                 aux.nomePoPs[0] = '\0';
             }
             
+            //Se encontrou o campo, imprime-o
             if (campoEncontrado(indiceCampoBuscado[i], valorCampoBuscado[i], aux)) {
                 numEncontrados++;
                 imprimeRegistro(aux);
@@ -184,6 +215,7 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
 
         }
         
+        //Caso nao encontrou nenhum campo, imprime mensagem
         if (!numEncontrados){
             printf("Registro inexistente.\n");    
             printf("\n");
@@ -196,25 +228,27 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
     }
 }
 
+//Atualiza status p escrita
 void atualizaStatusEscrita (FILE* arquivo) {
     fseek(arquivo, 0L, SEEK_SET);//adicionei esse fseek para funcionar
 	fwrite("0", sizeof(char), 1, arquivo);
 }
 
+//Apaga registro, usado na funcionalidade 4 e modularizado caso outras funcoes precisem
+//remover registros no futuro
 void apagaRegistro(FILE* arquivo, int topo) {
     fwrite("1", sizeof(char), 1, arquivo);
     fwrite(&topo, sizeof(int), 1, arquivo);
     preenchimentoComSifrao(arquivo, 5, tamRegistro);
 }
 
+//Funcao secundaria da funcionalidade 4, busca e remove registros
 void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
+    //Le numero de buscas
     int numBuscas;
     scanf("%d", &numBuscas);
 
-    fseek(arqEntrada, 0L, SEEK_END);
-    int tamanhoArq = ftell(arqEntrada);
-    int numRegistros = (tamanhoArq - 960) / 64;
-
+    //Le os detalhes da busca, igual funcionalidade 3
     //char *descricaoCampo[numBuscas];
     //char *valorCampoBuscado[numBuscas];
     char descricaoCampo[numBuscas][campoMaximo];
@@ -231,17 +265,23 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
         }   
     }
 
+    //Efetua cada busca
+    int numRegistros = cabecalho->proxRRN;
     for(int i = 0; i < numBuscas; i++){
         int encadeamento;
         char removido;
+        //Le cada registro procurando o que se busca
         for(int rrn = 0; rrn < numRegistros; rrn++) {
             fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
 
             fread(&removido, sizeof(char), 1, arqEntrada);
+            //Se removido, ignorar
             if(removido == '1'){
                 continue;
             }
 
+
+            //Le registro
             registro aux = inicializaRegistro();
             fread(&encadeamento, sizeof(int), 1, arqEntrada);
             fread(&aux.idConecta, sizeof(int), 1, arqEntrada);
@@ -256,7 +296,8 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
             if (fscanf(arqEntrada, "%[^|]", aux.nomePais) == 0){
                 aux.nomePoPs[0] = '\0';
             }
-            
+
+            //Verifica se foi encontrado e se sim, remove e atualiza os valores do cabecalho
             if (campoEncontrado(indiceCampoBuscado[i], valorCampoBuscado[i], aux)) {
                 fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
                 apagaRegistro(arqEntrada, cabecalho->topo);
@@ -267,9 +308,11 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
 
         //free(descricaoCampo);
     }
+    //Atualiza cabecalho para 1 caso o procedimento tenha dado certo
     cabecalho->status = '1';
 }
 
+//Retorna inteiro caso nao seja nulo
 int gravaInt(char* entrada) {
     if (!strcmp(entrada, "NULO")) {
         return 0;
@@ -278,7 +321,9 @@ int gravaInt(char* entrada) {
     }
 }
 
+//Funcao secundaria da funcionalidade 5
 void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
+    //Le o numero de insercoes
     int numInsercoes;
     scanf("%d", &numInsercoes);
 
@@ -286,6 +331,7 @@ void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
     registro aux[numInsercoes];
     char entrada[7][campoMaximo];
     for (int insercao = 0; insercao < numInsercoes; insercao++) {
+        //Le cada um dos campos que se quer adicionar 
         for (int indice = 0; indice < 7; indice++) {
             if(temAspas(indice, 1)) {
                 scan_quote_string(entrada[indice]);
@@ -318,7 +364,9 @@ void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
         }
     }
 
+    //Insere cada um dos campos
     for(int insercao = 0; insercao < numInsercoes; insercao++) {
+        //Se houver espaco livre no meio do .bin, insere no meio e caso contrario insere no fim
         if(cabecalho->nroRegRem) {
             fseek(arquivo, (961 + (cabecalho->topo * 64)), SEEK_SET);
             fread(&(cabecalho->topo), sizeof(int), 1, arquivo);
@@ -332,5 +380,6 @@ void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
         }
             
     }
+    //Atualiza status cabecalho caso procedimento de certo
     cabecalho->status = '1';
 }

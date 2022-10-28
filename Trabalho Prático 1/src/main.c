@@ -1,10 +1,30 @@
+/************************************************************
+ *            Trabalho Prático 1 - SCC0607                   *
+ *                                                           *
+ *      Nome: Artur Brenner Weber                            *
+ *      nUSP: 12675451    Participacao: 100%                 *
+ *      Nome: Aruan                                          *
+ *      nUSP:             Participacao: 100%                 *
+ *      Data de última atualizacao: 28/10/2022               *
+ *      Ambiente de Desenvolv: VSCode 1.72.2                 *
+ *                                                           *
+ *                Conteudo arquivo main:                     *
+ *   Funcoes principais de cada uma das funcionalidades,     *
+ * alem da funcao main.                                      *
+*************************************************************/
+
+//Includes das bibliotecas padrao e dos headers de cada arquivo .c 
+//por conterem as funcoes secundarias das funcionalidades 
 #include <stdio.h>
 #include <stdlib.h>
 #include "funcoesGerais.h"
 #include "funcoesBuscaBin.h"
 #include "funcoesImpressaoBin.h"
 
+//Funcao principal da funcionalidade 1, efetua as manipulacoes 
+//principais de arquivos 
 void funcUm(char *nomeArqEntrada, char *nomeArqSaida) {
+    //Abre arquivos e testa
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb");
     testaErroArquivo(arqEntrada);
@@ -13,68 +33,104 @@ void funcUm(char *nomeArqEntrada, char *nomeArqSaida) {
     arqSaida = fopen(nomeArqSaida, "wb");
     testaErroArquivo(arqSaida);
 
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores iniciais de cabecalho e os insere no arquivoFinal
     regCabecalho aux = inicializaCabecalho();
     atualizaRegCabecalho (arqSaida, aux);
+
+    //Insere dados do csv no arquivo de saida e atualiza o cabecalho
+    //auxiliar conforme. Depois atualiza o cabecalho do arquivo.  
     createTable(arqEntrada, arqSaida, &aux);
     atualizaRegCabecalho (arqSaida, aux); 
 
+    //Fecha os arquivos
     fclose(arqEntrada);
     fclose(arqSaida);
 
     binarioNaTela(nomeArqSaida);
 }
 
+//Funcao principal da funcionalidade 2, efetua as manipulacoes 
+//principais de arquivos 
 void funcDois(char *nomeArqEntrada) {
+    //Abre arquivo de entrada e testa
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb");
     testaErroArquivo(arqEntrada);
     
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusLeitura(aux.status);
 
+    //Percorre o arquivo, imprimindo-o
     selectFrom(arqEntrada, aux);
 
+    //Fecha o arquivo
     fclose(arqEntrada);
 }
 
-void funcTres(char *nomeArqEntrada){
+//Funcao principal da funcionalidade 3, efetua as manipulacoes 
+//principais de arquivos 
+void funcTres(char *nomeArqEntrada) {
+    //Abre arquivo de entrada e testa
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb");
     testaErroArquivo(arqEntrada);
 
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusLeitura(aux.status);
 
+    //Percorre o arquivo buscando e imprime
     selectFromWhere(arqEntrada, aux);
 
+    //Fecha o arquivo
     fclose(arqEntrada);
 }
 
+//Funcao principal da funcionalidade 4, efetua as manipulacoes 
+//principais de arquivos 
 void funcQuatro(char *nomeArqEntrada){
+    //Abre arquivo de entrada e testa
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb+");
     testaErroArquivo(arqEntrada);
 
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status e atualizando
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusLeitura(aux.status);
     atualizaStatusEscrita(arqEntrada);
 
+    //Remove os arquivos pedidos e atualiza o cabecalho
+    //auxiliar conforme. Depois escreve o cabecalho.
     remocaoLogica(arqEntrada, &aux);
     atualizaRegCabecalho(arqEntrada, aux); 
     
+    //Fecha o arquivo
     fclose(arqEntrada);
+    
     binarioNaTela(nomeArqEntrada);
 }
 
+//Funcao principal da funcionalidade 5, efetua as manipulacoes 
+//principais de arquivos 
 void funcCinco(char *nomeArqEntrada){
+    //Abre arquivo e testa
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb+");
     testaErroArquivo(arqEntrada);
 
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status e atualizando
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusLeitura(aux.status);
     atualizaStatusEscrita(arqEntrada);
 
+    //Insere os arquivos pedidos e atualiza o cabecalho
+    //auxiliar conforme. Depois escreve o cabecalho. 
     insertInto(arqEntrada, &aux);
     atualizaRegCabecalho(arqEntrada, aux);
     fclose(arqEntrada);
@@ -82,42 +138,41 @@ void funcCinco(char *nomeArqEntrada){
     binarioNaTela(nomeArqEntrada);
 }
 
+//Funcao principal da funcionalidade 6, efetua as manipulacoes 
+//principais de arquivos 
 void funcSeis(char *nomeArqEntrada){
+    //Abre o arquivo de entrada e testa
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb");
     testaErroArquivo(arqEntrada);
     
+    //Cria um arquivo temporario que se tornara o definitivo, testando 
     FILE* arqSaida;
     arqSaida = fopen("temporario.bin", "wb");
     testaErroArquivo(arqSaida);
+    //Como na funcionalidade 1, inicializa os valores iniciais do cabecalho e o escreve
     regCabecalho aux = inicializaCabecalho();
     atualizaRegCabecalho(arqSaida, aux);
 
+    //Recupera o cabecalho do arquivo original e verifica o seu status para iniciar o processo
     aux = recuperaCabecalho(arqEntrada);
     verificaStatusLeitura(aux.status);
 
+    //Compacta o arquivo e atualiza seu cabecalho conforme
     compactacao(arqEntrada, arqSaida, &aux);
     atualizaRegCabecalho(arqSaida, aux); 
+
+    //Fecha ambos os arquivos 
     fclose(arqEntrada);
     fclose(arqSaida);
 
+    //Remove arquivo original e renomeia arquivo temporario para definitivo
     manipulaArquivoDuplicata(nomeArqEntrada, "temporario.bin");
     
     binarioNaTela(nomeArqEntrada);
-
-
-    // FILE* arquivo1 = fopen("binario17.bin", "rb+");
-    // regCabecalho aux1 = recuperaCabecalho(arquivo1);
-    // printf("\n%c %d %d %d %d %d\n", aux1.status, aux1.topo, aux1.proxRRN, aux1.nroRegRem, aux1.nroPagDisco, aux1.qttCompacta);
-    // printf("\n\n\n");
-    // fclose(arquivo1);
-    // FILE *arquivo2 = fopen("correto17.bin", "rb+");
-    // regCabecalho aux2 = recuperaCabecalho(arquivo2);
-    // printf("\n%c %d %d %d %d %d\n", aux2.status, aux2.topo, aux2.proxRRN, aux2.nroRegRem, aux2.nroPagDisco, aux2.qttCompacta);
-    // printf("\n\n\n");
-    // fclose(arquivo2);
 }
 
+//Funcao main, le as entradas e aplica um switch com as funcionalidades
 int main(void) {
     int funcionalidade; 
     //char *nomeArqEntrada;

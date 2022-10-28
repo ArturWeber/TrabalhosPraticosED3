@@ -1,3 +1,5 @@
+//Header de funcoesImpressaoBin.c
+
 void insereRegistro (FILE* arquivo, registro aux);
 regCabecalho inicializaCabecalho(void);
 void createTable(FILE* arqEntrada, FILE* arqSaida, regCabecalho* cabecalho);
