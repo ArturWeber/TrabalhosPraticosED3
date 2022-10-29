@@ -3,8 +3,8 @@
  *                                                           *
  *      Nome: Artur Brenner Weber                            *
  *      nUSP: 12675451    Participacao: 100%                 *
- *      Nome: Aruan                                          *
- *      nUSP:             Participacao: 100%                 *
+ *      Nome: Aruan  Bretas de Oliveira Filho                *
+ *      nUSP: 12609731    Participacao: 100%                 *
  *      Data de última atualizacao: 28/10/2022               *
  *      Ambiente de Desenvolv: VSCode 1.72.2                 *
  *                                                           *
@@ -251,9 +251,11 @@ void selectFrom(FILE* arqEntrada, regCabecalho cabecalho){
     //Le todo o lixo do cabecalho para mover ponteiro e em seguida le registro a registro e imprime
     leLixo(arqEntrada, 939);
     for(int rrn = 0; rrn < cabecalho.proxRRN; rrn++){
+        //fseek(arqEntrada, 960+(64*rrn), SEEK_SET);
         fread(&removido, sizeof(char), 1, arqEntrada);
         //Se for removido nao imprime
         if(removido == '1'){
+            leLixo(arqEntrada, 63);
             continue;
         }
         //Senao, le registro e armazena no auxiliar
