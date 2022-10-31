@@ -261,15 +261,8 @@ void selectFrom(FILE* arqEntrada, regCabecalho cabecalho){
         //Senao, le registro e armazena no auxiliar
         registro aux = inicializaRegistro();
         fread(&encadeamento, sizeof(int), 1, arqEntrada);
-        fread(&aux.idConecta, sizeof(int), 1, arqEntrada);
-        fread(aux.siglaPais, sizeof(char), tamSiglaPais, arqEntrada);
-        fread(&aux.idPoPsConectado, sizeof(int), 1, arqEntrada);
-        fread(&aux.unidadeMedida, sizeof(char), tamUnidadeMedida, arqEntrada);
-        fread(&aux.velocidade, sizeof(int), 1, arqEntrada);
-        fscanf(arqEntrada, "%[^|]", aux.nomePoPs);
-        leLixo(arqEntrada, 1);
-        fscanf(arqEntrada, "%[^|]", aux.nomePais);
-        leLixo(arqEntrada, 1);
+        //le todos os campos de um registro
+        leRegistro(arqEntrada, &aux);
 
         //Imprime auxiliar lido
         imprimeRegistro(aux);
@@ -290,32 +283,32 @@ void compactacao(FILE* arqEntrada, FILE* arqSaida, regCabecalho* cabecalho){
     int removido;
     int encadeamento;
     int numRegistros = cabecalho->proxRRN;
+
+    leLixo(arqEntrada, 939);
     //Le registro a registro do arqEntrada
-    for(int rrn = 0; rrn < numRegistros; rrn++){
-        fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
+    for(int rrn = 1; rrn <= numRegistros; rrn++){
+        
 
         fread(&removido, sizeof(char), 1, arqEntrada);
-        fread(&encadeamento, sizeof(int), 1, arqEntrada);
+        
         //Se foi removido, nao grava no arqSaida, diminuindo o numero de removidos e o proximo RRN
         if(removido == '1'){
             cabecalho->proxRRN--;
             cabecalho->nroRegRem--;
+            leLixo(arqEntrada, 63);
             continue;
         }
 
         //Le registro se nao for removido
         registro aux = inicializaRegistro();
-        fread(&aux.idConecta, sizeof(int), 1, arqEntrada);
-        fread(aux.siglaPais, sizeof(char), tamSiglaPais, arqEntrada);
-        fread(&aux.idPoPsConectado, sizeof(int), 1, arqEntrada);
-        fread(&aux.unidadeMedida, sizeof(char), tamUnidadeMedida, arqEntrada);
-        fread(&aux.velocidade, sizeof(int), 1, arqEntrada);
-        fscanf(arqEntrada, "%[^|]", aux.nomePoPs);
-        fseek(arqEntrada, 1, SEEK_CUR);
-        fscanf(arqEntrada, "%[^|]", aux.nomePais);
+        fread(&encadeamento, sizeof(int), 1, arqEntrada);
+        //le todos os campos de um registro
+        leRegistro(arqEntrada, &aux);
 
         //Insere registro no arquivo de saida
         insereRegistro(arqSaida, aux);
+        int comprimentoLixo = 42 - strlen(aux.nomePoPs) - strlen(aux.nomePais);
+        leLixo(arqEntrada, comprimentoLixo);
     }
     //Atualiza o cabecalho caso o procedimento seja efetuado corretamente
     cabecalho->topo = -1;

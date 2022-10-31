@@ -36,3 +36,4 @@ void binarioNaTela(char *nomeArquivoBinario);
 void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo);
 void atualizaRegCabecalho (FILE* arquivo, regCabecalho cabecalho);
 void manipulaArquivoDuplicata (char* nomeArqOriginal, char* nomeArqTemporario);
+void leRegistro(FILE* arquivo, registro* aux);

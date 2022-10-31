@@ -176,35 +176,28 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
    
     //Efetua cada busca
     for(int i = 0; i < numBuscas; i++){
+        fseek(arqEntrada, 960, SEEK_SET);
         printf("Busca %d\n", i + 1);
         int encadeamento;
         char removido;
         int numEncontrados = 0;
         //Le registro a registro procurando o que busca
         for(int rrn = 0; rrn < aux.proxRRN; rrn++){
-            fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
+            //fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
             
             fread(&removido, sizeof(char), 1, arqEntrada);
             //Se for removido para de ler 
             if(removido == '1'){
+                leLixo(arqEntrada, 63);
                 continue;
             }
 
             //Armazena registro na variavel auxiliar
             registro aux = inicializaRegistro();
             fread(&encadeamento, sizeof(int), 1, arqEntrada);
-            fread(&aux.idConecta, sizeof(int), 1, arqEntrada);
-            fread(aux.siglaPais, sizeof(char), tamSiglaPais, arqEntrada);
-            fread(&aux.idPoPsConectado, sizeof(int), 1, arqEntrada);
-            fread(&aux.unidadeMedida, sizeof(char), tamUnidadeMedida, arqEntrada);
-            fread(&aux.velocidade, sizeof(int), 1, arqEntrada);
-            if (fscanf(arqEntrada, "%[^|]", aux.nomePoPs) == 0){
-                aux.nomePoPs[0] = '\0';
-            }
-            fseek(arqEntrada, 1, SEEK_CUR);
-            if (fscanf(arqEntrada, "%[^|]", aux.nomePais) == 0){
-                aux.nomePoPs[0] = '\0';
-            }
+            //le todos os campos de um registro
+            leRegistro(arqEntrada, &aux);
+
             
             //Se encontrou o campo, imprime-o
             if (campoEncontrado(indiceCampoBuscado[i], valorCampoBuscado[i], aux)) {
@@ -212,6 +205,9 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
                 imprimeRegistro(aux);
                 printf("\n");
             }
+
+            int comprimentoLixo = 42 - strlen(aux.nomePoPs) - strlen(aux.nomePais);
+            leLixo(arqEntrada, comprimentoLixo);
 
         }
         
@@ -270,13 +266,15 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
     for(int i = 0; i < numBuscas; i++){
         int encadeamento;
         char removido;
+        fseek(arqEntrada, 960, SEEK_SET);
         //Le cada registro procurando o que se busca
         for(int rrn = 0; rrn < numRegistros; rrn++) {
-            fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
+            //fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
 
             fread(&removido, sizeof(char), 1, arqEntrada);
             //Se removido, ignorar
             if(removido == '1'){
+                leLixo(arqEntrada, 63);
                 continue;
             }
 
@@ -284,25 +282,18 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
             //Le registro
             registro aux = inicializaRegistro();
             fread(&encadeamento, sizeof(int), 1, arqEntrada);
-            fread(&aux.idConecta, sizeof(int), 1, arqEntrada);
-            fread(aux.siglaPais, sizeof(char), tamSiglaPais, arqEntrada);
-            fread(&aux.idPoPsConectado, sizeof(int), 1, arqEntrada);
-            fread(&aux.unidadeMedida, sizeof(char), tamUnidadeMedida, arqEntrada);
-            fread(&aux.velocidade, sizeof(int), 1, arqEntrada);
-            if (fscanf(arqEntrada, "%[^|]", aux.nomePoPs) == 0){
-                aux.nomePoPs[0] = '\0';
-            }
-            fseek(arqEntrada, 1, SEEK_CUR);
-            if (fscanf(arqEntrada, "%[^|]", aux.nomePais) == 0){
-                aux.nomePoPs[0] = '\0';
-            }
-
+            //le todos os campos de um registro
+            leRegistro(arqEntrada, &aux);
+            
             //Verifica se foi encontrado e se sim, remove e atualiza os valores do cabecalho
             if (campoEncontrado(indiceCampoBuscado[i], valorCampoBuscado[i], aux)) {
                 fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
                 apagaRegistro(arqEntrada, cabecalho->topo);
                 cabecalho->topo = rrn;
                 cabecalho->nroRegRem++;
+            }else{
+                int comprimentoLixo = 42 - strlen(aux.nomePoPs) - strlen(aux.nomePais);
+                leLixo(arqEntrada, comprimentoLixo);
             }
         }
 

@@ -124,3 +124,17 @@ void manipulaArquivoDuplicata (char* nomeArqOriginal, char* nomeArqTemporario) {
     remove(nomeArqOriginal);
     rename(nomeArqTemporario, nomeArqOriginal);
 }
+
+//le todos os campos de um registro e atribui as variaveis da estrutura registro
+void leRegistro(FILE* arquivo, registro* aux){
+	fread(&aux->idConecta, sizeof(int), 1, arquivo);
+	fread(aux->siglaPais, sizeof(char), tamSiglaPais, arquivo);
+	fread(&aux->idPoPsConectado, sizeof(int), 1, arquivo);
+	fread(&aux->unidadeMedida, sizeof(char), tamUnidadeMedida, arquivo);
+	fread(&aux->velocidade, sizeof(int), 1, arquivo);
+	fscanf(arquivo, "%[^|]", aux->nomePoPs);
+	leLixo(arquivo, 1);
+	fscanf(arquivo, "%[^|]", aux->nomePais);
+	leLixo(arquivo, 1);
+	return;
+}
