@@ -1,29 +1,71 @@
+/************************************************************
+ *            Trabalho Prático 1 - SCC0607                   *
+ *                                                           *
+ *      Nome: Artur Brenner Weber                            *
+ *      nUSP: 12675451    Participacao: 100%                 *
+ *      Nome: Aruan  Bretas de Oliveira Filho                *
+ *      nUSP: 12609731    Participacao: 100%                 *
+ *      Data de última atualizacao: 28/10/2022               *
+ *      Ambiente de Desenvolv: VSCode 1.72.2                 *
+ *                                                           *
+ *             Conteudo arquivo funcoesBuscaBin:             *
+ *   Funcoes gerais utilizadas por todo o codigo, em 5       *
+ * ou mais funcionalidades. Seu header inclui as structs     *
+ * utilizadas ao longo do projeto.                           *
+*************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <math.h>
-#include "headerFuncoes.h"
+#include "funcoesGerais.h"
 
-void readline(char* string) {
-    char c = 0;
-
-    do{
-        c = (char) getchar();
-
-    } while(c == '\n' || c == '\r' || c == ' ');
-
-    int i = 0;
-
-    do{
-        string[i] = c;
-        i++;
-        c = getchar();
-    } while(c != '\n' && c != '\r' && c != ' ');
-
-    string[i]  = '\0';
+//Testa erro no arquivo aberto
+void testaErroArquivo(FILE* arquivo) {
+	if(arquivo == NULL) {
+		printf("Falha no processamento do arquivo.\n");
+        exit(0);
+    }
 }
 
+//Le lixo do arquivo para mover ponteiro, evitando fseeks desnecessarios 
+void leLixo (FILE* arquivo, int compLixo) {
+    char lixo[compLixo];
+    fread(lixo, sizeof(char), compLixo, arquivo);
+}
+
+//Recupera o cabecalho do arquivo .bin, armazenando em um auxiliar e retornando-o
+regCabecalho recuperaCabecalho (FILE* arquivo) {
+    regCabecalho aux;
+    memset(&aux, 0, sizeof(aux));
+
+    fread(&aux.status, sizeof(char), 1, arquivo);
+    fread(&aux.topo, sizeof(int), 1, arquivo);
+    fread(&aux.proxRRN, sizeof(int), 1, arquivo);
+    fread(&aux.nroRegRem, sizeof(int), 1, arquivo);
+    fread(&aux.nroPagDisco, sizeof(int), 1, arquivo);
+    fread(&aux.qttCompacta, sizeof(int), 1, arquivo);
+    
+    return aux;
+}
+
+//Verifica se o status do arquivo está como nao corrompido '1'
+void verificaStatusLeitura(char status) {
+	if(status == '0'){
+		printf("Falha no processamento do arquivo.\n");
+		exit(0);
+	}
+}
+
+//Inicializa um registro com valores nulos e retorna-o
+registro inicializaRegistro(void){
+    registro aux;
+    memset(&aux, 0, sizeof(registro));
+	return aux;
+}
+
+
+//Funcao fornecida binarioNaTela
 void binarioNaTela(char *nomeArquivoBinario) { /* Você não precisa entender o código dessa função. */
 
 	/* Use essa função para comparação no run.codes. Lembre-se de ter fechado (fclose) o arquivo anteriormente.
@@ -52,107 +94,47 @@ void binarioNaTela(char *nomeArquivoBinario) { /* Você não precisa entender o 
 	fclose(fs);
 }
 
-void scan_quote_string(char *str) {
-
-	/*
-	*	Use essa função para ler um campo string delimitado entre aspas (").
-	*	Chame ela na hora que for ler tal campo. Por exemplo:
-	*
-	*	A entrada está da seguinte forma:
-	*		nomeDoCampo "MARIA DA SILVA"
-	*
-	*	Para ler isso para as strings já alocadas str1 e str2 do seu programa, você faz:
-	*		scanf("%s", str1); // Vai salvar nomeDoCampo em str1
-	*		scan_quote_string(str2); // Vai salvar MARIA DA SILVA em str2 (sem as aspas)
-	*
-	*/
-
-	char R;
-
-	while((R = getchar()) != EOF && isspace(R)); // ignorar espaços, \r, \n...
-
-	if(R == 'N' || R == 'n') { // campo NULO
-		getchar(); getchar(); getchar(); // ignorar o "ULO" de NULO.
-		strcpy(str, ""); // copia string vazia
-	} else if(R == '\"') {
-		if(scanf("%[^\"]", str) != 1) { // ler até o fechamento das aspas
-			strcpy(str, "");
-		}
-		getchar(); // ignorar aspas fechando
-	} else if(R != EOF){ // vc tá tentando ler uma string que não tá entre aspas! Fazer leitura normal %s então, pois deve ser algum inteiro ou algo assim...
-		str[0] = R;
-		scanf("%s", &str[1]);
-	} else { // EOF
-		strcpy(str, "");
-	}
-}
-
-void testaErroArquivo(FILE* arquivo) {
-	if(arquivo == NULL) {
-		printf("Falha no processamento do arquivo.\n");
-        exit(0);
+//Preenche arquivo com sifroes, essencialmente lixo 
+void preenchimentoComSifrao(FILE* arquivo, int tamUsado, int tamMaximo){
+    //adiciona lixo em bytes não preenchido no campo
+    for (int i = 0; i < tamMaximo - tamUsado; i++){
+        fwrite("$", sizeof(char), 1, arquivo);
     }
 }
 
-void verificaStatus(FILE* arquivo){
-	fseek(arquivo, 0L, SEEK_SET);
-	char status;
-	fread(&status, sizeof(char), 1, arquivo);
-	if(status == '0'){
-		printf("Falha no processamento do arquivo.\n");
-		fclose(arquivo);
-		exit(0);
-	}
-	fseek(arquivo, 0L, SEEK_SET);
-}
+//Aplica os valores do cabecalho passado como parametro ao arquivo .bin 
+void atualizaRegCabecalho (FILE* arquivo, regCabecalho cabecalho) {
+	int nroPagDisco;
+	nroPagDisco = (int) (ceil((cabecalho.proxRRN) / 15.0) + 1);
 
-void atualizaRegCabecalho (FILE* arquivo) {
-	int sz, proxRRN, pagDisco;
+    fseek(arquivo, 0L, SEEK_SET);
+	fwrite(&cabecalho.status, sizeof(char), 1, arquivo);
+    fwrite(&cabecalho.topo, sizeof(int), 1, arquivo);
+	fwrite(&cabecalho.proxRRN, sizeof(int), 1, arquivo);
+    fwrite(&cabecalho.nroRegRem, sizeof(int), 1, arquivo);
+	fwrite(&nroPagDisco, sizeof(int), 1, arquivo);
+    fwrite(&cabecalho.qttCompacta, sizeof(int), 1, arquivo);
 
-	fseek(arquivo, 0, SEEK_END);
-	sz = ftell(arquivo);
-
-	pagDisco = (int) ceil((sz) / (64.0 * 15.0));
-	proxRRN = ((sz - 960) / 64);
-
-	fseek(arquivo, 5, SEEK_SET);
-	fwrite(&proxRRN, sizeof(int), 1, arquivo);
-
-	fseek(arquivo, 13, SEEK_SET);
-	fwrite(&pagDisco, sizeof(int), 1, arquivo);
-
-	fseek(arquivo, 0, SEEK_SET);
-	fwrite("1", sizeof(char), 1, arquivo);
-
+    preenchimentoComSifrao(arquivo, 21, 960);
 	return;
 }
 
-registro inicializaRegistro(void){
-    registro aux;
-    memset(&aux, 0, sizeof(registro));
-	return aux;
+//Remove arquivo original e renomeia o novo para o nome do original
+void manipulaArquivoDuplicata (char* nomeArqOriginal, char* nomeArqTemporario) {
+    remove(nomeArqOriginal);
+    rename(nomeArqTemporario, nomeArqOriginal);
 }
 
-void imprimeInt(int impressao, char *apresentacao, int flagTipagem) {
-    switch (flagTipagem) {
-    case 0:
-        if (impressao != -1) {
-            printf(apresentacao, impressao);
-        }
-        break;
-    case 1:
-        if (impressao != '$') {
-            printf(apresentacao, impressao);
-        }
-        break;
-    default:
-        break;
-    }
-    
-}
-
-void imprimeString(char *impressao, char *apresentacao) {
-    if (impressao[0] != '$' && impressao[0] != '\0' && strlen(impressao) > 1) {
-        printf(apresentacao, impressao);
-    }
+//le todos os campos de um registro e atribui as variaveis da estrutura registro
+void leRegistro(FILE* arquivo, registro* aux){
+	fread(&aux->idConecta, sizeof(int), 1, arquivo);
+	fread(aux->siglaPais, sizeof(char), tamSiglaPais, arquivo);
+	fread(&aux->idPoPsConectado, sizeof(int), 1, arquivo);
+	fread(&aux->unidadeMedida, sizeof(char), tamUnidadeMedida, arquivo);
+	fread(&aux->velocidade, sizeof(int), 1, arquivo);
+	fscanf(arquivo, "%[^|]", aux->nomePoPs);
+	leLixo(arquivo, 1);
+	fscanf(arquivo, "%[^|]", aux->nomePais);
+	leLixo(arquivo, 1);
+	return;
 }
