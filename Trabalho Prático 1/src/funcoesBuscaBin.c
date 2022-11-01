@@ -156,13 +156,10 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
     scanf("%d", &numBuscas);
 
     //Armazena as especificacoes de cada busca, isto e, o campo, seu valor e o indice do campo
-    //char *descricaoCampo[numBuscas];
-    //char *valorCampoBuscado[numBuscas];
     char descricaoCampo[numBuscas][campoMaximo];
     char valorCampoBuscado[numBuscas][campoMaximo];
     int indiceCampoBuscado[numBuscas];
     for (int i = 0; i < numBuscas; i++){
-        //scanf("%ms", &descricaoCampo[i]);
         scanf("%s", descricaoCampo[i]);
         indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
         //Se tiver aspas, usa a funcao de ler aspas, senao, usa scanf
@@ -183,7 +180,6 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
         int numEncontrados = 0;
         //Le registro a registro procurando o que busca
         for(int rrn = 0; rrn < aux.proxRRN; rrn++){
-            //fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
             
             fread(&removido, sizeof(char), 1, arqEntrada);
             //Se for removido para de ler 
@@ -245,13 +241,10 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
     scanf("%d", &numBuscas);
 
     //Le os detalhes da busca, igual funcionalidade 3
-    //char *descricaoCampo[numBuscas];
-    //char *valorCampoBuscado[numBuscas];
     char descricaoCampo[numBuscas][campoMaximo];
     char valorCampoBuscado[numBuscas][campoMaximo];
     int indiceCampoBuscado[numBuscas];
     for (int i = 0; i < numBuscas; i++){
-        //scanf("%ms", &descricaoCampo[i]);
         scanf("%s", descricaoCampo[i]);
         indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
         if (temAspas(indiceCampoBuscado[i], 0)) {
@@ -269,7 +262,6 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
         fseek(arqEntrada, 960, SEEK_SET);
         //Le cada registro procurando o que se busca
         for(int rrn = 0; rrn < numRegistros; rrn++) {
-            //fseek(arqEntrada, 960 + (64 * rrn), SEEK_SET);
 
             fread(&removido, sizeof(char), 1, arqEntrada);
             //Se removido, ignorar

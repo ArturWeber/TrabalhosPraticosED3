@@ -251,7 +251,6 @@ void selectFrom(FILE* arqEntrada, regCabecalho cabecalho){
     //Le todo o lixo do cabecalho para mover ponteiro e em seguida le registro a registro e imprime
     leLixo(arqEntrada, 939);
     for(int rrn = 0; rrn < cabecalho.proxRRN; rrn++){
-        //fseek(arqEntrada, 960+(64*rrn), SEEK_SET);
         fread(&removido, sizeof(char), 1, arqEntrada);
         //Se for removido nao imprime
         if(removido == '1'){
