@@ -288,7 +288,6 @@ void compactacao(FILE* arqEntrada, FILE* arqSaida, regCabecalho* cabecalho){
     //Le registro a registro do arqEntrada
     for(int rrn = 1; rrn <= numRegistros; rrn++){
         
-
         fread(&removido, sizeof(char), 1, arqEntrada);
         
         //Se foi removido, nao grava no arqSaida, diminuindo o numero de removidos e o proximo RRN

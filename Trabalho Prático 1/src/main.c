@@ -7,6 +7,7 @@
  *      nUSP: 12609731    Participacao: 100%                 *
  *      Data de última atualizacao: 28/10/2022               *
  *      Ambiente de Desenvolv: VSCode 1.72.2                 *
+ *      e-mail: arturweber@usp.br / aruanbretas@usp.br       *
  *                                                           *
  *                Conteudo arquivo main:                     *
  *   Funcoes principais de cada uma das funcionalidades,     *
@@ -117,7 +118,7 @@ void funcQuatro(char *nomeArqEntrada){
 
 //Funcao principal da funcionalidade 5, efetua as manipulacoes 
 //principais de arquivos 
-void funcCinco(char *nomeArqEntrada){
+void funcCinco(char *nomeArqEntrada) {
     //Abre arquivo e testa
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb+");
