@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "funcoesGerais.h"
+#include "funcoesGeraisT1.h"
 
 //Funcao utilizada pelo procedimento insereRegistro, e insere o campo no .bin quando seu valor
 //e de char ou int. A flagTipagem indica se o tipo da insercao e 0, int, ou 1, char

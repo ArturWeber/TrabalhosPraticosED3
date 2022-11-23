@@ -19,7 +19,7 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-#include "funcoesGerais.h"
+#include "funcoesGeraisT1.h"
 #include "funcoesBuscaBin.h"
 #include "funcoesImpressaoBin.h"
 

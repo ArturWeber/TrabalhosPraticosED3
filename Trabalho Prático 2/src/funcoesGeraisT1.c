@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "funcoesGerais.h"
+#include "funcoesGeraisT1.h"
 
 //Testa erro no arquivo aberto
 void testaErroArquivo(FILE* arquivo) {

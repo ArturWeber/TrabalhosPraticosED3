@@ -1,12 +1,12 @@
 /************************************************************
- *            Trabalho Prático 1 - SCC0607                   *
+ *            Trabalho Prático 2 - SCC0607                   *
  *                                                           *
  *      Nome: Artur Brenner Weber                            *
  *      nUSP: 12675451    Participacao: 100%                 *
  *      Nome: Aruan  Bretas de Oliveira Filho                *
  *      nUSP: 12609731    Participacao: 100%                 *
- *      Data de última atualizacao: 28/10/2022               *
- *      Ambiente de Desenvolv: VSCode 1.72.2                 *
+ *      Data de última atualizacao: 22/11/2022               *
+ *      Ambiente de Desenvolv: VSCode 1.73.1                 *
  *      e-mail: arturweber@usp.br / aruanbretas@usp.br       *
  *                                                           *
  *                Conteudo arquivo main:                     *
@@ -18,9 +18,11 @@
 //por conterem as funcoes secundarias das funcionalidades 
 #include <stdio.h>
 #include <stdlib.h>
-#include "funcoesGerais.h"
+#include "funcoesGeraisT1.h"
+#include "funcoesGeraisT2.h"
 #include "funcoesBuscaBin.h"
 #include "funcoesImpressaoBin.h"
+#include "funcaoSete.h"
 
 //Funcao principal da funcionalidade 1, efetua as manipulacoes 
 //principais de arquivos 
@@ -173,6 +175,34 @@ void funcSeis(char *nomeArqEntrada){
     binarioNaTela(nomeArqEntrada);
 }
 
+void funcSete(char *nomeArqEntrada, char *nomeArqSaida) {
+    //Abre arquivos e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+    testaErroArquivo(arqEntrada);
+    
+    FILE* arqSaida;
+    arqSaida = fopen(nomeArqSaida, "wb");
+    testaErroArquivo(arqSaida);
+
+    //Testa status para comecar leitura
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatusLeitura(aux.status);
+
+    regCabecalhoIndice auxIndice = inicializaCabecalhoIndice();
+    atualizaRegCabecalhoIndice (arqSaida, auxIndice);
+   
+    createIndex(arqEntrada, arqSaida, aux, &auxIndice);
+
+    atualizaRegCabecalhoIndice (arqSaida, auxIndice); 
+
+    //Fecha os arquivos
+    fclose(arqEntrada);
+    fclose(arqSaida);
+
+    binarioNaTela(nomeArqSaida);
+}
+
 //Funcao main, le as entradas e aplica um switch com as funcionalidades
 int main(void) {
     int funcionalidade; 
@@ -205,6 +235,19 @@ int main(void) {
         case 6:
             funcSeis(nomeArqEntrada);
             break; 
+        case 7:
+            scanf("%s", nomeArqSaida);
+            funcSete(nomeArqEntrada, nomeArqSaida);
+            break;
+        case 8:
+            printf("nao implementada!!");
+            break;
+        case 9:
+            printf("nao implementada!!");
+            break;
+        case 10:
+            printf("nao implementada!!");
+            break;
         default:
             printf("Comando Não Encontrado \n");
     }
