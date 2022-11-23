@@ -16,7 +16,6 @@ void atualizaRegCabecalhoIndice (FILE* arquivo, regCabecalhoIndice cabecalho) {
     fwrite(&cabecalho.RRNproxNo, sizeof(int), 1, arquivo);
 
     preenchimentoComSifrao(arquivo, 17, 65);
-	return;
 }
 
 regCabecalhoIndice inicializaCabecalhoIndice(void) {
@@ -39,13 +38,94 @@ void criaInicioRegistroIndice(FILE* arqSaida) {
 }
 
 void insereRegistroIndice (FILE* arquivo, registro aux, int encadeamento) {
-    criaInicioRegistroIndice(arquivo);
+    aux. criaInicioRegistroIndice(arquivo);
 
     insereInt(arquivo, aux.idConecta, 0);
     insereInt(arquivo, encadeamento, 0);
 
     int tamOcupadoRegistro = 22 + strlen(aux.nomePoPs) + strlen(aux.nomePais);
     preenchimentoComSifrao(arquivo, tamOcupadoRegistro, tamRegistro);
+}
+
+void leRegistroIndice(FILE* arquivo, registroIndice* aux, int rrn){
+    fseek(arquivo, (rrn + 1) * 65, SEEK_SET);
+
+	fread(&aux->folha, sizeof(char), 1, arquivo);
+	fread(&aux->nroChavesNo, sizeof(int), 1, arquivo);
+	fread(&aux->alturaNo, sizeof(char), 1, arquivo);
+	fread(&aux->RRNdoNo, sizeof(int), 1, arquivo);
+    for (int i = 0; i < ordemArvore - 1; i++) {
+	    fread(&aux->ponteiros[i], sizeof(int), 1, arquivo); 
+        fread(&aux->dados[i]; sizeof(int), 1, arquivo);
+    }
+    fread(&aux->ponteiros[ordemArvore - 1], sizeof(int), 1, arquivo);
+	return;
+}
+
+void salvarNo(FILE *arquivo, registroIndice* aux, int rrn) {
+    fseek(arquivo, (rrn + 1) * 65, SEEK_SET);
+
+    fwrite(&aux->folha, sizeof(char), 1, arquivo);
+	fwrite(&aux->nroChavesNo, sizeof(int), 1, arquivo);
+	fwrite(&aux->alturaNo, sizeof(char), 1, arquivo);
+	fwrite(&aux->RRNdoNo, sizeof(int), 1, arquivo);
+    for (int i = 0; i < ordemArvore - 1; i++) {
+	    fwrite(&aux->ponteiros[i], sizeof(int), 1, arquivo); 
+        fwrite(&aux->dados[i]; sizeof(int), 1, arquivo);
+    }
+    fwrite(&aux->ponteiros[ordemArvore - 1], sizeof(int), 1, arquivo);
+	return;
+}
+
+int posicaoInserir(registroIndice noAtual, int idConecta) {
+    int posicaoInserir = 0;
+    for (int i = 0; i < noAtual.nroChavesNo; i++) {
+        if (noAtual.dados[i].chave < idConecta) {
+            posPonteiro++;
+        } else {
+            break;
+        }
+    }
+}
+
+void criaNovoNo() {
+// cria um novo no do zero
+}
+
+void insereRegistroIndice (FILE* arqSaida, int idConecta, int referencia, regCabecalhoIndice* cabecalhoIndice, int RRNnoAtual) {
+    //PROCESSO DE BUSCAR ONDE INSERIR
+    if (RRNnoAtual == -1) {
+        //nao tem nenhum no 
+        //criar no raiz
+        return; 
+    }
+    //le no 
+    registroIndice noAtual;
+    leRegistroIndice(arqSaida, &noAtual, RRNnoAtual);
+    //se for folha ele insere
+    if (noAtual.folha == '0') {
+        //procura o filho 
+        int posPonteiro = posicaoInserir(noAtual, idConecta);
+        int RRNfilho = noAtual.ponteiros[posPonteiro];
+        insereRegistroIndice(arqSaida, idConecta, referencia, cabecalhoIndice, RRNfilho);
+    } else {
+        if (noAtual.nroChavesNo < ordemArvore - 1) {
+            //tem espaco
+            //procura onde inserir 
+            int posInserir = posicaoInserir(noAtual, idConecta);
+            for (int i = noAtual.nroChavesNo; i > posInserir; i--) {
+                noAtual.dados[i] = noAtual.dados[i - 1];
+            }
+            noAtual.dados[posInserir].chave = idConecta;
+            noAtual.dados[posInserir].referencia = referencia;
+            cabecalhoIndice->nroChavesTotal++;
+            noAtual.nroChavesNo++;
+            salvarNo(arqSaida, noAtual, RRNnoAtual);
+        } else {
+            //nao tem mais espaco
+            //faz o split e promove!
+        }
+    }
 }
 
 void createIndex(FILE* arqEntrada, FILE* arqSaida, regCabecalho cabecalho, regCabecalhoIndice* cabecalhoIndice){
@@ -64,12 +144,13 @@ void createIndex(FILE* arqEntrada, FILE* arqSaida, regCabecalho cabecalho, regCa
         }
 
         //Senao, le registro e armazena no auxiliar
-        registro aux = inicializaRegistro();
+        registro registroInserir = inicializaRegistro();
         fread(&encadeamento, sizeof(int), 1, arqEntrada);
         //le todos os campos de um registro
-        leRegistro(arqEntrada, &aux);
+        leRegistro(arqEntrada, &registroInserir);
 
-        insereRegistroIndice(arqSaida, aux, encadeamento);
+        int idConecta = registroInserir.idConecta;
+        insereRegistroIndice(arqSaida, idConecta, rrn, &cabecalhoIndice, cabecalhoIndice->noRaiz);
 
         //Le lixo do registro para mover ponteiro
         int comprimentoLixo = 42 - strlen(aux.nomePoPs) - strlen(aux.nomePais);

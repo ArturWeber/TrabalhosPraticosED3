@@ -91,7 +91,7 @@ regCabecalho inicializaCabecalho(void) {
     regCabecalho aux;
     memset(&aux, 0, sizeof(regCabecalho));
 
-    aux.status = '1';
+    aux.status = '0';
     aux.topo = -1;
     aux.proxRRN = 0;
     aux.nroRegRem = 0;
