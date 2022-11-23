@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
-#include "funcaoSete.h"
-#include "funcoesImpressaoBin.h"
 #include "funcoesGeraisT1.h"
 #include "funcoesGeraisT2.h"
+#include "funcaoSete.h"
+#include "funcoesImpressaoBin.h"
+
 
 void atualizaRegCabecalhoIndice (FILE* arquivo, regCabecalhoIndice cabecalho) {
 
