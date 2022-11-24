@@ -62,18 +62,18 @@ void leRegistroIndice(FILE* arquivo, registroIndice* aux, int rrn){
 	return;
 }
 
-void salvarNo(FILE *arquivo, registroIndice* aux, int rrn) {
-    fseek(arquivo, (rrn + 1) * 65, SEEK_SET);
+void salvarNo(FILE *arquivo, registroIndice aux) {
+    fseek(arquivo, (aux.RRNdoNo + 1) * 65, SEEK_SET);
 
-    fwrite(&aux->folha, sizeof(char), 1, arquivo);
-	fwrite(&aux->nroChavesNo, sizeof(int), 1, arquivo);
-	fwrite(&aux->alturaNo, sizeof(char), 1, arquivo);
-	fwrite(&aux->RRNdoNo, sizeof(int), 1, arquivo);
+    fwrite(&aux.folha, sizeof(char), 1, arquivo);
+	fwrite(&aux.nroChavesNo, sizeof(int), 1, arquivo);
+	fwrite(&aux.alturaNo, sizeof(char), 1, arquivo);
+	fwrite(&aux.RRNdoNo, sizeof(int), 1, arquivo);
     for (int i = 0; i < ordemArvore - 1; i++) {
-	    fwrite(&aux->ponteiros[i], sizeof(int), 1, arquivo); 
-        fwrite(&aux->dados[i]; sizeof(int), 1, arquivo);
+	    fwrite(&aux.ponteiros[i], sizeof(int), 1, arquivo); 
+        fwrite(&aux.dados[i]; sizeof(int), 1, arquivo);
     }
-    fwrite(&aux->ponteiros[ordemArvore - 1], sizeof(int), 1, arquivo);
+    fwrite(&aux.ponteiros[ordemArvore - 1], sizeof(int), 1, arquivo);
 	return;
 }
 
@@ -88,42 +88,78 @@ int posicaoInserir(registroIndice noAtual, int idConecta) {
     }
 }
 
-void criaNovoNo() {
-// cria um novo no do zero
+registroIndice criaNovoNo(char folha, int nroChavesNo, int alturaNo, int RRNdoNo, int ponteiros[], dado dados[]) {
+    // cria um novo no do zero
+    registroIndice novoNo;
+    novoNo.folha = folha;
+    novoNo.nroChavesNo = nroChavesNo;
+    novoNo.alturaNo = alturaNo;
+    novoNo.RRNdoNo = RRNdoNo;
+    for(int i = 0; i < ordemArvore; i++) {
+        novoNo.ponteiros[i] = ponteiros[i];
+    }
+    for(int i = 0; i < ordemArvore - 1; i++) {
+        novoNo.dados[i] = dados[i];
+    }
+    return novoNo;
 }
 
-void insereRegistroIndice (FILE* arqSaida, int idConecta, int referencia, regCabecalhoIndice* cabecalhoIndice, int RRNnoAtual) {
-    //PROCESSO DE BUSCAR ONDE INSERIR
+void insereRegistroIndice(FILE* arqSaida, dado* dadoInserir, int ponteiroInserir, regCabecalhoIndice* cabecalhoIndice, int RRNnoAtual) {
+    // se nao houver promocao entao para de mexer
+    if (dadoInserir->chave == -1) {
+        return;
+    }
+
     if (RRNnoAtual == -1) {
         //nao tem nenhum no 
         //criar no raiz
-        return; 
+        int ponteiros[ordemArvore];
+        for (int i = 0; i < ordemArvore; i++) {
+            ponteiros[i] = -1;
+        }
+        dado dados[ordemArvore - 1];
+        for (int i = 0; i < ordemArvore - 1; i++) {
+            dados[i].chave = 0;
+            dados[i].referencia = -1;
+        }
+        registroIndice novoNo = criarNovoNo('1', 0, 1, cabecalhoIndice->RRNproxNo, ponteiros, dados);
+        cabecalhoIndice->noRaiz = cabecalhoIndice->RRNproxNo;
+        cabecalhoIndice->RRNproxNo++;
+        cabecalhoIndice->alturaArvore++;
+        salvarNo(arqSaida, novoNo);
+        RRNnoAtual = 0;
     }
-    //le no 
+
+    //le o no 
     registroIndice noAtual;
     leRegistroIndice(arqSaida, &noAtual, RRNnoAtual);
-    //se for folha ele insere
+
+    //se nao for no folha
     if (noAtual.folha == '0') {
-        //procura o filho 
-        int posPonteiro = posicaoInserir(noAtual, idConecta);
+        //Continua buscando onde inserir
+        int posPonteiro = posicaoInserir(noAtual, dadoInserir->chave);
         int RRNfilho = noAtual.ponteiros[posPonteiro];
-        insereRegistroIndice(arqSaida, idConecta, referencia, cabecalhoIndice, RRNfilho);
+        insereRegistroIndice(arqSaida, dadoInserir, cabecalhoIndice, RRNfilho);
     } else {
         if (noAtual.nroChavesNo < ordemArvore - 1) {
             //tem espaco
             //procura onde inserir 
-            int posInserir = posicaoInserir(noAtual, idConecta);
+            int posInserir = posicaoInserir(noAtual, dadoInserir->chave);
             for (int i = noAtual.nroChavesNo; i > posInserir; i--) {
                 noAtual.dados[i] = noAtual.dados[i - 1];
+                noAtual.ponteiros[i + 1] = noAtual.ponteiros[i];
             }
-            noAtual.dados[posInserir].chave = idConecta;
-            noAtual.dados[posInserir].referencia = referencia;
+            noAtual.dados[posInserir] = *dadoInserir;
+            noAtual.ponteiros[posInserir + 1] = ponteiroInserir;
             cabecalhoIndice->nroChavesTotal++;
             noAtual.nroChavesNo++;
-            salvarNo(arqSaida, noAtual, RRNnoAtual);
+            salvarNo(arqSaida, noAtual);
+            //Nao ha mais dados a inserir
+            dadoInserir->chave = -1;
         } else {
             //nao tem mais espaco
             //faz o split e promove!
+            // o dadoInserir eh o promovido
         }
     }
 }
@@ -149,12 +185,19 @@ void createIndex(FILE* arqEntrada, FILE* arqSaida, regCabecalho cabecalho, regCa
         //le todos os campos de um registro
         leRegistro(arqEntrada, &registroInserir);
 
-        int idConecta = registroInserir.idConecta;
-        insereRegistroIndice(arqSaida, idConecta, rrn, &cabecalhoIndice, cabecalhoIndice->noRaiz);
+        dado dadoInserir;
+        dadoInserir.chave = registroInserir.idConecta;
+        dadoInserir.referencia = rrn;
+        insereRegistroIndice(arqSaida, &dadoInserir, -1, &cabecalhoIndice, cabecalhoIndice->noRaiz);
 
         //Le lixo do registro para mover ponteiro
         int comprimentoLixo = 42 - strlen(aux.nomePoPs) - strlen(aux.nomePais);
         leLixo(arqEntrada, comprimentoLixo);
     }
 
+    cabecalhoIndice->status = '1';
+
 }
+
+//Ler o livro 
+//Testar insercao para ate 4 registros (idconecta)

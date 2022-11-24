@@ -190,7 +190,7 @@ void funcSete(char *nomeArqEntrada, char *nomeArqSaida) {
     verificaStatusLeitura(aux.status);
 
     regCabecalhoIndice auxIndice = inicializaCabecalhoIndice();
-    atualizaRegCabecalhoIndice (arqSaida, auxIndice);
+    atualizaRegCabecalhoIndice(arqSaida, auxIndice);
    
     createIndex(arqEntrada, arqSaida, aux, &auxIndice);
 
