@@ -5,7 +5,7 @@
  *      nUSP: 12675451    Participacao: 100%                 *
  *      Nome: Aruan  Bretas de Oliveira Filho                *
  *      nUSP: 12609731    Participacao: 100%                 *
- *      Data de última atualizacao: 28/10/2022               *
+ *      Data de última atualizacao: 24/11/2022               *
  *      Ambiente de Desenvolv: VSCode 1.72.2                 *
  *                                                           *
  *         Conteudo arquivo funcoesImpressaoBin:             *

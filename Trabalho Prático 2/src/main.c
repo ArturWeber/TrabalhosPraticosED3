@@ -24,6 +24,7 @@
 #include "funcoesImpressaoBin.h"
 #include "funcaoSete.h"
 #include "funcaoOito.h"
+#include "funcaoNove.h"
 
 //Funcao principal da funcionalidade 1, efetua as manipulacoes 
 //principais de arquivos 
@@ -228,8 +229,44 @@ void funcOito(char* nomeArqEntrada, char* nomeArqIndice) {
     //Percorre o arquivo buscando e imprime
     selectFromWhereIndice(arqEntrada, arqIndice, aux, auxIndice);
 
-    //Fecha o arquivo
+    //Fecha os arquivos
     fclose(arqEntrada);
+    fclose(arqIndice);
+}
+
+void funcNove(char* nomeArqEntrada, char* nomeArqIndice) {
+    //Abre arquivo de entrada e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+    testaErroArquivo(arqEntrada);
+
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatusLeitura(aux.status);
+    atualizaStatusEscrita(arqEntrada);
+
+    //Abre arquivo de indice e testa
+    FILE* arqIndice;
+    arqIndice = fopen(nomeArqIndice, "rb");
+    testaErroArquivo(arqIndice);
+
+    //Inicializa um registro auxiliar do tipo regCabecalhoIndice com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalhoIndice auxIndice = recuperaCabecalhoIndice(arqIndice);
+    verificaStatusLeitura(auxIndice.status);
+    atualizaStatusEscrita(arqIndice);
+
+    //Insere os arquivos pedidos e atualiza o cabecalho
+    //auxiliar conforme. Depois escreve o cabecalho. 
+    insertIntoIndice(arqEntrada, arqIndice, &aux, &auxIndice);
+    atualizaRegCabecalho(arqEntrada, aux);
+
+    //Fecha os arquivos 
+    fclose(arqEntrada);
+    fclose(arqIndice);
+
+    binarioNaTela(nomeArqIndice);
 }
 
 //Funcao main, le as entradas e aplica um switch com as funcionalidades
@@ -273,7 +310,8 @@ int main(void) {
             funcOito(nomeArqEntrada, nomeArqSaida);
             break;
         case 9:
-            printf("nao implementada!!");
+            scanf("%s", nomeArqSaida);
+            funcNove(nomeArqEntrada, nomeArqSaida);
             break;
         case 10:
             printf("nao implementada!!");

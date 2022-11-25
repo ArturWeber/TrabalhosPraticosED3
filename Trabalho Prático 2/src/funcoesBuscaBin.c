@@ -222,7 +222,7 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
 
 //Atualiza status p escrita
 void atualizaStatusEscrita (FILE* arquivo) {
-    fseek(arquivo, 0L, SEEK_SET);//adicionei esse fseek para funcionar
+    fseek(arquivo, 0L, SEEK_SET);
 	fwrite("0", sizeof(char), 1, arquivo);
 }
 
