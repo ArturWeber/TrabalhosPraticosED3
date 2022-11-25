@@ -149,6 +149,19 @@ int campoEncontrado(int campoBuscado, char* valorCampo, registro aux) {
     return 0;
 }
 
+void leCamposDeBusca(char (*descricaoCampo)[campoMaximo], char (*valorCampoBuscado)[campoMaximo], int indiceCampoBuscado[], int numBuscas){
+        for (int i = 0; i < numBuscas; i++){
+        scanf("%s", descricaoCampo[i]);
+        indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
+        //Se tiver aspas, usa a funcao de ler aspas, senao, usa scanf
+        if (temAspas(indiceCampoBuscado[i], 0)) {
+            scan_quote_string(valorCampoBuscado[i]);
+        }else {
+            scanf("%s", valorCampoBuscado[i]);
+        }   
+    }
+}
+
 //Funcao secundaria da funcionalidade 3, busca o registro pedido e o imprime
 void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
     //Coleta o numero de buscas 
@@ -159,17 +172,7 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
     char descricaoCampo[numBuscas][campoMaximo];
     char valorCampoBuscado[numBuscas][campoMaximo];
     int indiceCampoBuscado[numBuscas];
-    for (int i = 0; i < numBuscas; i++){
-        scanf("%s", descricaoCampo[i]);
-        indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
-        //Se tiver aspas, usa a funcao de ler aspas, senao, usa scanf
-        if (temAspas(indiceCampoBuscado[i], 0)) {
-            scan_quote_string(valorCampoBuscado[i]);
-        }else {
-            scanf("%s", valorCampoBuscado[i]);
-        }
-        
-    }
+    leCamposDeBusca(descricaoCampo, valorCampoBuscado, indiceCampoBuscado, numBuscas);
    
     //Efetua cada busca
     for(int i = 0; i < numBuscas; i++){
@@ -244,15 +247,7 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
     char descricaoCampo[numBuscas][campoMaximo];
     char valorCampoBuscado[numBuscas][campoMaximo];
     int indiceCampoBuscado[numBuscas];
-    for (int i = 0; i < numBuscas; i++){
-        scanf("%s", descricaoCampo[i]);
-        indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
-        if (temAspas(indiceCampoBuscado[i], 0)) {
-            scan_quote_string(valorCampoBuscado[i]);
-        }else {
-            scanf("%s", valorCampoBuscado[i]);
-        }   
-    }
+    leCamposDeBusca(descricaoCampo, valorCampoBuscado, indiceCampoBuscado, numBuscas);
 
     //Efetua cada busca
     int numRegistros = cabecalho->proxRRN;
