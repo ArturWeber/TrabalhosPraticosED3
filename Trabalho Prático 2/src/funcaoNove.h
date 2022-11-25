@@ -1,1 +1,1 @@
-void insertIntoIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho* aux, regCabecalhoIndice* auxIndice);
+// void insertIntoIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho* aux, regCabecalhoIndice* auxIndice);

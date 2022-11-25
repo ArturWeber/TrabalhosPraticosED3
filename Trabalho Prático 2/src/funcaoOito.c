@@ -35,6 +35,20 @@ int buscaRegistroIndice(FILE* arqSaida, char* chaveBuscada, int RRNnoAtual, int*
 
 }
 
+// void leCamposDeBusca(int* numBuscas, char*** descricaoCampo, char*** valorCampoBuscado, int** indiceCampoBuscado){
+//     for (int i = 0; i < *numBuscas; i++){
+//         scanf("%s", (*descricaoCampo)[i]);
+//         (*indiceCampoBuscado)[i] = descobreCampoBuscado((*descricaoCampo)[i]);
+//         //Se tiver aspas, usa a funcao de ler aspas, senao, usa scanf
+//         if (temAspas((*indiceCampoBuscado)[i], 0)) {
+//             scan_quote_string((*valorCampoBuscado)[i]);
+//         }else {
+//             scanf("%s", (*valorCampoBuscado)[i]);
+//         }   
+//     }
+//     return;
+// }
+
 void selectFromWhereIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho aux, regCabecalhoIndice auxIndice) {
     //Coleta o numero de buscas 
     int numBuscas;
@@ -44,6 +58,7 @@ void selectFromWhereIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho aux, 
     char descricaoCampo[numBuscas][campoMaximo];
     char valorCampoBuscado[numBuscas][campoMaximo];
     int indiceCampoBuscado[numBuscas];
+    //leCamposDeBusca(&numBuscas, &descricaoCampo, &valorCampoBuscado, &indiceCampoBuscado);
     for (int i = 0; i < numBuscas; i++){
         scanf("%s", descricaoCampo[i]);
         indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
