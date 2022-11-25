@@ -62,7 +62,7 @@ void selectFromWhereIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho aux, 
         int encadeamento;
         char removido;
         int numEncontrados = 0;
-        int numPagDisco;
+        int numPagDisco = 0;
         registro lido = inicializaRegistro();
 
         //se for busca por idconecta usa arvore B
@@ -93,6 +93,7 @@ void selectFromWhereIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho aux, 
                 }
 
                 //Armazena registro na variavel auxiliar
+                lido = inicializaRegistro();
                 fread(&encadeamento, sizeof(int), 1, arqEntrada);
                 //le todos os campos de um registro
                 leRegistro(arqEntrada, &lido);
