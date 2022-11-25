@@ -21,3 +21,7 @@ typedef struct {
     int alturaArvore;
     int RRNproxNo;
 } regCabecalhoIndice;
+
+regCabecalhoIndice recuperaCabecalhoIndice(FILE* arqIndice);
+registroIndice leRegistroIndice(FILE* arquivo, int rrn);
+int posicaoInserir(registroIndice noAtual, int idConecta);

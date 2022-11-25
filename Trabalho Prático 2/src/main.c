@@ -220,8 +220,13 @@ void funcOito(char* nomeArqEntrada, char* nomeArqIndice) {
     arqIndice = fopen(nomeArqIndice, "rb");
     testaErroArquivo(arqIndice);
 
+    //Inicializa um registro auxiliar do tipo regCabecalhoIndice com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalhoIndice auxIndice = recuperaCabecalhoIndice(arqIndice);
+    verificaStatusLeitura(auxIndice.status);
+
     //Percorre o arquivo buscando e imprime
-    selectFromWhereIndice(arqEntrada, arqIndice, aux);
+    selectFromWhereIndice(arqEntrada, arqIndice, aux, auxIndice);
 
     //Fecha o arquivo
     fclose(arqEntrada);

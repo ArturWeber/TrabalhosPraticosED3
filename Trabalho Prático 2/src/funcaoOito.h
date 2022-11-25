@@ -1,1 +1,1 @@
-void selectFromWhereIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho aux);
+void selectFromWhereIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho aux, regCabecalhoIndice auxIndice);

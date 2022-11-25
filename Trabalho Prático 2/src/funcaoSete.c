@@ -33,25 +33,6 @@ regCabecalhoIndice inicializaCabecalhoIndice(void) {
     return aux;
 }
 
-registroIndice leRegistroIndice(FILE* arquivo, int rrn){
-    fseek(arquivo, (rrn + 1) * 65, SEEK_SET);
-
-    registroIndice noRecuperado;
-    memset(&noRecuperado, -1, sizeof(registroIndice));
-
-    fread(&noRecuperado.folha, sizeof(char), 1, arquivo);
-	fread(&noRecuperado.nroChavesNo, sizeof(int), 1, arquivo);
-	fread(&noRecuperado.alturaNo, sizeof(int), 1, arquivo);
-	fread(&noRecuperado.RRNdoNo, sizeof(int), 1, arquivo);
-    for (int i = 0; i < ordemArvore - 1; i++) {
-	    fread(&noRecuperado.ponteiros[i], sizeof(int), 1, arquivo); 
-        fread(&noRecuperado.dados[i].chave, sizeof(int), 1, arquivo);
-        fread(&noRecuperado.dados[i].referencia, sizeof(int), 1, arquivo);
-    }
-    fread(&noRecuperado.ponteiros[ordemArvore - 1], sizeof(int), 1, arquivo);
-    return noRecuperado;
-}
-
 void salvarNo(FILE *arquivo, registroIndice aux) {
     fseek(arquivo, (aux.RRNdoNo + 1) * 65, SEEK_SET);
 
@@ -79,18 +60,6 @@ void salvarNo(FILE *arquivo, registroIndice aux) {
     // }
     // printf("ponteiro%d: %d\n", ordemArvore, aux.ponteiros[ordemArvore - 1]);
 
-}
-
-int posicaoInserir(registroIndice noAtual, int idConecta) {
-    int posicaoInserir = 0;
-    for (int i = 0; i < noAtual.nroChavesNo; i++) {
-        if (noAtual.dados[i].chave < idConecta) {
-            posicaoInserir++;
-        } else {
-            break;
-        }
-    }
-    return posicaoInserir;
 }
 
 registroIndice criaNovoNo(char folha, int nroChavesNo, int alturaNo, int RRNdoNo) {
@@ -166,8 +135,7 @@ registroIndice split(registroIndice* noAtual, dado* dadoInserir, int *ponteiroIn
 
 
 void insereRegistroIndice(FILE* arqSaida, dado* dadoInserir, int *ponteiroInserir, regCabecalhoIndice* cabecalhoIndice, int RRNnoAtual) {
-    //le o no 
-    //read page at RRNnoAtual into noAtual
+    //le o no atual
     registroIndice noAtual = leRegistroIndice(arqSaida, RRNnoAtual);
 
     //busca onde inserir recursivamente
