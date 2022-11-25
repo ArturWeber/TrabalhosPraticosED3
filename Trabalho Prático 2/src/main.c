@@ -182,7 +182,7 @@ void funcSete(char *nomeArqEntrada, char *nomeArqSaida) {
     testaErroArquivo(arqEntrada);
     
     FILE* arqSaida;
-    arqSaida = fopen(nomeArqSaida, "wb");
+    arqSaida = fopen(nomeArqSaida, "wb+");
     testaErroArquivo(arqSaida);
 
     //Testa status para comecar leitura
