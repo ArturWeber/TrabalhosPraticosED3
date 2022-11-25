@@ -23,6 +23,7 @@
 #include "funcoesBuscaBin.h"
 #include "funcoesImpressaoBin.h"
 #include "funcaoSete.h"
+#include "funcaoOito.h"
 
 //Funcao principal da funcionalidade 1, efetua as manipulacoes 
 //principais de arquivos 
@@ -203,6 +204,29 @@ void funcSete(char *nomeArqEntrada, char *nomeArqSaida) {
     binarioNaTela(nomeArqSaida);
 }
 
+void funcOito(char* nomeArqEntrada, char* nomeArqIndice) {
+    //Abre arquivo de entrada e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+    testaErroArquivo(arqEntrada);
+
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatusLeitura(aux.status);
+
+    //Abre arquivo de indice e testa
+    FILE* arqIndice;
+    arqIndice = fopen(nomeArqIndice, "rb");
+    testaErroArquivo(arqIndice);
+
+    //Percorre o arquivo buscando e imprime
+    selectFromWhereIndice(arqEntrada, arqIndice, aux);
+
+    //Fecha o arquivo
+    fclose(arqEntrada);
+}
+
 //Funcao main, le as entradas e aplica um switch com as funcionalidades
 int main(void) {
     int funcionalidade; 
@@ -240,7 +264,8 @@ int main(void) {
             funcSete(nomeArqEntrada, nomeArqSaida);
             break;
         case 8:
-            printf("nao implementada!!");
+            scanf("%s", nomeArqSaida);
+            funcOito(nomeArqEntrada, nomeArqSaida);
             break;
         case 9:
             printf("nao implementada!!");
