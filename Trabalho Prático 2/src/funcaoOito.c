@@ -23,7 +23,7 @@ int buscaRegistroIndice(FILE* arqSaida, char* chaveBuscada, int RRNnoAtual, int*
         RRNencontrado = noAtual.dados[posPonteiro].referencia;
         return RRNencontrado;
     } 
-    if (noAtual.folha == 1) {
+    if (noAtual.folha == '1') {
         //Se for folha e ele nao encontrou é porque nao ha o valor em armazenamento
         RRNencontrado = -1;
         return RRNencontrado;
@@ -71,7 +71,8 @@ void selectFromWhereIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho aux, 
             int RRNencontrado = buscaRegistroIndice(arqIndice, valorCampoBuscado[i], auxIndice.noRaiz, &numPagDisco);
 
             if (RRNencontrado != -1) {
-                fseek(arqEntrada, RRNencontrado * 64, SEEK_CUR);
+                fseek(arqEntrada, (RRNencontrado * 64) + 5, SEEK_CUR);
+
                 //le todos os campos de um registro
                 leRegistro(arqEntrada, &lido);
                 imprimeRegistro(lido);
