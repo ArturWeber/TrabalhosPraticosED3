@@ -22,9 +22,8 @@
 #include "funcoesGeraisT2.h"
 #include "funcoesBuscaBin.h"
 #include "funcoesImpressaoBin.h"
-#include "funcaoSete.h"
 #include "funcaoOito.h"
-#include "funcaoNove.h"
+#include "insercaoArvore.h"
 
 //Funcao principal da funcionalidade 1, efetua as manipulacoes 
 //principais de arquivos 

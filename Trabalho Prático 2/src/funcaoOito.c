@@ -1,3 +1,20 @@
+/************************************************************
+ *            Trabalho Prático 2 - SCC0607                   *
+ *                                                           *
+ *      Nome: Artur Brenner Weber                            *
+ *      nUSP: 12675451    Participacao: 100%                 *
+ *      Nome: Aruan  Bretas de Oliveira Filho                *
+ *      nUSP: 12609731    Participacao: 65%                  *
+ *      Data de última atualizacao: 25/11/2022               *
+ *      Ambiente de Desenvolv: VSCode 1.72.2                 *
+ *                                                           *
+ *             Conteudo arquivo funcoesBuscaBin:             *
+ *   Funcoes secundarias das funcionalidades                 *
+ *                  8 (createIndex)                          *
+ * Organizadas juntas pois envolvem funcoes em comum.        *
+*************************************************************/
+
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -8,7 +25,7 @@
 #include "funcoesBuscaBin.h"
 #include "funcaoOito.h"
 
-
+//Funcionalidade responsavel pela busca do indice na arvore
 int buscaRegistroIndice(FILE* arqSaida, char* chaveBuscada, int RRNnoAtual, int* numPagDisco) {
     (*numPagDisco)++;
     int RRNencontrado;
@@ -35,6 +52,10 @@ int buscaRegistroIndice(FILE* arqSaida, char* chaveBuscada, int RRNnoAtual, int*
 
 }
 
+//Funcao secundaria da funcionalidade 8, muito semelhante a funcionalidade 3
+//tendo como diferenca ter que diferenciar quando a busca eh pelo
+//idConecta, a qual deve ser realizada na arvore-b(arquivo de indice)
+//sendo mais eficiente do que a busca sequecial
 void selectFromWhereIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho aux, regCabecalhoIndice auxIndice) {
     //Coleta o numero de buscas 
     int numBuscas;

@@ -298,15 +298,7 @@ int gravaInt(char* entrada) {
     }
 }
 
-//Funcao secundaria da funcionalidade 5
-void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
-    //Le o numero de insercoes
-    int numInsercoes;
-    scanf("%d", &numInsercoes);
-
-
-    registro aux[numInsercoes];
-    char entrada[7][campoMaximo];
+void GravaParaInserir(char (*entrada)[campoMaximo],int numInsercoes, registro aux[numInsercoes]){
     for (int insercao = 0; insercao < numInsercoes; insercao++) {
         //Le cada um dos campos que se quer adicionar 
         for (int indice = 0; indice < 7; indice++) {
@@ -340,6 +332,18 @@ void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
             }
         }
     }
+}
+
+//Funcao secundaria da funcionalidade 5
+void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
+    //Le o numero de insercoes
+    int numInsercoes;
+    scanf("%d", &numInsercoes);
+
+
+    registro aux[numInsercoes];
+    char entrada[7][campoMaximo];
+    GravaParaInserir(entrada, numInsercoes, aux);
 
     //Insere cada um dos campos
     for(int insercao = 0; insercao < numInsercoes; insercao++) {

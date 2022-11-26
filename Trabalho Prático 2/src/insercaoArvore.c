@@ -1,10 +1,29 @@
+/************************************************************
+ *            Trabalho Prático 2 - SCC0607                   *
+ *                                                           *
+ *      Nome: Artur Brenner Weber                            *
+ *      nUSP: 12675451    Participacao: 100%                 *
+ *      Nome: Aruan  Bretas de Oliveira Filho                *
+ *      nUSP: 12609731    Participacao: 65%                  *
+ *      Data de última atualizacao: 25/11/2022               *
+ *      Ambiente de Desenvolv: VSCode 1.72.2                 *
+ *                                                           *
+ *             Conteudo arquivo funcoesBuscaBin:             *
+ *   Funcoes secundarias das funcionalidades                 *
+ *         7 (createIndex) e 9 (InsertIntoIndex)             *
+ * Organizadas juntas pois envolvem funcoes em comum.        *
+*************************************************************/
+
 #include <stdio.h>
 #include <string.h>
+
 #include "funcoesGeraisT1.h"
 #include "funcoesGeraisT2.h"
-#include "funcaoSete.h"
+#include "funcoesBuscaBin.h"
 #include "funcoesImpressaoBin.h"
+#include "insercaoArvore.h"
 
+//Aplica os valores do cabecalho passado como parametro ao arquivo de indice .bin 
 void atualizaRegCabecalhoIndice (FILE* arquivo, regCabecalhoIndice cabecalho) {
     fseek(arquivo, 0L, SEEK_SET);
 
@@ -16,11 +35,10 @@ void atualizaRegCabecalhoIndice (FILE* arquivo, regCabecalhoIndice cabecalho) {
 
     preenchimentoComSifrao(arquivo, 17, 65);
 
-    // //VERIFICACOES PARA DEBUGGING
-    // printf("\n\n ATUALIZA REGISTRO DE CABECALHO \n");
-    // printf("%c \n %d \n %d \n %d \n %d\n", cabecalho.status, cabecalho.noRaiz, cabecalho.nroChavesTotal, cabecalho.alturaArvore, cabecalho.RRNproxNo);
 }
 
+//Funcao do tipo regCabecalhoIndice que inicializa o cabecalho do indice 
+//com valores iniciais especificados no documento
 regCabecalhoIndice inicializaCabecalhoIndice(void) {
     regCabecalhoIndice aux;
     memset(&aux, 0, sizeof(regCabecalhoIndice));
@@ -33,6 +51,7 @@ regCabecalhoIndice inicializaCabecalhoIndice(void) {
     return aux;
 }
 
+//Funcionalidade que insere o No no arquivo de indice .bin
 void salvarNo(FILE *arquivo, registroIndice aux) {
     fseek(arquivo, (aux.RRNdoNo + 1) * 65, SEEK_SET);
 
@@ -47,21 +66,9 @@ void salvarNo(FILE *arquivo, registroIndice aux) {
     }
     fwrite(&aux.ponteiros[ordemArvore - 1], sizeof(int), 1, arquivo);
 
-    // //AJUDA A DEBUGGAR
-    // printf("\n\n\nFUNCAO DE SALVAR O NO\n");
-    // printf("folha: %c\n", aux.folha);
-    // printf("nroChavesNo: %d\n", aux.nroChavesNo);
-    // printf("alturaNo: %d\n", aux.alturaNo);
-    // printf("RRNdoNo: %d\n", aux.RRNdoNo);
-    // for (int i = 0; i < ordemArvore - 1; i++) {
-    //     printf("ponteiro%d: %d\n", i + 1, aux.ponteiros[i]);
-    //     printf("chave%d: %d\n", i + 1, aux.dados[i].chave);
-    //     printf("referencia%d: %d\n", i + 1, aux.dados[i].referencia);
-    // }
-    // printf("ponteiro%d: %d\n", ordemArvore, aux.ponteiros[ordemArvore - 1]);
-
 }
 
+//Inicializa um No do zero na arvore
 registroIndice criaNovoNo(char folha, int nroChavesNo, int alturaNo, int RRNdoNo) {
     // cria um novo no do zero
     registroIndice novoNo;
@@ -81,8 +88,9 @@ registroIndice criaNovoNo(char folha, int nroChavesNo, int alturaNo, int RRNdoNo
     return novoNo;
 }
 
+//Funcionalidade responsável por fazer o split, ou seja, quando houver a necessidade
+//de criar um novo No dentro da arvore
 registroIndice split(registroIndice* noAtual, dado* dadoInserir, int *ponteiroInserir, regCabecalhoIndice* cabecalhoIndice) {
-    //CONTENTS OF PAGE ARE COPIED TO THE WORKING PAGE AND KEY AND RRN ARE INSERTED INTO WORKING PAGE
     int posInserir = posicaoInserir(*noAtual, dadoInserir->chave);
     dado todosDados[ordemArvore];
     int todosPonteiros[ordemArvore + 1];
@@ -99,7 +107,6 @@ registroIndice split(registroIndice* noAtual, dado* dadoInserir, int *ponteiroIn
         }
     }
 
-    //ALLOCATE AND INITIALIZE A NEW PAGE IN THE B-TREE FILE TO HOLD NEW PAGE
     dado dadoVazio; 
     dadoVazio.chave = -1;
     dadoVazio.referencia = -1;
@@ -133,7 +140,9 @@ registroIndice split(registroIndice* noAtual, dado* dadoInserir, int *ponteiroIn
     return novoNo;
 }
 
-
+//Funcao responsavel pela insercao de um dado a ser inserido no arquivo de indice,
+//verificar se ha necessidade de split
+//e chamar a funcao para salvar os dados no arquivo de indice .bin
 void insereRegistroIndice(FILE* arqSaida, dado* dadoInserir, int *ponteiroInserir, regCabecalhoIndice* cabecalhoIndice, int RRNnoAtual) {
     //le o no atual
     registroIndice noAtual = leRegistroIndice(arqSaida, RRNnoAtual);
@@ -171,6 +180,7 @@ void insereRegistroIndice(FILE* arqSaida, dado* dadoInserir, int *ponteiroInseri
     }
 }
 
+//Funcao que cria a raiz da arvore ou faz o split para criacao de uma nova raiz
 void engineInsercaoIndice(FILE* arqSaida, regCabecalhoIndice* cabecalhoIndice, registro* registroInserir, dado *dadoInserir, int rrn){
     if (cabecalhoIndice->noRaiz == -1) {
         //se a arvore ainda nao tem nenhum no 
@@ -189,8 +199,7 @@ void engineInsercaoIndice(FILE* arqSaida, regCabecalhoIndice* cabecalhoIndice, r
     int ponteiroInserir = -1;
     insereRegistroIndice(arqSaida, dadoInserir, &ponteiroInserir, cabecalhoIndice, cabecalhoIndice->noRaiz);
 
-    //SE O DADOINSERIR CONTINUAR SENDO DIFERENTE DE -1 ENTAO TEMOS QUE CRIAR UMA NOVA RAIZ!!!
-    //CUIDAR AQUI DO CASO ONDE SPLITA UMA RAIZ!!!
+    //SE O DadoInserir CONTINUAR SENDO DIFERENTE DE -1 ENTAO TEMOS QUE CRIAR UMA NOVA RAIZ
     if (dadoInserir->chave != -1) {
         registroIndice novaRaiz = criaNovoNo('0', 1, cabecalhoIndice->alturaArvore + 1, cabecalhoIndice->RRNproxNo);
         novaRaiz.ponteiros[0] = cabecalhoIndice->noRaiz;
@@ -205,6 +214,7 @@ void engineInsercaoIndice(FILE* arqSaida, regCabecalhoIndice* cabecalhoIndice, r
     cabecalhoIndice->nroChavesTotal++;
 }
 
+//Funcao sencudaria da funcionalidade 7, cria o arquivo de indice com base no arquivo de dados
 void createIndex(FILE* arqEntrada, FILE* arqSaida, regCabecalho cabecalho, regCabecalhoIndice* cabecalhoIndice){
     int encadeamento;
     char removido;
@@ -235,5 +245,46 @@ void createIndex(FILE* arqEntrada, FILE* arqSaida, regCabecalho cabecalho, regCa
         leLixo(arqEntrada, comprimentoLixo);
     }
 
+    cabecalhoIndice->status = '1';
+}
+
+//Funcao sencudaria da funcionalidade 9, insere novos registros no arquivo de dados
+//e insere o indice desses novos registros adicionados no arquivo de indice
+void insertIntoIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho* cabecalho, regCabecalhoIndice* cabecalhoIndice) {
+    //Le o numero de insercoes
+    int numInsercoes;
+    scanf("%d", &numInsercoes);
+
+    registro aux[numInsercoes];
+    char entrada[7][campoMaximo];
+
+    GravaParaInserir(entrada, numInsercoes, aux);
+
+    //Insere cada um dos campos
+    int rrnInserir;
+    for(int insercao = 0; insercao < numInsercoes; insercao++) {
+        //Se houver espaco livre no meio do .bin, insere no meio e caso contrario insere no fim
+        if(cabecalho->nroRegRem) {
+            fseek(arqEntrada, (961 + (cabecalho->topo * 64)), SEEK_SET);
+            rrnInserir = cabecalho->topo;
+            fread(&(cabecalho->topo), sizeof(int), 1, arqEntrada);
+            fseek(arqEntrada, -5, SEEK_CUR);
+            insereRegistro(arqEntrada, aux[insercao]);   
+            cabecalho->nroRegRem--;
+        
+        } else {
+            fseek(arqEntrada, (960 + (cabecalho->proxRRN * 64)), SEEK_SET);
+            insereRegistro(arqEntrada, aux[insercao]);
+            rrnInserir = cabecalho->proxRRN;
+            cabecalho->proxRRN++;
+        }
+            
+        //INSERE NA ARVORE B 
+        dado dadoInserir;
+        engineInsercaoIndice(arqIndice, cabecalhoIndice, &aux[insercao], &dadoInserir, rrnInserir);
+       
+    }
+    //Atualiza status cabecalho caso procedimento de certo
+    cabecalho->status = '1';
     cabecalhoIndice->status = '1';
 }

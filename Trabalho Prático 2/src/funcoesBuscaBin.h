@@ -10,3 +10,4 @@ void scan_quote_string(char *str);
 int campoEncontrado(int campoBuscado, char* valorCampo, registro aux);
 void leCamposDeBusca(char (*descricaoCampo)[campoMaximo], char (*valorCampoBuscado)[campoMaximo], int indiceCampoBuscado[], int numBuscas);
 int gravaInt(char* entrada);
+void GravaParaInserir(char (*entrada)[campoMaximo],int numInsercoes, registro aux[numInsercoes]);

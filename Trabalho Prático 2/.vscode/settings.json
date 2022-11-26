@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "insercaoarvore.h": "c",
+        "stdlib.h": "c"
+    }
+}
