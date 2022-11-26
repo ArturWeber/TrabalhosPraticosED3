@@ -173,37 +173,36 @@ void insereRegistroIndice(FILE* arqSaida, dado* dadoInserir, int *ponteiroInseri
 
 void engineInsercaoIndice(FILE* arqSaida, regCabecalhoIndice* cabecalhoIndice, registro* registroInserir, dado *dadoInserir, int rrn){
     if (cabecalhoIndice->noRaiz == -1) {
-            //se a arvore ainda nao tem nenhum no 
-            //cria raiz inicial 
-            registroIndice primeiraRaiz = criaNovoNo('1', 0, 1, cabecalhoIndice->RRNproxNo);
-            //atualiza cabecalho com novos valores da raiz, atualiza RRNproxNo e aumenta a altura da arvore 
-            cabecalhoIndice->noRaiz = cabecalhoIndice->RRNproxNo;
-            cabecalhoIndice->RRNproxNo++;
-            cabecalhoIndice->alturaArvore++;
-            salvarNo(arqSaida, primeiraRaiz);
-            
-        }
+        //se a arvore ainda nao tem nenhum no 
+        //cria raiz inicial 
+        registroIndice primeiraRaiz = criaNovoNo('1', 0, 1, cabecalhoIndice->RRNproxNo);
+        //atualiza cabecalho com novos valores da raiz, atualiza RRNproxNo e aumenta a altura da arvore 
+        cabecalhoIndice->noRaiz = cabecalhoIndice->RRNproxNo;
+        cabecalhoIndice->RRNproxNo++;
+        cabecalhoIndice->alturaArvore++;
+        salvarNo(arqSaida, primeiraRaiz);
+        
+    }
 
-        //dado dadoInserir;
-        dadoInserir->chave = registroInserir->idConecta;
-        dadoInserir->referencia = rrn;
-        int ponteiroInserir = -1;
-        insereRegistroIndice(arqSaida, dadoInserir, &ponteiroInserir, cabecalhoIndice, cabecalhoIndice->noRaiz);
+    dadoInserir->chave = registroInserir->idConecta;
+    dadoInserir->referencia = rrn;
+    int ponteiroInserir = -1;
+    insereRegistroIndice(arqSaida, dadoInserir, &ponteiroInserir, cabecalhoIndice, cabecalhoIndice->noRaiz);
 
-        //SE O DADOINSERIR CONTINUAR SENDO DIFERENTE DE -1 ENTAO TEMOS QUE CRIAR UMA NOVA RAIZ!!!
-        //CUIDAR AQUI DO CASO ONDE SPLITA UMA RAIZ!!!
-        if (dadoInserir->chave != -1) {
-            registroIndice novaRaiz = criaNovoNo('0', 1, cabecalhoIndice->alturaArvore + 1, cabecalhoIndice->RRNproxNo);
-            novaRaiz.ponteiros[0] = cabecalhoIndice->noRaiz;
-            novaRaiz.dados[0] = *dadoInserir;
-            novaRaiz.ponteiros[1] = ponteiroInserir;
-            salvarNo(arqSaida, novaRaiz);
+    //SE O DADOINSERIR CONTINUAR SENDO DIFERENTE DE -1 ENTAO TEMOS QUE CRIAR UMA NOVA RAIZ!!!
+    //CUIDAR AQUI DO CASO ONDE SPLITA UMA RAIZ!!!
+    if (dadoInserir->chave != -1) {
+        registroIndice novaRaiz = criaNovoNo('0', 1, cabecalhoIndice->alturaArvore + 1, cabecalhoIndice->RRNproxNo);
+        novaRaiz.ponteiros[0] = cabecalhoIndice->noRaiz;
+        novaRaiz.dados[0] = *dadoInserir;
+        novaRaiz.ponteiros[1] = ponteiroInserir;
+        salvarNo(arqSaida, novaRaiz);
 
-            cabecalhoIndice->noRaiz = cabecalhoIndice->RRNproxNo;
-            cabecalhoIndice->RRNproxNo++;
-            cabecalhoIndice->alturaArvore++;
-        }
-        cabecalhoIndice->nroChavesTotal++;
+        cabecalhoIndice->noRaiz = cabecalhoIndice->RRNproxNo;
+        cabecalhoIndice->RRNproxNo++;
+        cabecalhoIndice->alturaArvore++;
+    }
+    cabecalhoIndice->nroChavesTotal++;
 }
 
 void createIndex(FILE* arqEntrada, FILE* arqSaida, regCabecalho cabecalho, regCabecalhoIndice* cabecalhoIndice){
@@ -230,38 +229,7 @@ void createIndex(FILE* arqEntrada, FILE* arqSaida, regCabecalho cabecalho, regCa
         
         dado dadoInserir;
         engineInsercaoIndice(arqSaida, cabecalhoIndice, &registroInserir, &dadoInserir, rrn);
-        // if (cabecalhoIndice->noRaiz == -1) {
-        //     //se a arvore ainda nao tem nenhum no 
-        //     //cria raiz inicial 
-        //     registroIndice primeiraRaiz = criaNovoNo('1', 0, 1, cabecalhoIndice->RRNproxNo);
-        //     //atualiza cabecalho com novos valores da raiz, atualiza RRNproxNo e aumenta a altura da arvore 
-        //     cabecalhoIndice->noRaiz = cabecalhoIndice->RRNproxNo;
-        //     cabecalhoIndice->RRNproxNo++;
-        //     cabecalhoIndice->alturaArvore++;
-        //     salvarNo(arqSaida, primeiraRaiz);
-        // }
-
-        // dado dadoInserir;
-        // dadoInserir.chave = registroInserir.idConecta;
-        // dadoInserir.referencia = rrn;
-        // int ponteiroInserir = -1;
-        // insereRegistroIndice(arqSaida, &dadoInserir, &ponteiroInserir, cabecalhoIndice, cabecalhoIndice->noRaiz);
-
-        // //SE O DADOINSERIR CONTINUAR SENDO DIFERENTE DE -1 ENTAO TEMOS QUE CRIAR UMA NOVA RAIZ!!!
-        // //CUIDAR AQUI DO CASO ONDE SPLITA UMA RAIZ!!!
-        // if (dadoInserir.chave != -1) {
-        //     registroIndice novaRaiz = criaNovoNo('0', 1, cabecalhoIndice->alturaArvore + 1, cabecalhoIndice->RRNproxNo);
-        //     novaRaiz.ponteiros[0] = cabecalhoIndice->noRaiz;
-        //     novaRaiz.dados[0] = dadoInserir;
-        //     novaRaiz.ponteiros[1] = ponteiroInserir;
-        //     salvarNo(arqSaida, novaRaiz);
-
-        //     cabecalhoIndice->noRaiz = cabecalhoIndice->RRNproxNo;
-        //     cabecalhoIndice->RRNproxNo++;
-        //     cabecalhoIndice->alturaArvore++;
-        // }
-        // cabecalhoIndice->nroChavesTotal++;
-
+        
         //Le lixo do registro para mover ponteiro
         int comprimentoLixo = 42 - strlen(registroInserir.nomePoPs) - strlen(registroInserir.nomePais);
         leLixo(arqEntrada, comprimentoLixo);

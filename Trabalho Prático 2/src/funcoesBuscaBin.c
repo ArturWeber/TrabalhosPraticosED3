@@ -150,7 +150,7 @@ int campoEncontrado(int campoBuscado, char* valorCampo, registro aux) {
 }
 
 void leCamposDeBusca(char (*descricaoCampo)[campoMaximo], char (*valorCampoBuscado)[campoMaximo], int indiceCampoBuscado[], int numBuscas){
-        for (int i = 0; i < numBuscas; i++){
+    for (int i = 0; i < numBuscas; i++){
         scanf("%s", descricaoCampo[i]);
         indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
         //Se tiver aspas, usa a funcao de ler aspas, senao, usa scanf
@@ -219,7 +219,6 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
         printf("Numero de paginas de disco: %d\n", aux.nroPagDisco);        
         printf("\n");
 
-        //free(descricaoCampo);
     }
 }
 
