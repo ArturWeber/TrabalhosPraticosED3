@@ -23,6 +23,7 @@
 #include "funcoesBuscaBin.h"
 #include "funcoesImpressaoBin.h"
 #include "funcaoOito.h"
+#include "funcaoDez.h"
 #include "insercaoArvore.h"
 
 //Funcao principal da funcionalidade 1, efetua as manipulacoes 
@@ -270,6 +271,45 @@ void funcNove(char* nomeArqEntrada, char* nomeArqIndice) {
     binarioNaTela(nomeArqIndice);
 }
 
+void funcDez(char* nomeArqEntrada, char* nomeArqSaida, char* nomeArqIndice) {
+    //Abre arquivo de entrada e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+    //testaErroArquivo(arqEntrada);
+
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalho auxEntrada = recuperaCabecalho(arqEntrada);
+    verificaStatusLeitura(auxEntrada.status);
+
+    //Abre arquivo de saida e testa
+    FILE* arqSaida;
+    arqSaida = fopen(nomeArqSaida, "rb");
+    testaErroArquivo(arqSaida);
+
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de saida, verificando seu status
+    regCabecalho auxSaida = recuperaCabecalho(arqSaida);
+    verificaStatusLeitura(auxSaida.status);
+
+    //Abre arquivo de indice e testa
+    FILE* arqIndice;
+    arqIndice = fopen(nomeArqIndice, "rb");
+    testaErroArquivo(arqIndice);
+
+    //Inicializa um registro auxiliar do tipo regCabecalhoIndice com
+    //os valores de cabecalho do arquivo de indice, verificando seu status
+    regCabecalhoIndice auxIndice = recuperaCabecalhoIndice(arqIndice);
+    verificaStatusLeitura(auxIndice.status);
+
+    //FUNCAO SECUNDARIA DEZ VAI AQUI
+    selectFromWhereMultiplasTabelas(arqEntrada, arqSaida, arqIndice, auxEntrada, auxIndice);
+
+    fclose(arqEntrada);
+    fclose(arqSaida);
+    fclose(arqIndice);
+}
+
 //Funcao main, le as entradas e aplica um switch com as funcionalidades
 int main(void) {
     int funcionalidade; 
@@ -315,7 +355,14 @@ int main(void) {
             funcNove(nomeArqEntrada, nomeArqSaida);
             break;
         case 10:
-            printf("nao implementada!!");
+            scanf("%s", nomeArqSaida);
+            char nomeCampoPrim[campoMaximo];
+            char nomeCampoSeg[campoMaximo];
+            char nomeArqIndice[campoMaximo];
+            scanf("%s", nomeCampoPrim);
+            scanf("%s", nomeCampoSeg);
+            scanf("%s", nomeArqIndice);
+            funcDez(nomeArqEntrada, nomeArqSaida, nomeArqIndice);
             break;
         default:
             printf("Comando Não Encontrado \n");

@@ -298,7 +298,7 @@ int gravaInt(char* entrada) {
     }
 }
 
-void GravaParaInserir(char (*entrada)[campoMaximo],int numInsercoes, registro aux[numInsercoes]){
+void gravaParaInserir(char (*entrada)[campoMaximo],int numInsercoes, registro aux[numInsercoes]){
     for (int insercao = 0; insercao < numInsercoes; insercao++) {
         //Le cada um dos campos que se quer adicionar 
         for (int indice = 0; indice < 7; indice++) {
@@ -343,7 +343,7 @@ void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
 
     registro aux[numInsercoes];
     char entrada[7][campoMaximo];
-    GravaParaInserir(entrada, numInsercoes, aux);
+    gravaParaInserir(entrada, numInsercoes, aux);
 
     //Insere cada um dos campos
     for(int insercao = 0; insercao < numInsercoes; insercao++) {

@@ -1,0 +1,1 @@
+void selectFromWhereMultiplasTabelas(FILE* arqEntrada, FILE* arqSaida, FILE* arqIndice, regCabecalho auxEntrada, regCabecalhoIndice auxIndice);

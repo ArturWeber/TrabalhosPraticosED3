@@ -26,17 +26,17 @@
 #include "funcaoOito.h"
 
 //Funcionalidade responsavel pela busca do indice na arvore
-int buscaRegistroIndice(FILE* arqSaida, char* chaveBuscada, int RRNnoAtual, int* numPagDisco) {
+int buscaRegistroIndice(FILE* arqSaida, int chaveBuscada, int RRNnoAtual, int* numPagDisco) {
     (*numPagDisco)++;
     int RRNencontrado;
     //le o no atual
     registroIndice noAtual = leRegistroIndice(arqSaida, RRNnoAtual);
 
     //procura ou o valor ou onde inserir
-    int posPonteiro = posicaoInserir(noAtual, atoi(chaveBuscada));
+    int posPonteiro = posicaoInserir(noAtual, chaveBuscada);
 
     //se encontrou o valor, o retorna
-    if ((posPonteiro < ordemArvore - 1) && (noAtual.dados[posPonteiro].chave == atoi(chaveBuscada))) { 
+    if ((posPonteiro < ordemArvore - 1) && (noAtual.dados[posPonteiro].chave == chaveBuscada)) { 
         RRNencontrado = noAtual.dados[posPonteiro].referencia;
         return RRNencontrado;
     } 
@@ -80,7 +80,8 @@ void selectFromWhereIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho aux, 
         //se for busca por idconecta usa arvore B
         if (indiceCampoBuscado[i] == 0) {
             //comeca buscando pela raiz, e retorna o valor do rrn encontrado ou -1 se nao encontrar
-            int RRNencontrado = buscaRegistroIndice(arqIndice, valorCampoBuscado[i], auxIndice.noRaiz, &numPagDisco);
+            int chaveBuscada = atoi(valorCampoBuscado[i]);
+            int RRNencontrado = buscaRegistroIndice(arqIndice, chaveBuscada, auxIndice.noRaiz, &numPagDisco);
 
             if (RRNencontrado != -1) {
                 fseek(arqEntrada, (RRNencontrado * 64) + 5, SEEK_CUR);

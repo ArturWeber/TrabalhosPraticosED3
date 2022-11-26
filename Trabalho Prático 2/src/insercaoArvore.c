@@ -6,7 +6,7 @@
  *      Nome: Aruan  Bretas de Oliveira Filho                *
  *      nUSP: 12609731    Participacao: 65%                  *
  *      Data de última atualizacao: 25/11/2022               *
- *      Ambiente de Desenvolv: VSCode 1.72.2                 *
+ *      Ambiente de Desenvolv: VSCode 1.73.1                 *
  *                                                           *
  *             Conteudo arquivo funcoesBuscaBin:             *
  *   Funcoes secundarias das funcionalidades                 *
@@ -258,7 +258,7 @@ void insertIntoIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho* cabecalho
     registro aux[numInsercoes];
     char entrada[7][campoMaximo];
 
-    GravaParaInserir(entrada, numInsercoes, aux);
+    gravaParaInserir(entrada, numInsercoes, aux);
 
     //Insere cada um dos campos
     int rrnInserir;
