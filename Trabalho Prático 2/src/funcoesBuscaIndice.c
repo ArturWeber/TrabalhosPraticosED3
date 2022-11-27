@@ -14,7 +14,6 @@
  * Organizadas juntas pois envolvem funcoes em comum.        *
 *************************************************************/
 
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

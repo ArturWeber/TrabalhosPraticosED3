@@ -23,6 +23,7 @@
 #include "funcoesImpressaoBin.h"
 #include "insercaoArvore.h"
 
+
 //Aplica os valores do cabecalho passado como parametro ao arquivo de indice .bin 
 void atualizaRegCabecalhoIndice (FILE* arquivo, regCabecalhoIndice cabecalho) {
     fseek(arquivo, 0L, SEEK_SET);
