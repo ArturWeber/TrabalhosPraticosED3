@@ -1,2 +1,0 @@
-void selectFromWhereIndice(FILE* arqEntrada, FILE* arqIndice, regCabecalho aux, regCabecalhoIndice auxIndice);
-int buscaRegistroIndice(FILE* arqSaida, int chaveBuscada, int RRNnoAtual, int* numPagDisco);
