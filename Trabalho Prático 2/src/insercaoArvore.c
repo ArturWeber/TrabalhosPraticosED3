@@ -194,12 +194,13 @@ void engineInsercaoIndice(FILE* arqSaida, regCabecalhoIndice* cabecalhoIndice, r
         
     }
 
+    //prepara o dado para ser inserido
     dadoInserir->chave = registroInserir->idConecta;
     dadoInserir->referencia = rrn;
     int ponteiroInserir = -1;
     insereRegistroIndice(arqSaida, dadoInserir, &ponteiroInserir, cabecalhoIndice, cabecalhoIndice->noRaiz);
 
-    //SE O DadoInserir CONTINUAR SENDO DIFERENTE DE -1 ENTAO TEMOS QUE CRIAR UMA NOVA RAIZ
+    //SE O DadoInserir CONTINUAR SENDO DIFERENTE DE -1, ENTAO HOUVE SPLIT NA ANTIGA RAIZ E TEMOS QUE CRIAR UMA NOVA RAIZ
     if (dadoInserir->chave != -1) {
         registroIndice novaRaiz = criaNovoNo('0', 1, cabecalhoIndice->alturaArvore + 1, cabecalhoIndice->RRNproxNo);
         novaRaiz.ponteiros[0] = cabecalhoIndice->noRaiz;
