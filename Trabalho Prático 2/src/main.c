@@ -22,7 +22,8 @@
 #include "funcoesGeraisT2.h"
 #include "funcoesBuscaBin.h"
 #include "funcoesImpressaoBin.h"
-#include "funcaoSete.h"
+#include "insercaoArvore.h"
+#include "funcoesBuscaIndice.h"
 
 //Funcao principal da funcionalidade 1, efetua as manipulacoes 
 //principais de arquivos 
@@ -203,6 +204,111 @@ void funcSete(char *nomeArqEntrada, char *nomeArqSaida) {
     binarioNaTela(nomeArqSaida);
 }
 
+void funcOito(char* nomeArqEntrada, char* nomeArqIndice) {
+    //Abre arquivo de entrada e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+    testaErroArquivo(arqEntrada);
+
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatusLeitura(aux.status);
+
+    //Abre arquivo de indice e testa
+    FILE* arqIndice;
+    arqIndice = fopen(nomeArqIndice, "rb");
+    testaErroArquivo(arqIndice);
+
+    //Inicializa um registro auxiliar do tipo regCabecalhoIndice com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalhoIndice auxIndice = recuperaCabecalhoIndice(arqIndice);
+    verificaStatusLeitura(auxIndice.status);
+
+    //Percorre o arquivo buscando e imprime
+    selectFromWhereIndice(arqEntrada, arqIndice, aux, auxIndice);
+
+    //Fecha os arquivos
+    fclose(arqEntrada);
+    fclose(arqIndice);
+}
+
+void funcNove(char* nomeArqEntrada, char* nomeArqIndice) {
+    //Abre arquivo de entrada e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb+");
+    testaErroArquivo(arqEntrada);
+
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatusLeitura(aux.status);
+    atualizaStatusEscrita(arqEntrada);
+
+    //Abre arquivo de indice e testa
+    FILE* arqIndice;
+    arqIndice = fopen(nomeArqIndice, "rb+");
+    testaErroArquivo(arqIndice);
+
+    //Inicializa um registro auxiliar do tipo regCabecalhoIndice com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalhoIndice auxIndice = recuperaCabecalhoIndice(arqIndice);
+    verificaStatusLeitura(auxIndice.status);
+    atualizaStatusEscrita(arqIndice);
+
+    //Insere os arquivos pedidos e atualiza o cabecalho
+    //auxiliar conforme. Depois escreve o cabecalho. 
+    insertIntoIndice(arqEntrada, arqIndice, &aux, &auxIndice);
+    atualizaRegCabecalho(arqEntrada, aux);
+    atualizaRegCabecalhoIndice(arqIndice, auxIndice);
+
+    //Fecha os arquivos 
+    fclose(arqEntrada);
+    fclose(arqIndice);
+
+    binarioNaTela(nomeArqEntrada);
+    binarioNaTela(nomeArqIndice);
+}
+
+void funcDez(char* nomeArqEntrada, char* nomeArqSaida, char* nomeArqIndice) {
+    //Abre arquivo de entrada e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+    //testaErroArquivo(arqEntrada);
+
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalho auxEntrada = recuperaCabecalho(arqEntrada);
+    verificaStatusLeitura(auxEntrada.status);
+
+    //Abre arquivo de saida e testa
+    FILE* arqSaida;
+    arqSaida = fopen(nomeArqSaida, "rb");
+    testaErroArquivo(arqSaida);
+
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de saida, verificando seu status
+    regCabecalho auxSaida = recuperaCabecalho(arqSaida);
+    verificaStatusLeitura(auxSaida.status);
+
+    //Abre arquivo de indice e testa
+    FILE* arqIndice;
+    arqIndice = fopen(nomeArqIndice, "rb");
+    testaErroArquivo(arqIndice);
+
+    //Inicializa um registro auxiliar do tipo regCabecalhoIndice com
+    //os valores de cabecalho do arquivo de indice, verificando seu status
+    regCabecalhoIndice auxIndice = recuperaCabecalhoIndice(arqIndice);
+    verificaStatusLeitura(auxIndice.status);
+
+    //FUNCAO SECUNDARIA DEZ VAI AQUI
+    selectFromWhereMultiplasTabelas(arqEntrada, arqSaida, arqIndice, auxEntrada, auxIndice);
+
+    fclose(arqEntrada);
+    fclose(arqSaida);
+    fclose(arqIndice);
+}
+
 //Funcao main, le as entradas e aplica um switch com as funcionalidades
 int main(void) {
     int funcionalidade; 
@@ -240,13 +346,22 @@ int main(void) {
             funcSete(nomeArqEntrada, nomeArqSaida);
             break;
         case 8:
-            printf("nao implementada!!");
+            scanf("%s", nomeArqSaida);
+            funcOito(nomeArqEntrada, nomeArqSaida);
             break;
         case 9:
-            printf("nao implementada!!");
+            scanf("%s", nomeArqSaida);
+            funcNove(nomeArqEntrada, nomeArqSaida);
             break;
         case 10:
-            printf("nao implementada!!");
+            scanf("%s", nomeArqSaida);
+            char nomeCampoPrim[campoMaximo];
+            char nomeCampoSeg[campoMaximo];
+            char nomeArqIndice[campoMaximo];
+            scanf("%s", nomeCampoPrim);
+            scanf("%s", nomeCampoSeg);
+            scanf("%s", nomeArqIndice);
+            funcDez(nomeArqEntrada, nomeArqSaida, nomeArqIndice);
             break;
         default:
             printf("Comando Não Encontrado \n");
@@ -254,5 +369,4 @@ int main(void) {
 
     //free(nomeArqEntrada);
     return 0;
-
 }

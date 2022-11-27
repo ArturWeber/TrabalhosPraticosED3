@@ -149,6 +149,19 @@ int campoEncontrado(int campoBuscado, char* valorCampo, registro aux) {
     return 0;
 }
 
+void leCamposDeBusca(char (*descricaoCampo)[campoMaximo], char (*valorCampoBuscado)[campoMaximo], int indiceCampoBuscado[], int numBuscas){
+    for (int i = 0; i < numBuscas; i++){
+        scanf("%s", descricaoCampo[i]);
+        indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
+        //Se tiver aspas, usa a funcao de ler aspas, senao, usa scanf
+        if (temAspas(indiceCampoBuscado[i], 0)) {
+            scan_quote_string(valorCampoBuscado[i]);
+        }else {
+            scanf("%s", valorCampoBuscado[i]);
+        }   
+    }
+}
+
 //Funcao secundaria da funcionalidade 3, busca o registro pedido e o imprime
 void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
     //Coleta o numero de buscas 
@@ -159,17 +172,7 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
     char descricaoCampo[numBuscas][campoMaximo];
     char valorCampoBuscado[numBuscas][campoMaximo];
     int indiceCampoBuscado[numBuscas];
-    for (int i = 0; i < numBuscas; i++){
-        scanf("%s", descricaoCampo[i]);
-        indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
-        //Se tiver aspas, usa a funcao de ler aspas, senao, usa scanf
-        if (temAspas(indiceCampoBuscado[i], 0)) {
-            scan_quote_string(valorCampoBuscado[i]);
-        }else {
-            scanf("%s", valorCampoBuscado[i]);
-        }
-        
-    }
+    leCamposDeBusca(descricaoCampo, valorCampoBuscado, indiceCampoBuscado, numBuscas);
    
     //Efetua cada busca
     for(int i = 0; i < numBuscas; i++){
@@ -216,13 +219,12 @@ void selectFromWhere(FILE* arqEntrada, regCabecalho aux){
         printf("Numero de paginas de disco: %d\n", aux.nroPagDisco);        
         printf("\n");
 
-        //free(descricaoCampo);
     }
 }
 
 //Atualiza status p escrita
 void atualizaStatusEscrita (FILE* arquivo) {
-    fseek(arquivo, 0L, SEEK_SET);//adicionei esse fseek para funcionar
+    fseek(arquivo, 0L, SEEK_SET);
 	fwrite("0", sizeof(char), 1, arquivo);
 }
 
@@ -244,15 +246,7 @@ void remocaoLogica(FILE* arqEntrada, regCabecalho* cabecalho) {
     char descricaoCampo[numBuscas][campoMaximo];
     char valorCampoBuscado[numBuscas][campoMaximo];
     int indiceCampoBuscado[numBuscas];
-    for (int i = 0; i < numBuscas; i++){
-        scanf("%s", descricaoCampo[i]);
-        indiceCampoBuscado[i] = descobreCampoBuscado(descricaoCampo[i]);
-        if (temAspas(indiceCampoBuscado[i], 0)) {
-            scan_quote_string(valorCampoBuscado[i]);
-        }else {
-            scanf("%s", valorCampoBuscado[i]);
-        }   
-    }
+    leCamposDeBusca(descricaoCampo, valorCampoBuscado, indiceCampoBuscado, numBuscas);
 
     //Efetua cada busca
     int numRegistros = cabecalho->proxRRN;
@@ -304,15 +298,7 @@ int gravaInt(char* entrada) {
     }
 }
 
-//Funcao secundaria da funcionalidade 5
-void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
-    //Le o numero de insercoes
-    int numInsercoes;
-    scanf("%d", &numInsercoes);
-
-
-    registro aux[numInsercoes];
-    char entrada[7][campoMaximo];
+void gravaParaInserir(char (*entrada)[campoMaximo],int numInsercoes, registro aux[numInsercoes]){
     for (int insercao = 0; insercao < numInsercoes; insercao++) {
         //Le cada um dos campos que se quer adicionar 
         for (int indice = 0; indice < 7; indice++) {
@@ -346,6 +332,18 @@ void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
             }
         }
     }
+}
+
+//Funcao secundaria da funcionalidade 5
+void insertInto(FILE* arquivo, regCabecalho* cabecalho) {
+    //Le o numero de insercoes
+    int numInsercoes;
+    scanf("%d", &numInsercoes);
+
+
+    registro aux[numInsercoes];
+    char entrada[7][campoMaximo];
+    gravaParaInserir(entrada, numInsercoes, aux);
 
     //Insere cada um dos campos
     for(int insercao = 0; insercao < numInsercoes; insercao++) {
