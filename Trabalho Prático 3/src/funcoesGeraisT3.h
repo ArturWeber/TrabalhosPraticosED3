@@ -1,4 +1,3 @@
-#include "funcoesGeraisT1.h"
 /*    Inclui:
     - Os prototipos das funcoes
     - O tipo de dado armazenado na lista

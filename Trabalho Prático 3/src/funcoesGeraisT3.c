@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include "funcoesGeraisT1.h"
 #include "funcoesGeraisT3.h"
 
 /*    Inclui:
@@ -5,8 +8,7 @@
     - Implementar suas funcoes
 */
 
-#include <stdlib.h>
-#include <stdio.h>
+
 
 Grafo* cria_grafo() {
     Grafo* gr = (Grafo*) malloc(sizeof(Grafo));
