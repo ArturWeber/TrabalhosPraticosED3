@@ -1,4 +1,5 @@
 //Header de funcoesGerais.c
+#include <stdio.h>
 
 //Define valores fixos de campo e registro
 #define campoMaximo 50

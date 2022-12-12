@@ -20,10 +20,12 @@
 #include <stdlib.h>
 #include "funcoesGeraisT1.h"
 #include "funcoesGeraisT2.h"
+#include "funcoesGeraisT3.h"
 #include "funcoesBuscaBin.h"
 #include "funcoesImpressaoBin.h"
 #include "insercaoArvore.h"
 #include "funcoesBuscaIndice.h"
+#include "funcOnze.h"
 
 //Funcao principal da funcionalidade 1, efetua as manipulacoes 
 //principais de arquivos 
@@ -309,6 +311,22 @@ void funcDez(char* nomeArqEntrada, char* nomeArqSaida, char* nomeArqIndice) {
     fclose(arqIndice);
 }
 
+void funcOnze (char* nomeArqEntrada) {
+    //Abre arquivo de entrada e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+    testaErroArquivo(arqEntrada);
+    
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatusLeitura(aux.status);
+
+    geraImprimeGrafo(arqEntrada, aux);
+
+    fclose(arqEntrada);
+}
+
 //Funcao main, le as entradas e aplica um switch com as funcionalidades
 int main(void) {
     int funcionalidade; 
@@ -364,7 +382,7 @@ int main(void) {
             funcDez(nomeArqEntrada, nomeArqSaida, nomeArqIndice);
             break;
         case 11:
-            printf("Ainda nao implementada");
+            funcOnze(nomeArqEntrada);
             break;
         case 12:
             printf("Ainda nao implementada");
