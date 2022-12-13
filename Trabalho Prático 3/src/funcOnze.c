@@ -121,12 +121,12 @@ void imprimeGrafo(Grafo *gr) {
     if (gr != NULL) {
         vertice *atual = *gr;
         while (atual != NULL) {
-            aresta *atualAresta = *(atual->raizLista);
+            aresta **atualAresta = atual->raizLista;
             while(atualAresta != NULL) {
                 //imprime 
-                printf("%d %s %s %s %d %dMbps\n", atual->dados.idConecta, atual->dados.nomePoPs, atual->dados.nomePais, atual->dados.siglaPais, atualAresta->dados.idPoPsConectado, atualAresta->dados.velocidade);
+                printf("%d %s %s %s %d %dMbps\n", atual->dados.idConecta, atual->dados.nomePoPs, atual->dados.nomePais, atual->dados.siglaPais, (*atualAresta)->dados.idPoPsConectado, (*atualAresta)->dados.velocidade);
 
-                atualAresta = atualAresta->prox;
+                *atualAresta = (*atualAresta)->prox;
             }
 
             atual = atual->prox;
