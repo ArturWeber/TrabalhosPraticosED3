@@ -9,13 +9,12 @@ typedef struct {
     int velocidade;
 } dadoAresta;
 
-struct Aresta {
+typedef struct Aresta {
     dadoAresta dados;
 
     struct Aresta *prox;
-};
+} aresta;
 
-typedef struct Aresta aresta; 
 typedef struct Aresta Lista;
 
 typedef struct {
@@ -25,15 +24,14 @@ typedef struct {
     char siglaPais[campoMaximo];
 } dadoVertice;
 
-struct Vertice {
+typedef struct Vertice {
     dadoVertice dados;
     int adicionado;
     Lista* raizLista;
 
     struct Vertice *prox;
-};
+} vertice;
 
-typedef struct Vertice vertice;
 typedef struct Vertice *Grafo;
 
 Grafo* cria_grafo();
