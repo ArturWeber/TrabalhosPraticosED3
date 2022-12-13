@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-void insereArestaLista (Lista** li, registro aux, int ehReciproco) {
+void insereArestaLista (Lista** li, registro aux, int ehAdicionado) {
     if (li == NULL) {
         return;
     }
@@ -25,10 +25,10 @@ void insereArestaLista (Lista** li, registro aux, int ehReciproco) {
         velocidade *= 1024;
     }
     int idAdicionar;
-    if(ehReciproco) {
-        idAdicionar = aux.idConecta;
-    } else {
+    if(ehAdicionado) {
         idAdicionar = aux.idPoPsConectado;
+    } else {
+        idAdicionar = aux.idConecta;
     }
     no->dados.velocidade = velocidade;
     no->dados.idPoPsConectado = idAdicionar;
@@ -61,8 +61,14 @@ void insereArestaLista (Lista** li, registro aux, int ehReciproco) {
 
 }
 
-void insereRegistroGrafo(Grafo* gr, registro aux) {
-    
+void insereRegistroGrafo(Grafo* gr, registro aux, int ehAdicionado) {
+    int parametroOrdem;
+    if (ehAdicionado) {
+        parametroOrdem = aux.idConecta;
+    } else {
+        parametroOrdem = aux.idPoPsConectado;
+    }
+
     if (gr == NULL) {
         //verifica se o grafo existe
         return;
@@ -73,53 +79,62 @@ void insereRegistroGrafo(Grafo* gr, registro aux) {
     if (no == NULL) {
         //verifica se alocou
         return;
+    }   
+    no->adicionado = ehAdicionado;
+    no->dados.idConecta = parametroOrdem;
+    if (ehAdicionado) {
+        strcpy(no->dados.nomePais, aux.nomePais);
+        strcpy(no->dados.nomePoPs, aux.nomePoPs);
+        strcpy(no->dados.siglaPais, aux.siglaPais);
+    } else {
+        strcpy(no->dados.nomePais, "");
+        strcpy(no->dados.nomePoPs, "");
+        strcpy(no->dados.siglaPais, "");
     }
-    no->adicionado = 1;
-    no->dados.idConecta = aux.idConecta;
-    strcpy(no->dados.nomePais, aux.nomePais);
-    strcpy(no->dados.nomePoPs, aux.nomePoPs);
-    strcpy(no->dados.siglaPais, aux.siglaPais);
     no->raizLista = cria_lista();
-    insereArestaLista(&no->raizLista, aux, 0);
-
-    //cria o noReciproco e sua aresta a serem adicionados ao grafo tb
-    vertice *noReciproco = (vertice*) malloc(sizeof(vertice));
-    if (noReciproco == NULL) {
-        //verifica se alocou
-        return;
-    }
-    noReciproco->adicionado = 0;
-    noReciproco->dados.idConecta = aux.idPoPsConectado;
-    strcpy(noReciproco->dados.nomePais, "");
-    strcpy(noReciproco->dados.nomePoPs, "");
-    strcpy(noReciproco->dados.siglaPais, "");
-    noReciproco->raizLista = cria_lista();
-    insereArestaLista(&noReciproco->raizLista, aux, 1);
 
     //procura onde inserir
     vertice *atual = *gr;
     vertice *ant = *gr;
-    while (atual != NULL && atual->dados.idConecta < aux.idConecta) {
+    while (atual != NULL && atual->dados.idConecta < parametroOrdem) {
         ant = atual;
         atual = atual->prox;
     }
 
-    if (atual != NULL && atual->dados.idConecta == aux.idConecta && atual->adicionado == 1) {
-        //se ele nao precisar inserir o vertice porque ja existe, so insere a aresta no vertice atual
-        insereArestaLista(&atual->raizLista, aux, 0);
-        return;
+    if (atual != NULL && atual->dados.idConecta == parametroOrdem) {
+        //se o vertice ja existe, insere a aresta nele 
+        no->raizLista = atual->raizLista;   
+        insereArestaLista(&no->raizLista, aux, ehAdicionado);
+
+        //se estivermos tentando inserir um vertice incompleto em um completo, paramos por aqui
+        if (!ehAdicionado && atual->adicionado) {
+            return;
+        }
+        //Caso contrario, substituimos o novo vertice pelo antigo 
+        if (atual == *gr || grafo_vazio(gr)) {
+            //se o grafo estiver vazio ou adicionar no inicio, ele substitui a raiz
+            no->prox = atual->prox;
+            *gr = no;
+        } else {
+            //se o grafo estiver adicionando no meio, so adiciona normalmanete
+            no->prox = atual->prox;
+            ant->prox = no;
+        }
+    } else {
+        //Caso o vertice nao existe, adiciona-o
+        insereArestaLista(&no->raizLista, aux, ehAdicionado);
+        if (atual == *gr || grafo_vazio(gr)) {
+            //se o grafo estiver vazio ou adicionar no inicio, ele substitui a raiz
+            no->prox = (*gr);
+            *gr = no;
+        } else {
+            //se o grafo estiver adicionando no meio, so adiciona normalmanete
+            no->prox = ant->prox;
+            ant->prox = no;
+        }
     }
 
-    //lida com os ponteiros 
-    if (atual == *gr || grafo_vazio(gr)) {
-        //se o grafo estiver vazio ou adicionar no inicio, ele substitui a raiz
-        no->prox = (*gr);
-        *gr = no;
-    } else {
-        //se o grafo estiver adicionando no meio, so adiciona normalmanete
-        no->prox = ant->prox;
-        ant->prox = no;
-    }
+
 
     return;
 }
@@ -170,7 +185,8 @@ void geraImprimeGrafo(FILE* arqEntrada, regCabecalho cabecalho) {
         leRegistro(arqEntrada, &aux);
 
         //Armazena auxiliar no Grafo
-        insereRegistroGrafo(gr, aux);
+        insereRegistroGrafo(gr, aux, 1);
+        insereRegistroGrafo(gr, aux, 0);
 
         //Le lixo do registro para mover ponteiro
         int comprimentoLixo = 42 - strlen(aux.nomePoPs) - strlen(aux.nomePais);
