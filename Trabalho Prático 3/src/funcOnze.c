@@ -76,7 +76,6 @@ void insereRegistroGrafo(Grafo* gr, registro aux) {
         strcpy(no->dados.nomePais, aux.nomePais);
         strcpy(no->dados.nomePoPs, aux.nomePoPs);
         strcpy(no->dados.siglaPais, aux.siglaPais);
-        printf("%d\n", no->dados.idConecta);
         insereArestaLista(&no->raizLista, aux);
         no->prox = (*gr);
         *gr = no;
