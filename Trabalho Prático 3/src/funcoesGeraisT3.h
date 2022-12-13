@@ -16,7 +16,7 @@ struct Aresta {
 };
 
 typedef struct Aresta aresta; 
-typedef struct Aresta *Lista;
+typedef struct Aresta Lista;
 
 typedef struct {
     int idConecta; 
@@ -41,4 +41,4 @@ Lista* cria_lista();
 
 void libera_grafo(Grafo* gr);
 int grafo_vazio(Grafo* gr);
-int lista_vazia(Lista* li);
+int lista_vazia(Lista** li);

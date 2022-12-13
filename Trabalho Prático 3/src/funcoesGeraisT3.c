@@ -23,7 +23,7 @@ Lista* cria_lista() {
     Lista* li = (Lista*) malloc(sizeof(Lista));
 
     if (li != NULL) {
-        *li = NULL;
+        li = NULL;
     }
     return li;
 }
@@ -38,7 +38,7 @@ int grafo_vazio(Grafo* gr) {
     return 0;
 }
 
-int lista_vazia(Lista* li) {
+int lista_vazia(Lista** li) {
     if (li == NULL) {
         return 1;
     }
@@ -48,10 +48,10 @@ int lista_vazia(Lista* li) {
     return 0;
 }
 
-void libera_lista(Lista* li) {
+void libera_lista(Lista** li) {
     if (li != NULL) {
         aresta* no; 
-        while ((*li) != NULL) {
+        while (*li != NULL) {
             no = *li;
             *li = (*li)->prox;
             free(no);
@@ -67,7 +67,7 @@ void libera_grafo(Grafo* gr) {
         while ((*gr) != NULL) {
             no = *gr;
             *gr = (*gr)->prox;
-            libera_lista((*gr)->raizLista);
+            libera_lista(&(*gr)->raizLista);
             free(no);
         }
 

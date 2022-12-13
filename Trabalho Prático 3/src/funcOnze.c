@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-void insereArestaLista (Lista* li, registro aux) {
+void insereArestaLista (Lista** li, registro aux) {
     if (li == NULL) {
         return;
     }
@@ -28,9 +28,10 @@ void insereArestaLista (Lista* li, registro aux) {
     no->dados.idPoPsConectado = aux.idPoPsConectado;
     no->dados.velocidade = velocidade;
 
-    
+    printf("%d\n", no->dados.idPoPsConectado);
+
     if (lista_vazia(li)) {
-        no->prox = (*li);
+        no->prox = *li;
         *li = no;
         return;
     } else {
@@ -44,7 +45,7 @@ void insereArestaLista (Lista* li, registro aux) {
         }
 
         if (atual == *li) {
-            no->prox = (*li);
+            no->prox = *li;
             *li = no;
         }
         else {
@@ -63,12 +64,13 @@ void insereRegistroGrafo(Grafo* gr, registro aux) {
     if (gr == NULL) {
         return;
     }
-    
+
     vertice *no = (vertice*) malloc(sizeof(vertice));
 
     if (no == NULL) {
         return;
     }
+
     
     if (grafo_vazio(gr)) {
         no->adicionado = 1;
@@ -76,9 +78,10 @@ void insereRegistroGrafo(Grafo* gr, registro aux) {
         strcpy(no->dados.nomePais, aux.nomePais);
         strcpy(no->dados.nomePoPs, aux.nomePoPs);
         strcpy(no->dados.siglaPais, aux.siglaPais);
+        printf("%d\n", no->dados.idConecta);
         no->raizLista = cria_lista();
-        insereArestaLista(no->raizLista, aux);
-
+        insereArestaLista(&no->raizLista, aux);
+        printf("%d\n", no->raizLista->dados.idPoPsConectado);
         no->prox = (*gr);
         *gr = no;
         return;
@@ -93,7 +96,7 @@ void insereRegistroGrafo(Grafo* gr, registro aux) {
         }
 
         if (atual != NULL && atual->dados.idConecta == aux.idConecta) {
-            insereArestaLista(atual->raizLista, aux);
+            insereArestaLista(&atual->raizLista, aux);
         } else {
             no->adicionado = 1;
             no->dados.idConecta = aux.idConecta;
@@ -101,7 +104,7 @@ void insereRegistroGrafo(Grafo* gr, registro aux) {
             strcpy(no->dados.nomePoPs, aux.nomePoPs);
             strcpy(no->dados.siglaPais, aux.siglaPais);
             no->raizLista = cria_lista();
-            insereArestaLista(no->raizLista, aux);
+            insereArestaLista(&no->raizLista, aux);
         }
 
         if (atual == *gr) {
@@ -120,13 +123,14 @@ void insereRegistroGrafo(Grafo* gr, registro aux) {
 void imprimeGrafo(Grafo *gr) {
     if (gr != NULL) {
         vertice *atual = *gr;
+        Lista *atualAresta;
         while (atual != NULL) {
-            aresta **atualAresta = atual->raizLista;
+            atualAresta = atual->raizLista;
             while(atualAresta != NULL) {
                 //imprime 
-                printf("%d %s %s %s %d %dMbps\n", atual->dados.idConecta, atual->dados.nomePoPs, atual->dados.nomePais, atual->dados.siglaPais, (*atualAresta)->dados.idPoPsConectado, (*atualAresta)->dados.velocidade);
+                printf("%d %s %s %s %d %dMbps\n", atual->dados.idConecta, atual->dados.nomePoPs, atual->dados.nomePais, atual->dados.siglaPais, atualAresta->dados.idPoPsConectado, atualAresta->dados.velocidade);
 
-                *atualAresta = (*atualAresta)->prox;
+                atualAresta = atualAresta->prox;
             }
 
             atual = atual->prox;
