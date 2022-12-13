@@ -134,8 +134,6 @@ void insereRegistroGrafo(Grafo* gr, registro aux, int ehAdicionado) {
         }
     }
 
-
-
     return;
 }
 
