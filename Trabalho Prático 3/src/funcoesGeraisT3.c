@@ -19,47 +19,34 @@ Grafo* cria_grafo() {
     return gr;
 }
 
-// int insere_lista_ordenada(Lista* li, struct aluno a1) {
-//     if (li == NULL) {
-//         return 0;
-//     }
+Lista* cria_lista() {
+    Lista* li = (Lista*) malloc(sizeof(Lista));
 
-//     Elem *no = (Elem*) malloc(sizeof(Elem));
+    if (li != NULL) {
+        *li = NULL;
+    }
+    return li;
+}
 
-//     if (no == NULL) {
-//         return 0;
-//     }
+int grafo_vazio(Grafo* gr) {
+    if (gr == NULL) {
+        return 1;
+    }
+    if (*gr == NULL) {
+        return 1;
+    }
+    return 0;
+}
 
-//     no->dados = a1;
-
-//     if (lista_vazia(li)) {
-//         no->prox = (*li);
-//         *li = no;
-//         return 1;
-//     }
-//     else {
-//         //procura onde inserir
-//         Elem *atual = *li;
-//         Elem *ant = *li;
-
-//         while (atual != NULL && atual->dados.matricula < a1.matricula) {
-//             ant = atual;
-//             atual = atual->prox;
-//         }
-
-//         if (atual == *li) {
-//             no->prox = (*li);
-//             *li = no;
-//         }
-//         else {
-//             no->prox = ant->prox;
-//             ant->prox = no;
-//         }
-
-//         return 1;
-//     }
-// }
-
+int lista_vazia(Lista* li) {
+    if (li == NULL) {
+        return 1;
+    }
+    if (*li == NULL) {
+        return 1;
+    }
+    return 0;
+}
 
 void libera_lista(Lista* li) {
     if (li != NULL) {

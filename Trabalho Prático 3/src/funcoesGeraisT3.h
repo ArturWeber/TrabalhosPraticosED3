@@ -9,13 +9,14 @@ typedef struct {
     int velocidade;
 } dadoAresta;
 
-typedef struct Aresta {
+struct Aresta {
     dadoAresta dados;
 
     struct Aresta *prox;
-} aresta;
+};
 
-typedef aresta *Lista;
+typedef struct Aresta aresta; 
+typedef struct Aresta *Lista;
 
 typedef struct {
     int idConecta; 
@@ -24,16 +25,20 @@ typedef struct {
     char siglaPais[campoMaximo];
 } dadoVertice;
 
-typedef struct Vertice {
+struct Vertice {
     dadoVertice dados;
     int adicionado;
     Lista* raizLista;
 
     struct Vertice *prox;
-} vertice;
+};
 
-typedef vertice *Grafo;
+typedef struct Vertice vertice;
+typedef struct Vertice *Grafo;
 
 Grafo* cria_grafo();
+Lista* cria_lista();
 
-void libera_grafo(Grafo* ve);
+void libera_grafo(Grafo* gr);
+int grafo_vazio(Grafo* gr);
+int lista_vazia(Lista* li);
