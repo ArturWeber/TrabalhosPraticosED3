@@ -28,8 +28,6 @@ void insereArestaLista (Lista** li, registro aux) {
     no->dados.idPoPsConectado = aux.idPoPsConectado;
     no->dados.velocidade = velocidade;
 
-    printf("%d\n", no->dados.idPoPsConectado);
-
     if (lista_vazia(li)) {
         no->prox = *li;
         *li = no;
@@ -79,9 +77,7 @@ void insereRegistroGrafo(Grafo* gr, registro aux) {
         strcpy(no->dados.nomePoPs, aux.nomePoPs);
         strcpy(no->dados.siglaPais, aux.siglaPais);
         printf("%d\n", no->dados.idConecta);
-        no->raizLista = cria_lista();
         insereArestaLista(&no->raizLista, aux);
-        printf("%d\n", no->raizLista->dados.idPoPsConectado);
         no->prox = (*gr);
         *gr = no;
         return;
