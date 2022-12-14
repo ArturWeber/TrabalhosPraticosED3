@@ -7,11 +7,18 @@
 #include <stdlib.h>
 
 void insereArestaLista (Lista** li, registro aux, int ehAdicionado) {
+    int idAdicionar;
+    if(ehAdicionado) {
+        idAdicionar = aux.idPoPsConectado;
+    } else {
+        idAdicionar = aux.idConecta;
+    }
+
     if (li == NULL) {
         return;
     }
 
-    if ((aux.idPoPsConectado == -1) || (aux.velocidade == -1)) {
+    if ((idAdicionar == -1) || (aux.velocidade == -1)) {
         return;
     }
 
@@ -24,41 +31,28 @@ void insereArestaLista (Lista** li, registro aux, int ehAdicionado) {
     if (aux.unidadeMedida == 'G') {
         velocidade *= 1024;
     }
-    int idAdicionar;
-    if(ehAdicionado) {
-        idAdicionar = aux.idPoPsConectado;
-    } else {
-        idAdicionar = aux.idConecta;
-    }
     no->dados.velocidade = velocidade;
     no->dados.idPoPsConectado = idAdicionar;
 
-    if (lista_vazia(li)) {
-        no->prox = *li;
-        *li = no;
-        return;
-    } else {
-        //procura onde inserir
-        aresta *atual = *li;
-        aresta *ant = *li;
 
-        while (atual != NULL && atual->dados.idPoPsConectado < idAdicionar) {
-            ant = atual;
-            atual = atual->prox;
-        }
+    //procura onde inserir
+    aresta *atual = *li;
+    aresta *ant = *li;
 
-        if (atual == *li) {
-            no->prox = *li;
-            *li = no;
-        }
-        else {
-            no->prox = ant->prox;
-            ant->prox = no;
-        }
-
-        return;
+    while (atual != NULL && atual->dados.idPoPsConectado < idAdicionar) {
+        ant = atual;
+        atual = atual->prox;
     }
 
+    if (atual == *li || lista_vazia(li)){
+        no->prox = (*li);
+        *li = no;
+    } else {
+        no->prox = ant->prox;
+        ant->prox = no;
+    }
+
+    return;
 }
 
 void insereRegistroGrafo(Grafo* gr, registro aux, int ehAdicionado) {
@@ -102,20 +96,20 @@ void insereRegistroGrafo(Grafo* gr, registro aux, int ehAdicionado) {
     }
 
     if (atual != NULL && atual->dados.idConecta == parametroOrdem) {
-        //se o vertice ja existe, insere a aresta nele 
-        no->raizLista = atual->raizLista;   
-        insereArestaLista(&no->raizLista, aux, ehAdicionado);
-
-        //se estivermos tentando inserir um vertice incompleto em um completo, paramos por aqui
-        if (!ehAdicionado && atual->adicionado) {
+        if (!ehAdicionado) {
+            //se estivermos tentando inserir um vertice incompleto, so colocamos a aresta e pronto 
+            insereArestaLista(&atual->raizLista, aux, ehAdicionado);
             return;
         }
+
+        no->raizLista = atual->raizLista;   
+        insereArestaLista(&no->raizLista, aux, ehAdicionado);
         //Caso contrario, substituimos o novo vertice pelo antigo 
         if (atual == *gr || grafo_vazio(gr)) {
             //se o grafo estiver vazio ou adicionar no inicio, ele substitui a raiz
             no->prox = atual->prox;
             *gr = no;
-        } else {
+        } else {  
             //se o grafo estiver adicionando no meio, so adiciona normalmanete
             no->prox = atual->prox;
             ant->prox = no;
@@ -140,7 +134,7 @@ void insereRegistroGrafo(Grafo* gr, registro aux, int ehAdicionado) {
 void imprimeGrafo(Grafo *gr) {
     if (gr != NULL) {
         vertice *atual = *gr;
-        Lista *atualAresta;
+        aresta *atualAresta;
         while (atual != NULL) {
             atualAresta = atual->raizLista;
             while(atualAresta != NULL) {

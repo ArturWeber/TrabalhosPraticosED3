@@ -1,0 +1,13 @@
+idConecta,nomePoPs,nomePais,siglaPais,idPoPsConectado,unidadeMedida,velocidade
+1,Recife,Brazil,BR,3,M,10240
+1,Recife,Brazil,BR,22,M,3072
+2,Maceio,Brazil,BR,7,M,10240
+5,Brasilia,Brazil,BR,6,M,10240
+5,Brasilia,Brazil,BR,31,M,692
+6,Belo Horizonte,Brazil,BR,8,M,10240
+6,Belo Horizonte,Brazil,BR,17,M,10240
+6,Belo Horizonte,Brazil,BR,31,M,10240
+7,Bahia,Brazil,BR,5,M,3
+3,Campina Grande,Brazil,BR,2,M,6969
+2,Maceio,Brazil,BR,3,M,291
+4,Joao Pessoa,Brazil,BR,31,M,1022
