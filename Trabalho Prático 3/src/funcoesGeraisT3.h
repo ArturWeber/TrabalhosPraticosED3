@@ -3,6 +3,9 @@
     - O tipo de dado armazenado na lista
     - O ponteiro "lista"
 */
+#define BRANCO 0
+#define AMARELO 1
+#define VERMELHO 2
 
 typedef struct {
     int idPoPsConectado;
@@ -33,6 +36,9 @@ typedef struct Vertice {
 } vertice;
 
 typedef struct Vertice *Grafo;
+
+void testaAlgumErro(FILE* arquivo);
+void verificaStatusArq(char status);
 
 Grafo* cria_grafo();
 Lista* cria_lista();

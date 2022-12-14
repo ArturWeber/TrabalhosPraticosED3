@@ -8,7 +8,21 @@
     - Implementar suas funcoes
 */
 
+//Testa erro no arquivo aberto
+void testaAlgumErro(FILE* arquivo) {
+	if(arquivo == NULL) {
+		printf("Falha na execução da funcionalidade.\n");
+        exit(0);
+    }
+}
 
+//Verifica se o status do arquivo está como nao corrompido '1'
+void verificaStatusArq(char status) {
+	if(status == '0'){
+		printf("Falha na execução da funcionalidade.\n");
+		exit(0);
+	}
+}
 
 Grafo* cria_grafo() {
     Grafo* gr = (Grafo*) malloc(sizeof(Grafo));

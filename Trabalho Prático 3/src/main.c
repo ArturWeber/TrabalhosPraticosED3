@@ -26,6 +26,7 @@
 #include "insercaoArvore.h"
 #include "funcoesBuscaIndice.h"
 #include "funcOnze.h"
+#include "funcDoze.h"
 
 //Funcao principal da funcionalidade 1, efetua as manipulacoes 
 //principais de arquivos 
@@ -315,14 +316,30 @@ void funcOnze (char* nomeArqEntrada) {
     //Abre arquivo de entrada e testa
     FILE* arqEntrada;
     arqEntrada = fopen(nomeArqEntrada, "rb");
-    testaErroArquivo(arqEntrada);
+    testaAlgumErro(arqEntrada);
     
     //Inicializa um registro auxiliar do tipo regCabecalho com
     //os valores de cabecalho do arquivo de entrada, verificando seu status
     regCabecalho aux = recuperaCabecalho(arqEntrada);
-    verificaStatusLeitura(aux.status);
+    verificaStatusArq(aux.status);
 
     geraImprimeGrafo(arqEntrada, aux);
+
+    fclose(arqEntrada);
+}
+
+void funcDoze (char* nomeArqEntrada) {
+    //Abre arquivo de entrada e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+    testaAlgumErro(arqEntrada);
+    
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatusArq(aux.status);
+
+    calculaCiclos(arqEntrada, aux);
 
     fclose(arqEntrada);
 }

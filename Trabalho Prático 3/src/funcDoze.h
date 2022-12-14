@@ -1,0 +1,1 @@
+void calculaCiclos(FILE* arqEntrada, regCabecalho cabecalho);
