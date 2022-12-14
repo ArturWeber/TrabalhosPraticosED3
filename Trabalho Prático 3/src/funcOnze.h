@@ -1,4 +1,5 @@
 #include "stdio.h"
 
+void imprimeGrafo(Grafo *gr);
 void insereRegistroGrafo(Grafo* gr, registro aux, int ehAdicionado);
-void geraImprimeGrafo(FILE* arqEntrada, regCabecalho aux); 
+Grafo* geraGrafo(FILE* arqEntrada, regCabecalho cabecalho);

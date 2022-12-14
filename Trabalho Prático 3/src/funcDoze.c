@@ -37,8 +37,6 @@ void calculaCiclos(FILE* arqEntrada, regCabecalho cabecalho){
     //Cria o grafo 
     Grafo* gr = cria_grafo();
 
-
-    int qttCiclos;
     int encadeamento;
     char removido;
 

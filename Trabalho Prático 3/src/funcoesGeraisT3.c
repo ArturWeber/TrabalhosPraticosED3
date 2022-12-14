@@ -81,7 +81,7 @@ void libera_grafo(Grafo* gr) {
         while ((*gr) != NULL) {
             no = *gr;
             *gr = (*gr)->prox;
-            libera_lista(&(*gr)->raizLista);
+            libera_lista(&((*gr)->raizLista));
             free(no);
         }
 

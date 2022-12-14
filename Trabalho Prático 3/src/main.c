@@ -323,7 +323,9 @@ void funcOnze (char* nomeArqEntrada) {
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusArq(aux.status);
 
-    geraImprimeGrafo(arqEntrada, aux);
+    Grafo* gr = geraGrafo(arqEntrada, aux);
+    imprimeGrafo(gr);
+    libera_grafo(gr);
 
     fclose(arqEntrada);
 }

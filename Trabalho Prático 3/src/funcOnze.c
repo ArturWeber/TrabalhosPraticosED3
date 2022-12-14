@@ -149,7 +149,8 @@ void imprimeGrafo(Grafo *gr) {
     }
 }
 
-void geraImprimeGrafo(FILE* arqEntrada, regCabecalho cabecalho) {
+
+Grafo* geraGrafo(FILE* arqEntrada, regCabecalho cabecalho) {
     //Cria o grafo 
     Grafo* gr = cria_grafo();
 
@@ -158,7 +159,7 @@ void geraImprimeGrafo(FILE* arqEntrada, regCabecalho cabecalho) {
 
     //Se o numero de paginas de disco for 1 (somente cabecalho), nao ha registro
     if (cabecalho.nroPagDisco == 1) {
-        return;
+        return gr;
     }
     
     //Le todo o lixo do cabecalho para mover ponteiro e em seguida le registro a registro e imprime
@@ -186,5 +187,5 @@ void geraImprimeGrafo(FILE* arqEntrada, regCabecalho cabecalho) {
 
     }
     
-    imprimeGrafo(gr);
+    return gr;
 }
