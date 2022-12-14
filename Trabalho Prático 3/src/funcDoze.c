@@ -33,43 +33,7 @@ void profundidade(Grafo* g, int numeroReg){
 }
 
 
-void calculaCiclos(FILE* arqEntrada, regCabecalho cabecalho){
-    //Cria o grafo 
-    Grafo* gr = cria_grafo();
-
-    int encadeamento;
-    char removido;
-
-    //Se o numero de paginas de disco for 1 (somente cabecalho), nao ha registro
-    if (cabecalho.nroPagDisco == 1) {
-        return;
-    }
-    
-    //Le todo o lixo do cabecalho para mover ponteiro e em seguida le registro a registro e imprime
-    leLixo(arqEntrada, 939);
-    for(int rrn = 0; rrn < cabecalho.proxRRN; rrn++){
-        fread(&removido, sizeof(char), 1, arqEntrada);
-        //Se for removido nao imprime
-        if(removido == '1'){
-            leLixo(arqEntrada, 63);
-            continue;
-        }
-        //Senao, le registro e armazena no auxiliar
-        registro aux = inicializaRegistro();
-        fread(&encadeamento, sizeof(int), 1, arqEntrada);
-        //le todos os campos de um registro
-        leRegistro(arqEntrada, &aux);
-
-        //Armazena auxiliar no Grafo
-        insereRegistroGrafo(gr, aux, 1);
-        insereRegistroGrafo(gr, aux, 0);
-
-        //Le lixo do registro para mover ponteiro
-        int comprimentoLixo = 42 - strlen(aux.nomePoPs) - strlen(aux.nomePais);
-        leLixo(arqEntrada, comprimentoLixo);
-
-    }
-
+void calculaCiclos(Grafo* gr) {
 
     
 }

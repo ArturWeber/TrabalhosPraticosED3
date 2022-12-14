@@ -325,7 +325,7 @@ void funcOnze (char* nomeArqEntrada) {
 
     Grafo* gr = geraGrafo(arqEntrada, aux);
     imprimeGrafo(gr);
-    libera_grafo(gr);
+    //libera_grafo(gr);
 
     fclose(arqEntrada);
 }
@@ -341,7 +341,9 @@ void funcDoze (char* nomeArqEntrada) {
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusArq(aux.status);
 
-    calculaCiclos(arqEntrada, aux);
+    Grafo* gr = geraGrafo(arqEntrada, aux);
+    calculaCiclos(gr);
+    //libera_grafo(gr);
 
     fclose(arqEntrada);
 }

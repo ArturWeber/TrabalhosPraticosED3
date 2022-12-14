@@ -1,1 +1,2 @@
-void calculaCiclos(FILE* arqEntrada, regCabecalho cabecalho);
+
+void calculaCiclos(Grafo* gr);
