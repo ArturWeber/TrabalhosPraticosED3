@@ -64,14 +64,12 @@ int lista_vazia(Lista** li) {
 
 void libera_lista(Lista** li) {
     if (li != NULL) {
-        aresta* no; 
-        while (*li != NULL) {
+        aresta* no;
+        while ((*li) != NULL) { 
             no = *li;
-            *li = (*li)->prox;
+            (*li) = (*li)->prox;
             free(no);
         }
-
-        free(li);
     }
 }
 
@@ -81,7 +79,7 @@ void libera_grafo(Grafo* gr) {
         while ((*gr) != NULL) {
             no = *gr;
             *gr = (*gr)->prox;
-            //libera_lista(&((*gr)->raizLista));
+            libera_lista(&no->raizLista);
             free(no);
         }
 
