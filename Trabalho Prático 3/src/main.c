@@ -325,7 +325,7 @@ void funcOnze (char* nomeArqEntrada) {
 
     Grafo* gr = geraGrafo(arqEntrada, aux);
     imprimeGrafo(gr);
-    //libera_grafo(gr);
+    libera_grafo(gr);
 
     fclose(arqEntrada);
 }
@@ -343,7 +343,7 @@ void funcDoze (char* nomeArqEntrada) {
 
     Grafo* gr = geraGrafo(arqEntrada, aux);
     calculaCiclos(gr);
-    //libera_grafo(gr);
+    libera_grafo(gr);
 
     fclose(arqEntrada);
 }
@@ -406,7 +406,7 @@ int main(void) {
             funcOnze(nomeArqEntrada);
             break;
         case 12:
-            printf("Ainda nao implementada");
+            funcDoze(nomeArqEntrada);
             break;
         case 13:
             printf("Ainda nao implementada");

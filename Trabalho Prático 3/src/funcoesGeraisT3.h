@@ -4,8 +4,8 @@
     - O ponteiro "lista"
 */
 #define BRANCO 0
-#define AMARELO 1
-#define VERMELHO 2
+#define CINZA 1
+#define PRETO 2
 
 typedef struct {
     int idPoPsConectado;
@@ -30,6 +30,7 @@ typedef struct {
 typedef struct Vertice {
     dadoVertice dados;
     int adicionado;
+    int cor;
     Lista* raizLista;
 
     struct Vertice *prox;

@@ -6,34 +6,49 @@
 #include <stdlib.h>
 #include <string.h>
 
-void visitaP(Grafo* g, int u, int *cor){
-    cor[u] = AMARELO;
-    vertice *v = *g;
-    while(v != NULL){
-        if(cor[v->dados.idConecta] == BRANCO){
-            visitaP(g, v->dados.idConecta, cor);
-        }
-        v = v->prox;
+vertice* recuperaVerticeBuscado(Grafo* gr, int idBuscado) {
+    vertice* verticeAtual = *gr; 
+    while (verticeAtual != NULL && verticeAtual->dados.idConecta < idBuscado) {
+        verticeAtual = verticeAtual->prox;
     }
-    cor[u] = VERMELHO;
+    if (verticeAtual != NULL && verticeAtual->dados.idConecta == idBuscado) {
+        return verticeAtual;
+    } else {
+        printf("Vertice nao encontrado\n");
+        return NULL;
+    }
+} 
+
+void buscaProfundidadeRecursiva(Grafo* gr, int idAtual, int* qtdCiclos) {
+    vertice* verticeAtual = recuperaVerticeBuscado(gr, idAtual);
+    if (verticeAtual->cor == CINZA) {
+        return;
+    }
+    if (verticeAtual->cor == PRETO) {
+        (*qtdCiclos)++;
+        return;
+    }
+    verticeAtual->cor = CINZA;
+    aresta* arestaAtual = verticeAtual->raizLista;
+    while (arestaAtual != NULL) {
+        buscaProfundidadeRecursiva(gr, arestaAtual->dados.idPoPsConectado, qtdCiclos);
+        arestaAtual = arestaAtual->prox;
+    }
+    verticeAtual->cor = PRETO;
 }
-
-void profundidade(Grafo* g, int numeroReg){
-    int cor[numeroReg];
-
-    for(int u = 0; u < numeroReg; u++){
-        cor[u] = BRANCO;
-    }
-    for (int u = 0; u < numeroReg; u++){
-        if(cor[u] == BRANCO){
-            visitaP(g, u, cor);
-        }
-    }
-
-}
-
 
 void calculaCiclos(Grafo* gr) {
-
-    
+    if (gr == NULL) {
+        return;
+    }
+    vertice *primeiro = *gr;
+    int qtdCiclos = 0;
+    //Esse while cuida de grafos que sao desconexos 
+    while(primeiro != NULL) {
+        if (primeiro->cor == BRANCO) {
+            buscaProfundidadeRecursiva(gr, primeiro->dados.idConecta, &qtdCiclos);
+        } 
+        primeiro = primeiro->prox;
+    }
+    printf("Quantidade de ciclos: %d\n", qtdCiclos);
 }

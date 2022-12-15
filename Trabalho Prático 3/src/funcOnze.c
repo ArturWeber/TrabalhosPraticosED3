@@ -63,6 +63,10 @@ void insereRegistroGrafo(Grafo* gr, registro aux, int ehAdicionado) {
         parametroOrdem = aux.idPoPsConectado;
     }
 
+    if (parametroOrdem == -1) {
+        return;
+    }
+
     if (gr == NULL) {
         //verifica se o grafo existe
         return;
@@ -75,6 +79,7 @@ void insereRegistroGrafo(Grafo* gr, registro aux, int ehAdicionado) {
         return;
     }   
     no->adicionado = ehAdicionado;
+    no->cor = BRANCO;
     no->dados.idConecta = parametroOrdem;
     if (ehAdicionado) {
         strcpy(no->dados.nomePais, aux.nomePais);
