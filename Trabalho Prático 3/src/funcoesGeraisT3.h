@@ -31,6 +31,7 @@ typedef struct Vertice {
     dadoVertice dados;
     int adicionado;
     int cor;
+    int distOrigem;
     Lista* raizLista;
 
     struct Vertice *prox;
@@ -47,3 +48,4 @@ Lista* cria_lista();
 void libera_grafo(Grafo* gr);
 int grafo_vazio(Grafo* gr);
 int lista_vazia(Lista** li);
+vertice* recuperaVerticeBuscado(Grafo* gr, int idBuscado);

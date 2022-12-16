@@ -86,3 +86,16 @@ void libera_grafo(Grafo* gr) {
         free(gr);
     }
 }
+
+vertice* recuperaVerticeBuscado(Grafo* gr, int idBuscado) {
+    vertice* verticeAtual = *gr; 
+    while (verticeAtual != NULL && verticeAtual->dados.idConecta < idBuscado) {
+        verticeAtual = verticeAtual->prox;
+    }
+    if (verticeAtual != NULL && verticeAtual->dados.idConecta == idBuscado) {
+        return verticeAtual;
+    } else {
+        printf("Vertice nao encontrado\n");
+        return NULL;
+    }
+} 

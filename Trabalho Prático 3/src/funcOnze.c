@@ -80,6 +80,7 @@ void insereRegistroGrafo(Grafo* gr, registro aux, int ehAdicionado) {
     }   
     no->adicionado = ehAdicionado;
     no->cor = BRANCO;
+    no->distOrigem = -1;
     no->dados.idConecta = parametroOrdem;
     if (ehAdicionado) {
         strcpy(no->dados.nomePais, aux.nomePais);

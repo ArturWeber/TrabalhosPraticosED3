@@ -1,6 +1,8 @@
 idConecta,nomePoPs,nomePais,siglaPais,idPoPsConectado,unidadeMedida,velocidade
-1,Recife,Brazil,BR,2,M,1040
-1,Recife,Brazil,BR,3,M,1931
-2,Curitiba,Brazil,BR,3,M,3072
-3,Maceio,Brazil,BR,4,M,229
-4,Brasilia,Brazil,BR,2,M,294
+1,Recife,Brazil,BR,3,M,4
+1,Recife,Brazil,BR,4,M,3
+2,Curitiba,Brazil,BR,4,M,1
+3,Maceio,Brazil,BR,5,M,5
+4,Brasilia,Brazil,BR,5,M,5
+5,Joaquina,Brail,BR,6,M,1
+6,Cuiaba,Brazil,BR,2,M,1

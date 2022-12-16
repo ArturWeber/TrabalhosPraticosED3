@@ -27,6 +27,7 @@
 #include "funcoesBuscaIndice.h"
 #include "funcOnze.h"
 #include "funcDoze.h"
+#include "funcQuatorze.h"
 
 //Funcao principal da funcionalidade 1, efetua as manipulacoes 
 //principais de arquivos 
@@ -348,6 +349,24 @@ void funcDoze (char* nomeArqEntrada) {
     fclose(arqEntrada);
 }
 
+void funcQuatorze (char* nomeArqEntrada) {
+    //Abre arquivo de entrada e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+    testaAlgumErro(arqEntrada);
+    
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatusArq(aux.status);
+
+    Grafo* gr = geraGrafo(arqEntrada, aux);
+    menorCaminhoGrafo(gr);
+    libera_grafo(gr);
+
+    fclose(arqEntrada);
+}
+
 //Funcao main, le as entradas e aplica um switch com as funcionalidades
 int main(void) {
     int funcionalidade; 
@@ -412,7 +431,7 @@ int main(void) {
             printf("Ainda nao implementada");
             break;
         case 14:
-            printf("Ainda nao implementada");
+            funcQuatorze(nomeArqEntrada);
             break;
         default:
             printf("Comando Não Encontrado \n");

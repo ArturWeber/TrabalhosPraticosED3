@@ -6,19 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-vertice* recuperaVerticeBuscado(Grafo* gr, int idBuscado) {
-    vertice* verticeAtual = *gr; 
-    while (verticeAtual != NULL && verticeAtual->dados.idConecta < idBuscado) {
-        verticeAtual = verticeAtual->prox;
-    }
-    if (verticeAtual != NULL && verticeAtual->dados.idConecta == idBuscado) {
-        return verticeAtual;
-    } else {
-        printf("Vertice nao encontrado\n");
-        return NULL;
-    }
-} 
-
 void buscaProfundidadeRecursiva(Grafo* gr, int idAtual, int* qtdCiclos) {
     vertice* verticeAtual = recuperaVerticeBuscado(gr, idAtual);
     if (verticeAtual->cor == CINZA) {
