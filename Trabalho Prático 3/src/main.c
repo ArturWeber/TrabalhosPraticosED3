@@ -5,8 +5,8 @@
  *      nUSP: 12675451    Participacao: 100%                 *
  *      Nome: Aruan  Bretas de Oliveira Filho                *
  *      nUSP: 12609731    Participacao: 100%                 *
- *      Data de última atualizacao: 2/12/2022                *
- *      Ambiente de Desenvolv: VSCode 1.73.1                 *
+ *      Data de última atualizacao: 16/12/2022                *
+ *      Ambiente de Desenvolv: VSCode 1.74.1                 *
  *      e-mail: arturweber@usp.br / aruanbretas@usp.br       *
  *                                                           *
  *                Conteudo arquivo main:                     *
@@ -25,9 +25,8 @@
 #include "funcoesImpressaoBin.h"
 #include "insercaoArvore.h"
 #include "funcoesBuscaIndice.h"
-#include "funcOnze.h"
-#include "funcDoze.h"
-#include "funcQuatorze.h"
+#include "geraCalculaGrafo.h"
+#include "calculaCaminhoGrafo.h"
 
 //Funcao principal da funcionalidade 1, efetua as manipulacoes 
 //principais de arquivos 
@@ -180,6 +179,7 @@ void funcSeis(char *nomeArqEntrada){
     binarioNaTela(nomeArqEntrada);
 }
 
+//Funcao principal da funcionalidade sete
 void funcSete(char *nomeArqEntrada, char *nomeArqSaida) {
     //Abre arquivos e testa
     FILE* arqEntrada;
@@ -313,6 +313,8 @@ void funcDez(char* nomeArqEntrada, char* nomeArqSaida, char* nomeArqIndice) {
     fclose(arqIndice);
 }
 
+//Funcao principal da funcionalidade onze, abre o arquivo, verifica seu status e o
+//passa para uma funcao secundaria que cria o grafo e outra que o imprime em seguida
 void funcOnze (char* nomeArqEntrada) {
     //Abre arquivo de entrada e testa
     FILE* arqEntrada;
@@ -324,6 +326,7 @@ void funcOnze (char* nomeArqEntrada) {
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusArq(aux.status);
 
+    //Gera o grafo e o imprime em seguida
     Grafo* gr = geraGrafo(arqEntrada, aux);
     imprimeGrafo(gr);
     libera_grafo(gr);
@@ -331,6 +334,9 @@ void funcOnze (char* nomeArqEntrada) {
     fclose(arqEntrada);
 }
 
+//Funcao principal da funcionalidade doze, abre o arquivo, verifica seu status e o
+//passa para uma funcao secundaria que cria o grafo e outra que calcula seu numero de ciclos
+//e imprime-os em seguida
 void funcDoze (char* nomeArqEntrada) {
     //Abre arquivo de entrada e testa
     FILE* arqEntrada;
@@ -342,6 +348,7 @@ void funcDoze (char* nomeArqEntrada) {
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusArq(aux.status);
 
+    //Gera o grafo e calcula seu numero de ciclos
     Grafo* gr = geraGrafo(arqEntrada, aux);
     calculaCiclos(gr);
     libera_grafo(gr);
@@ -349,6 +356,9 @@ void funcDoze (char* nomeArqEntrada) {
     fclose(arqEntrada);
 }
 
+//Funcao principal da funcionalidade quatorze, abre o arquivo, verifica seu status e o
+//passa para uma funcao secundaria que cria o grafo e outra que aceita as entradas de 
+//pontos e calcula o caminho minimo entre eles
 void funcQuatorze (char* nomeArqEntrada) {
     //Abre arquivo de entrada e testa
     FILE* arqEntrada;
@@ -360,6 +370,7 @@ void funcQuatorze (char* nomeArqEntrada) {
     regCabecalho aux = recuperaCabecalho(arqEntrada);
     verificaStatusArq(aux.status);
 
+    //Cria o grafo e, a partir dos pontos lidos, verifica menor caminho
     Grafo* gr = geraGrafo(arqEntrada, aux);
     menorCaminhoGrafo(gr);
     libera_grafo(gr);

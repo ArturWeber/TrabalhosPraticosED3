@@ -1,6 +1,20 @@
+/************************************************************
+ *            Trabalho Prático 3 - SCC0607                   *
+ *                                                           *
+ *      Nome: Artur Brenner Weber                            *
+ *      nUSP: 12675451    Participacao: 100%                 *
+ *      Nome: Aruan  Bretas de Oliveira Filho                *
+ *      nUSP: 12609731    Participacao: 100%                 *
+ *      Data de última atualizacao: 16/12/2022               *
+ *      Ambiente de Desenvolv: VSCode 1.74.1                 *
+ *                                                           *
+ *         Conteudo arquivo geraCalculaGrafo:                *
+ *   Funcoes secundarias das funcionalidades 13 e 14         *
+*************************************************************/
+
 #include "funcoesGeraisT1.h"
 #include "funcoesGeraisT3.h"
-#include "funcQuatorze.h"
+#include "calculaCaminhoGrafo.h"
 
 #include <stdio.h>
 
@@ -104,6 +118,6 @@ void menorCaminhoGrafo(Grafo* gr) {
 
         distancia += primDistancia;
         distancia += segDistancia;
-        printf("Comprimento do caminho entre %d e %d parando em %d: %dMbps\n", PoPsOrigem[i], PoPsDestino[i], PoPsParada[i], distancia)        
+        printf("Comprimento do caminho entre %d e %d parando em %d: %dMbps\n", PoPsOrigem[i], PoPsDestino[i], PoPsParada[i], distancia);        
     }
 }

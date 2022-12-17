@@ -1,3 +1,19 @@
+/************************************************************
+ *            Trabalho Prático 3 - SCC0607                   *
+ *                                                           *
+ *      Nome: Artur Brenner Weber                            *
+ *      nUSP: 12675451    Participacao: 100%                 *
+ *      Nome: Aruan  Bretas de Oliveira Filho                *
+ *      nUSP: 12609731    Participacao: 100%                 *
+ *      Data de última atualizacao: 16/12/2022               *
+ *      Ambiente de Desenvolv: VSCode 1.74.1                 *
+ *                                                           *
+ *             Conteudo arquivo funcoesGeraisT3:             *
+ *   Funcoes gerais utilizadas por todo o codigo, em 3       *
+ * ou mais funcionalidades. Seu header inclui as structs     *
+ * utilizadas ao longo do projeto.                           *
+*************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "funcoesGeraisT1.h"
@@ -24,6 +40,7 @@ void verificaStatusArq(char status) {
 	}
 }
 
+//Aloca espaco na memoria para a estrutura grafo
 Grafo* cria_grafo() {
     Grafo* gr = (Grafo*) malloc(sizeof(Grafo));
 
@@ -33,6 +50,7 @@ Grafo* cria_grafo() {
     return gr;
 }
 
+//Aloca espaco na memoria para a estrutura lista (usada pelas arestas nesse caso)
 Lista* cria_lista() {
     Lista* li = (Lista*) malloc(sizeof(Lista));
 
@@ -42,6 +60,7 @@ Lista* cria_lista() {
     return li;
 }
 
+//Verifica se o grafo esta vazio (sem vertices) para as funcoes de insercao
 int grafo_vazio(Grafo* gr) {
     if (gr == NULL) {
         return 1;
@@ -52,6 +71,7 @@ int grafo_vazio(Grafo* gr) {
     return 0;
 }
 
+//Verifica se a lista de arestas esta vazia para as funcoes de insercao
 int lista_vazia(Lista** li) {
     if (li == NULL) {
         return 1;
@@ -62,6 +82,7 @@ int lista_vazia(Lista** li) {
     return 0;
 }
 
+//Libera o espaco alocado em memoria para a lista de arestas
 void libera_lista(Lista** li) {
     if (li != NULL) {
         aresta* no;
@@ -73,6 +94,7 @@ void libera_lista(Lista** li) {
     }
 }
 
+//Libera o espaco alocado para o grafo em memoria
 void libera_grafo(Grafo* gr) {
     if (gr != NULL) {
         vertice* no; 
@@ -87,11 +109,14 @@ void libera_grafo(Grafo* gr) {
     }
 }
 
+//Retorna o vertice cujo idConecta foi fornecido dentro do grafo
 vertice* recuperaVerticeBuscado(Grafo* gr, int idBuscado) {
+    //Vertice atual comeca como vertice inicial, percorrendo o grafo em busca do idBuscado
     vertice* verticeAtual = *gr; 
     while (verticeAtual != NULL && verticeAtual->dados.idConecta < idBuscado) {
         verticeAtual = verticeAtual->prox;
     }
+    //Se for encontrado, retorna o vertice, caso contrario, retorna NULL e da mensagem de erro
     if (verticeAtual != NULL && verticeAtual->dados.idConecta == idBuscado) {
         return verticeAtual;
     } else {
