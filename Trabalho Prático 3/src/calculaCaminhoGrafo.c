@@ -48,6 +48,8 @@ void dijkstraAlgoritmo(Grafo* gr, int idInicial) {
             valorAtualizar = arestaAtual->dados.velocidade + verticeAtual->distOrigem;
             if (verticeAnalisado->distOrigem == -1 || (valorAtualizar < verticeAnalisado->distOrigem)) {
                 verticeAnalisado->distOrigem = valorAtualizar;
+                //aqui
+                verticeAnalisado->verticeAnt = idMenorDist;
             }
             arestaAtual = arestaAtual->prox;
         }
@@ -61,6 +63,7 @@ void zeraDistancias(Grafo* gr) {
         vertice *atual = *gr;
         while (atual != NULL) {
             atual->cor = BRANCO;
+            atual->verticeAnt = -1;
             atual->distOrigem = -1;
             atual = atual->prox;
         }
@@ -79,6 +82,69 @@ int retornaDistanciaVertice(Grafo* gr, int idVertice) {
         }
     }
     return -1;
+}
+
+//funcao que encontra a menor velocidade de uma rota
+int encontraMenorVel(Grafo *gr, int destino){
+    vertice *v = *gr;
+    //estima-se um valor muito alto
+    int menorVelocidade = __INT_MAX__;
+    v = recuperaVerticeBuscado(gr, destino);
+    int posicaoAnt;
+    while(v->verticeAnt != -1){
+        posicaoAnt = v->dados.idConecta;
+        v = recuperaVerticeBuscado(gr, v->verticeAnt);
+
+        aresta *ar = v->raizLista;
+        
+        while(ar != NULL && ar->dados.idPoPsConectado != posicaoAnt){
+            ar = ar->prox;
+        }
+
+        if(ar->dados.velocidade < menorVelocidade){
+            menorVelocidade = ar->dados.velocidade;
+        }
+        
+
+    }
+    return menorVelocidade;
+}
+
+//funcao secundaria da funcionalidade 13, responsavel por
+//chamar funções que descubram o menor caminho
+//e depois imprimir a menor velocidade de transmissão desse caminho
+void fluxoMaximo(Grafo *gr){
+    int numeroEntradas; 
+    scanf("%d", &numeroEntradas);
+
+    int PoPsOrigem[numeroEntradas], PoPsDestino[numeroEntradas];
+    for (int i = 0; i < numeroEntradas; i++) {
+        scanf("%d %d", &PoPsOrigem[i], &PoPsDestino[i]);
+    }
+
+    int distancia;
+    int menorVelocidade;
+
+    //laço que roda n vezes, zerando o as distancias do grafo
+    //calculando assim todas as distancias de um vertice de origem
+    //e encontrando a menor velocidade presente na menor rota
+    for (int i = 0; i < numeroEntradas; i++) {
+        distancia = 0;
+        //Calcula distancia minima da origem para a parada e a soma à distancia minima entre a parada e o destino
+        zeraDistancias(gr);
+        dijkstraAlgoritmo(gr, PoPsOrigem[i]);
+        //analisa do destino, fazendo o caminho inverso ate a origem para encontrar
+        //o menor valor dessa rota
+        menorVelocidade = encontraMenorVel(gr, PoPsDestino[i]);
+        distancia = retornaDistanciaVertice(gr, PoPsDestino[i]);
+
+        if (distancia == -1) {
+            printf("Fluxo máximo entre %d e %d: %d\n", PoPsOrigem[i], PoPsDestino[i], distancia);
+            continue;
+        } 
+
+        printf("Fluxo máximo entre %d e %d: %d Mpbs\n", PoPsOrigem[i], PoPsDestino[i], menorVelocidade);        
+    }
 }
 
 void menorCaminhoGrafo(Grafo* gr) {

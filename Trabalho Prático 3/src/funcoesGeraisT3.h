@@ -31,6 +31,7 @@ typedef struct {
 typedef struct Vertice {
     dadoVertice dados;
     int adicionado;
+    int verticeAnt;
     int cor;
     int distOrigem;
     Lista* raizLista;
