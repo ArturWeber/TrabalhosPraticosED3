@@ -8,7 +8,7 @@
  *      Data de última atualizacao: 16/12/2022               *
  *      Ambiente de Desenvolv: VSCode 1.74.1                 *
  *                                                           *
- *         Conteudo arquivo geraCalculaGrafo:                *
+ *         Conteudo arquivo calculaCaminhoGrafo:             *
  *   Funcoes secundarias das funcionalidades 13 e 14         *
 *************************************************************/
 
