@@ -14,7 +14,6 @@
  * utilizadas ao longo do projeto.                           *
 *************************************************************/
 
-
 #include <stdio.h>
 #include <string.h>
 #include "funcoesGeraisT2.h"
