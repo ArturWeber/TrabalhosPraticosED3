@@ -356,6 +356,28 @@ void funcDoze (char* nomeArqEntrada) {
     fclose(arqEntrada);
 }
 
+//Funcao principal da funcionalidade treze, abre o arquivo, verifica seu status e o
+//passa para uma funcao secundaria que cria o grafo e outra que aceita as entradas de 
+//pontos e calcula o caminho minimo entre eles
+void funcTreze (char* nomeArqEntrada) {
+    //Abre arquivo de entrada e testa
+    FILE* arqEntrada;
+    arqEntrada = fopen(nomeArqEntrada, "rb");
+    testaAlgumErro(arqEntrada);
+    
+    //Inicializa um registro auxiliar do tipo regCabecalho com
+    //os valores de cabecalho do arquivo de entrada, verificando seu status
+    regCabecalho aux = recuperaCabecalho(arqEntrada);
+    verificaStatusArq(aux.status);
+
+    //Cria o grafo e, a partir dos pontos lidos, verifica a menor velocidade do menor caminho
+    Grafo* gr = geraGrafo(arqEntrada, aux);
+    fluxoMaximo(gr);
+    libera_grafo(gr);
+
+    fclose(arqEntrada);
+}
+
 //Funcao principal da funcionalidade quatorze, abre o arquivo, verifica seu status e o
 //passa para uma funcao secundaria que cria o grafo e outra que aceita as entradas de 
 //pontos e calcula o caminho minimo entre eles
@@ -439,7 +461,7 @@ int main(void) {
             funcDoze(nomeArqEntrada);
             break;
         case 13:
-            printf("Ainda nao implementada");
+            funcTreze(nomeArqEntrada);
             break;
         case 14:
             funcQuatorze(nomeArqEntrada);
