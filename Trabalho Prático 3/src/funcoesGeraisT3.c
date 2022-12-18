@@ -123,4 +123,4 @@ vertice* recuperaVerticeBuscado(Grafo* gr, int idBuscado) {
         printf("Vertice nao encontrado\n");
         return NULL;
     }
-} 
+}
