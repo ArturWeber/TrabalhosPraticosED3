@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "insercaoarvore.h": "c",
+        "stdlib.h": "c",
+        "funcoesgeraist1.h": "c",
+        "funcoesgeraist2.h": "c",
+        "funcoesbuscabin.h": "c",
+        "funcoesgeraist3.h": "c"
+    }
+}
